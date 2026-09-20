@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 80" width="420" height="80">
+  <defs>
+    <linearGradient id="gtoBlueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#008BE2" />
+      <stop offset="100%" stop-color="#005B9E" />
+    </linearGradient>
+    <linearGradient id="gtoRedGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF3838" />
+      <stop offset="100%" stop-color="#D9141B" />
+    </linearGradient>
+    <linearGradient id="gtoGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FCD34D" />
+      <stop offset="100%" stop-color="#F59E0B" />
+    </linearGradient>
+    <filter id="subtleGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Official GTO Federation Shield / Badge -->
+  <g transform="translate(10, 8)">
+    <!-- Russian Tricolor Ribbon Edge -->
+    <path d="M32 0 L58 12 L54 48 L32 64 L10 48 L6 12 Z" fill="#131926" stroke="#0078BF" stroke-width="2"/>
+    <path d="M12 15 L32 5 L52 15 L50 30 L32 30 L14 30 Z" fill="#FFFFFF" opacity="0.9"/>
+    <path d="M14 30 L32 30 L50 30 L48 45 L32 45 L16 45 Z" fill="url(#gtoBlueGrad)"/>
+    <path d="M16 45 L32 45 L48 45 L45 56 L32 62 L19 56 Z" fill="url(#gtoRedGrad)"/>
+    
+    <!-- Central GTO Emblem Star -->
+    <circle cx="32" cy="34" r="15" fill="#0E131E" stroke="url(#gtoGoldGrad)" stroke-width="1.5"/>
+    <polygon points="32,24 35,31 43,32 37,37 39,44 32,40 25,44 27,37 21,32 29,31" fill="url(#gtoGoldGrad)" filter="url(#subtleGlow)"/>
+  </g>
+
+  <!-- Typography: Federation Title -->
+  <text x="80" y="32" font-family="'Inter', -apple-system, sans-serif" font-weight="900" font-size="20" fill="#FFFFFF" letter-spacing="1">
+    ФЕДЕРАЦИЯ МНОГОБОРЬЯ
+  </text>
+  <text x="80" y="54" font-family="'Inter', -apple-system, sans-serif" font-weight="900" font-size="22" letter-spacing="1.5">
+    <tspan fill="#008BE2">ГТО</tspan> <tspan fill="#ED1C24">РОССИИ</tspan>
+  </text>
+  <text x="80" y="69" font-family="'Inter', -apple-system, sans-serif" font-weight="600" font-size="9" fill="#94A3B8" letter-spacing="1.5">
+    ОФИЦИАЛЬНЫЙ ВИД СПОРТА • GTO.COM.RU
+  </text>
+</svg>

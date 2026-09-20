@@ -1,0 +1,5767 @@
+/* ==========================================================================
+   Федерация многоборья «Готов к труду и обороне» России (gto.com.ru)
+   Официальные компоненты веб-приложения / PWA
+   ========================================================================== */
+
+/* --- Верхняя панель (Sticky Header) --- */
+.gto-top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10, 14, 23, 0.94);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--gto-border);
+  padding: calc(10px + var(--sat)) 20px 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.gto-brand-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* --- Кнопка «Назад» для внутренних экранов --- */
+.gto-header-back-btn {
+  display: none !important;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 9999px;
+  color: #FFFFFF;
+  padding: 7px 15px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.gto-header-back-btn:hover {
+  background: rgba(0, 136, 255, 0.22);
+  border-color: rgba(0, 136, 255, 0.45);
+  color: #60A5FA;
+  transform: translateX(-2px);
+}
+
+.gto-header-back-btn:active {
+  transform: scale(0.96) translateX(-3px);
+}
+
+.gto-header-back-btn .gto-icon-svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  stroke-width: 2.2;
+}
+
+.gto-header-screen-info {
+  display: none;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  margin-left: 6px;
+  overflow: hidden;
+}
+
+.gto-header-screen-title {
+  font-family: var(--gto-font-display);
+  font-size: 15px;
+  font-weight: 800;
+  color: #FFFFFF;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 280px;
+}
+
+.gto-header-screen-badge {
+  font-size: 10px;
+  font-weight: 700;
+  color: #38BDF8;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 1px 7px;
+  border-radius: 9999px;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* Состояние Sticky Header при открытии внутренних экранов */
+.gto-top-bar.is-inner-page .gto-header-back-btn {
+  display: inline-flex !important;
+}
+
+@media (max-width: 991px) {
+  .gto-top-bar.is-inner-page #header-brand-area {
+    display: none;
+  }
+  .gto-top-bar.is-inner-page .gto-header-screen-info {
+    display: flex;
+    flex: 1;
+  }
+  .gto-top-bar.is-inner-page .gto-header-screen-title {
+    max-width: 220px;
+    font-size: 14.5px;
+  }
+}
+
+.gto-mobile-menu-btn {
+  display: none;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--gto-radius-sm);
+  background: var(--gto-surface);
+  border: 1px solid var(--gto-border);
+  color: var(--gto-text);
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-fast);
+}
+
+.gto-mobile-menu-btn:active {
+  background: var(--gto-surface-hover);
+  transform: scale(0.96);
+}
+
+.gto-header-logo {
+  height: 40px;
+  width: auto;
+  max-width: 220px;
+  object-fit: contain;
+  display: block;
+  cursor: pointer;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.4));
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+.gto-header-logo:hover {
+  opacity: 0.94;
+  transform: scale(1.02);
+}
+
+.gto-drawer-logo {
+  height: 38px;
+  width: auto;
+  max-width: 190px;
+  object-fit: contain;
+  display: block;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .gto-header-logo {
+    height: 32px;
+    max-width: 165px;
+  }
+}
+
+.gto-brand-text {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  user-select: none;
+  line-height: 1.15;
+  transition: opacity var(--transition-fast);
+}
+
+.gto-brand-text:hover {
+  opacity: 0.88;
+}
+
+.gto-brand-name {
+  font-family: var(--gto-font-display);
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  color: #FFFFFF;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.gto-brand-name .blue {
+  color: #0088FF;
+}
+
+.gto-brand-name .red {
+  color: #FF3B30;
+}
+
+.gto-brand-sub {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: var(--gto-text-muted);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Десктопное меню */
+.gto-desktop-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.gto-nav-btn {
+  padding: 8px 14px;
+  border-radius: var(--gto-radius-sm);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--gto-text-secondary);
+  transition: var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid transparent;
+}
+
+.gto-nav-btn:hover {
+  color: #fff;
+  background: var(--gto-surface);
+  border-color: var(--gto-border);
+}
+
+.gto-nav-btn.active {
+  color: #fff;
+  background: linear-gradient(135deg, var(--gto-blue) 0%, #005B9E 100%);
+  border-color: rgba(0, 120, 191, 0.4);
+  box-shadow: 0 4px 14px var(--gto-blue-glow);
+}
+
+/* Правые действия в шапке */
+.gto-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gto-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  background: var(--gto-surface);
+  border: 1px solid var(--gto-border);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gto-text-secondary);
+}
+
+.gto-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gto-success);
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+}
+
+.gto-action-icon-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--gto-surface);
+  border: 1px solid var(--gto-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gto-text-secondary);
+  transition: var(--transition-fast);
+  position: relative;
+}
+
+.gto-action-icon-btn:hover {
+  background: var(--gto-surface-hover);
+  color: #fff;
+  border-color: var(--gto-blue);
+}
+
+.gto-icon-svg {
+  width: 19px;
+  height: 19px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Триколор полоса */
+.gto-tricolor-line {
+  height: 3px;
+  width: 100%;
+  background: var(--gto-tricolor-gradient);
+}
+
+/* --- Боковое меню (Mobile Drawer) --- */
+.gto-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.gto-drawer-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.gto-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 300px;
+  max-width: 85vw;
+  background: #0D121D;
+  border-right: 1px solid var(--gto-border);
+  z-index: 201;
+  transform: translateX(-100%);
+  transition: transform 0.26s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  padding: calc(16px + var(--sat)) 16px calc(16px + var(--sab)) 16px;
+  box-sizing: border-box;
+}
+
+.gto-drawer.active {
+  transform: translateX(0);
+}
+
+.gto-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--gto-border);
+}
+
+.gto-drawer-close-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--gto-radius-sm);
+  background: var(--gto-surface);
+  color: var(--gto-text);
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gto-drawer-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.gto-drawer-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  border-radius: var(--gto-radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gto-text-secondary);
+  transition: var(--transition-fast);
+}
+
+.gto-drawer-item:hover, .gto-drawer-item:active {
+  background: var(--gto-surface);
+  color: #fff;
+}
+
+.gto-drawer-item.active {
+  background: linear-gradient(135deg, var(--gto-blue) 0%, #005B9E 100%);
+  color: #fff;
+  box-shadow: 0 4px 14px var(--gto-blue-glow);
+}
+
+.gto-drawer-footer {
+  padding-top: 14px;
+  border-top: 1px solid var(--gto-border);
+  font-size: 11px;
+  color: var(--gto-text-muted);
+  text-align: center;
+}
+
+/* --- Главный HERO баннер с живым фоновым видео --- */
+.gto-hero {
+  position: relative;
+  background: #0A0E17;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 42px 36px 36px 36px;
+  margin-bottom: 28px;
+  overflow: hidden;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.45);
+}
+
+
+
+/* Фоновый плеер Hero с плавной кинематографической анимацией */
+@keyframes heroAmbientFloat {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.035); }
+  100% { transform: scale(1); }
+}
+
+.gto-hero-video-wrap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+  background-color: #0A0E17;
+  background-image: url('../assets/video/bg-poster.jpg');
+  background-size: cover;
+  background-position: center 30%;
+  animation: heroAmbientFloat 22s ease-in-out infinite alternate;
+}
+
+.gto-hero-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  filter: brightness(0.64) contrast(1.08) saturate(1.18);
+  display: block;
+}
+
+.gto-hero-video-overlay {
+  position: absolute;
+  inset: 0;
+  background: 
+    linear-gradient(180deg, rgba(10, 14, 23, 0.45) 0%, rgba(10, 14, 23, 0.72) 48%, rgba(10, 14, 23, 0.98) 100%),
+    radial-gradient(ellipse at 50% 25%, transparent 20%, rgba(10, 14, 23, 0.75) 85%);
+}
+
+.gto-hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+/* --- Главные разделы и сервисы Федерации (Premier Native App Hub Cards) --- */
+.gto-app-hub-section {
+  margin-top: 24px;
+  margin-bottom: 34px;
+}
+
+.gto-app-hub-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 14px;
+}
+
+@media (max-width: 768px) {
+  .gto-app-hub-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+.gto-hub-card {
+  position: relative;
+  background: linear-gradient(145deg, rgba(20, 27, 45, 0.88) 0%, rgba(13, 18, 30, 0.96) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  padding: 22px 20px;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.gto-hub-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+  transition: opacity 0.3s ease;
+}
+
+.gto-hub-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.26);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
+}
+
+.gto-hub-card:active {
+  transform: scale(0.985);
+}
+
+/* Цветовые акценты карточек */
+.gto-hub-card.calendar-card {
+  border-left: 4px solid #38BDF8;
+}
+.gto-hub-card.calendar-card:hover {
+  box-shadow: 0 12px 32px rgba(56, 189, 248, 0.18);
+  border-color: rgba(56, 189, 248, 0.5);
+}
+
+.gto-hub-card.photos-card {
+  border-left: 4px solid #60A5FA;
+}
+.gto-hub-card.photos-card:hover {
+  box-shadow: 0 12px 32px rgba(96, 165, 250, 0.18);
+  border-color: rgba(96, 165, 250, 0.5);
+}
+
+.gto-hub-card.videos-card {
+  border-left: 4px solid #F87171;
+}
+.gto-hub-card.videos-card:hover {
+  box-shadow: 0 12px 32px rgba(248, 113, 113, 0.18);
+  border-color: rgba(248, 113, 113, 0.5);
+}
+
+.gto-hub-card.records-card {
+  border-left: 4px solid #FBBF24;
+}
+.gto-hub-card.records-card:hover {
+  box-shadow: 0 12px 32px rgba(251, 191, 36, 0.18);
+  border-color: rgba(251, 191, 36, 0.5);
+}
+
+.gto-hub-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #94A3B8;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 4px 10px;
+  border-radius: 9999px;
+  margin-bottom: 14px;
+  align-self: flex-start;
+}
+
+.gto-hub-badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #38BDF8;
+  box-shadow: 0 0 8px #38BDF8;
+}
+
+.photobank-badge {
+  color: #93C5FD;
+  background: rgba(59, 130, 246, 0.12);
+  border-color: rgba(59, 130, 246, 0.25);
+}
+
+.video-badge {
+  color: #FCA5A5;
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.25);
+}
+
+.records-badge {
+  color: #FDE68A;
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.25);
+}
+
+.gto-hub-icon-wrap {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.gto-hub-icon-wrap.blue {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38BDF8;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+}
+.gto-hub-icon-wrap.cyan {
+  background: rgba(96, 165, 250, 0.15);
+  color: #60A5FA;
+  border: 1px solid rgba(96, 165, 250, 0.25);
+}
+.gto-hub-icon-wrap.red {
+  background: rgba(248, 113, 113, 0.15);
+  color: #F87171;
+  border: 1px solid rgba(248, 113, 113, 0.25);
+}
+.gto-hub-icon-wrap.gold {
+  background: rgba(251, 191, 36, 0.15);
+  color: #FBBF24;
+  border: 1px solid rgba(251, 191, 36, 0.25);
+}
+
+.gto-hub-icon-wrap .gto-icon-svg {
+  width: 22px;
+  height: 22px;
+}
+
+.gto-hub-title {
+  font-family: var(--gto-font-display);
+  font-size: 18px;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin-bottom: 6px;
+}
+
+.gto-hub-desc {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--gto-text-secondary);
+  margin-bottom: 16px;
+  flex: 1;
+}
+
+.gto-hub-action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #FFFFFF;
+  transition: gap 0.2s ease;
+}
+
+.gto-hub-card:hover .gto-hub-action {
+  color: #60A5FA;
+  gap: 12px;
+}
+
+.gto-hub-arrow {
+  transition: transform 0.2s ease;
+}
+
+.gto-hub-card:hover .gto-hub-arrow {
+  transform: translateX(4px);
+}
+
+.gto-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  background: rgba(0, 120, 191, 0.15);
+  border: 1px solid rgba(0, 120, 191, 0.35);
+  color: #38BDF8;
+  font-size: 12.5px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  letter-spacing: 0.4px;
+}
+
+.gto-hero-title {
+  font-size: 32px;
+  font-weight: 900;
+  line-height: 1.2;
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+  color: #FFFFFF;
+}
+
+.gto-hero-title span.blue {
+  color: var(--gto-blue-hover);
+}
+
+.gto-hero-title span.red {
+  color: var(--gto-red);
+}
+
+.gto-hero-desc {
+  font-size: 15.5px;
+  color: var(--gto-text-secondary);
+  max-width: 780px;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.gto-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.gto-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--gto-red) 0%, #C81017 100%);
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 11px 24px;
+  border-radius: 9999px;
+  box-shadow: 0 4px 16px var(--gto-red-glow);
+  transition: transform var(--transition-smooth), background var(--transition-fast), box-shadow var(--transition-fast);
+  cursor: pointer;
+}
+
+.gto-btn-primary:hover {
+  background: linear-gradient(135deg, var(--gto-red-hover) 0%, var(--gto-red) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(237, 28, 36, 0.5);
+}
+
+.gto-btn-primary:active {
+  transform: scale(0.97);
+}
+
+.gto-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--gto-blue) 0%, #005A94 100%);
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 11px 24px;
+  border-radius: 9999px;
+  box-shadow: 0 4px 16px var(--gto-blue-glow);
+  transition: transform var(--transition-smooth), background var(--transition-fast), box-shadow var(--transition-fast);
+  cursor: pointer;
+}
+
+.gto-btn-secondary:hover {
+  background: linear-gradient(135deg, var(--gto-blue-hover) 0%, var(--gto-blue) 100%);
+  transform: translateY(-2px);
+}
+
+.gto-btn-secondary:active {
+  transform: scale(0.97);
+}
+
+.gto-btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--gto-surface);
+  border: 1px solid var(--gto-border);
+  color: var(--gto-text);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 11px 22px;
+  border-radius: 9999px;
+  transition: transform var(--transition-smooth), background var(--transition-fast), border-color var(--transition-fast);
+  cursor: pointer;
+}
+
+.gto-btn-outline:hover {
+  background: var(--gto-surface-raised);
+  border-color: var(--gto-blue);
+  color: #fff;
+}
+
+.gto-btn-outline:active {
+  transform: scale(0.97);
+}
+
+/* 5 Ключевых метрик Федерации */
+.gto-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+
+.gto-stat-card {
+  background: rgba(18, 24, 38, 0.75);
+  border: 1px solid var(--gto-border);
+  border-radius: var(--gto-radius-sm);
+  padding: 16px 14px;
+  text-align: center;
+  backdrop-filter: blur(8px);
+  transition: var(--transition-fast);
+}
+
+.gto-stat-card:hover {
+  border-color: var(--gto-border-active);
+  transform: translateY(-2px);
+  background: rgba(26, 35, 55, 0.85);
+}
+
+.gto-stat-val {
+  font-size: 26px;
+  font-weight: 900;
+  color: #FFFFFF;
+  line-height: 1.1;
+  margin-bottom: 6px;
+  font-feature-settings: "tnum";
+}
+
+.gto-stat-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gto-text-secondary);
+  margin-bottom: 2px;
+}
+
+.gto-stat-sub {
+  font-size: 10.5px;
+  color: var(--gto-text-muted);
+}
+
+/* --- Быстрые сервисы экосистемы (Native App Shortcuts Bar) --- */
+.gto-app-shortcuts-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 22px;
+  overflow-x: auto;
+  padding: 4px 6px 18px 6px;
+  margin-bottom: 24px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.gto-app-shortcuts-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.gto-app-shortcut-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gto-app-shortcut-item:hover, .gto-app-shortcut-item:active {
+  transform: translateY(-2px);
+}
+
+.gto-shortcut-icon-circle {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.25s ease;
+}
+
+.gto-shortcut-icon-circle.blue {
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 4px 16px rgba(0, 120, 191, 0.25);
+}
+
+.gto-shortcut-icon-circle.gold {
+  border-color: rgba(251, 191, 36, 0.4);
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.25);
+}
+
+.gto-shortcut-icon-circle.purple {
+  border-color: rgba(167, 139, 250, 0.4);
+  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.25);
+}
+
+.gto-shortcut-icon-circle.emerald {
+  border-color: rgba(52, 211, 153, 0.4);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.25);
+}
+
+.gto-shortcut-icon-circle.cyan {
+  border-color: rgba(34, 211, 238, 0.4);
+  box-shadow: 0 4px 16px rgba(6, 182, 212, 0.25);
+}
+
+.gto-shortcut-icon-circle.slate {
+  border-color: rgba(148, 163, 184, 0.4);
+}
+
+.gto-app-shortcut-item:hover .gto-shortcut-icon-circle {
+  border-color: #fff;
+  transform: scale(1.08);
+  box-shadow: 0 6px 22px rgba(56, 189, 248, 0.4);
+}
+
+.gto-shortcut-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--gto-text-secondary);
+  text-align: center;
+  white-space: nowrap;
+  letter-spacing: -0.1px;
+}
+
+.gto-app-shortcut-item:hover .gto-shortcut-label {
+  color: #fff;
+}
+
+/* --- Секционные заголовки --- */
+.gto-section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.gto-section-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gto-section-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--gto-blue-hover);
+}
+
+.gto-section-title {
+  font-family: var(--gto-font-display);
+  font-size: 24px;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gto-section-action {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--gto-blue-hover);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: var(--transition-fast);
+}
+
+.gto-section-action:hover {
+  color: #fff;
+  transform: translateX(3px);
+}
+
+/* --- Карточки новостей (News Grid) --- */
+.gto-news-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 36px;
+}
+
+.gto-news-card {
+  background: var(--gto-glass-bg);
+  backdrop-filter: blur(var(--gto-glass-blur));
+  -webkit-backdrop-filter: blur(var(--gto-glass-blur));
+  border: 1px solid var(--gto-glass-border);
+  border-radius: var(--gto-radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--gto-shadow-float);
+  transition: transform var(--transition-smooth), border-color var(--transition-smooth), box-shadow var(--transition-smooth);
+  cursor: pointer;
+  will-change: transform;
+}
+
+.gto-news-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0, 120, 191, 0.45);
+  box-shadow: var(--gto-shadow-hover);
+}
+
+.gto-news-card:active {
+  transform: scale(0.985);
+}
+
+.gto-news-thumb-wrap {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 */
+  background: #0D121D;
+  overflow: hidden;
+}
+
+.gto-news-thumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gto-news-card:hover .gto-news-thumb {
+  transform: scale(1.05);
+}
+
+.gto-news-date-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(10, 14, 23, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gto-text-secondary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.gto-news-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.gto-news-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.38;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.gto-news-desc {
+  font-size: 13px;
+  color: var(--gto-text-muted);
+  line-height: 1.45;
+  margin-bottom: 14px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+}
+
+.gto-news-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px solid var(--gto-border);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gto-blue-hover);
+}
+
+/* --- Панель фильтров и поиска (Все вкладки полностью видны) --- */
+.gto-filters-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--gto-surface);
+  border: 1px solid var(--gto-border);
+  border-radius: var(--gto-radius);
+  padding: 14px 16px;
+  margin-bottom: 24px;
+}
+
+@media (min-width: 1080px) {
+  .gto-filters-bar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.gto-filter-pills {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  flex: 1;
+}
+
+.gto-filter-pill {
+  padding: 7px 14px;
+  border-radius: 9999px;
+  background: var(--gto-surface-raised);
+  border: 1px solid var(--gto-border);
+  color: var(--gto-text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: var(--transition-fast);
+}
+
+.gto-filter-pill:hover {
+  background: var(--gto-surface-hover);
+  color: #fff;
+}
+
+.gto-filter-pill.active {
+  background: var(--gto-blue);
+  color: #fff;
+  border-color: var(--gto-blue-hover);
+  box-shadow: 0 2px 10px var(--gto-blue-glow);
+}
+
+.gto-search-wrap {
+  position: relative;
+  min-width: 260px;
+  flex: 1;
+  max-width: 380px;
+}
+
+.gto-search-input {
+  width: 100%;
+  background: var(--gto-surface-raised);
+  border: 1px solid var(--gto-border);
+  border-radius: 9999px;
+  color: #fff;
+  padding: 9px 16px 9px 38px;
+  font-size: 13.5px;
+  outline: none;
+  transition: var(--transition-fast);
+}
+
+.gto-search-input:focus {
+  border-color: var(--gto-blue);
+  box-shadow: 0 0 0 3px rgba(0, 120, 191, 0.2);
+}
+
+.gto-search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: var(--gto-text-muted);
+  fill: none !important;
+  stroke: currentColor !important;
+  stroke-width: 2 !important;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+/* --- Карточки турниров (Календарь) --- */
+.gto-events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.gto-event-card {
+  background: var(--gto-glass-bg);
+  backdrop-filter: blur(var(--gto-glass-blur));
+  -webkit-backdrop-filter: blur(var(--gto-glass-blur));
+  border: 1px solid var(--gto-glass-border);
+  border-radius: var(--gto-radius);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--gto-shadow-float);
+  transition: transform var(--transition-smooth), border-color var(--transition-smooth), box-shadow var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+  will-change: transform;
+}
+
+.gto-event-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--gto-blue);
+  z-index: 5;
+}
+
+.gto-event-card.federal::before {
+  background: var(--gto-red);
+}
+
+.gto-event-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0, 120, 191, 0.5);
+  box-shadow: var(--gto-shadow-hover);
+}
+
+.gto-event-card:active {
+  transform: scale(0.985);
+}
+
+/* Event Poster Header */
+.gto-event-poster-wrap {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  background: #090d16;
+  cursor: pointer;
+}
+
+.gto-event-poster-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gto-event-poster-img.fallback {
+  object-fit: contain;
+  padding: 24px;
+}
+
+.gto-event-card:hover .gto-event-poster-img {
+  transform: scale(1.06);
+}
+
+.gto-event-poster-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10, 14, 23, 0.96) 0%, rgba(10, 14, 23, 0.4) 50%, rgba(0, 0, 0, 0.45) 100%);
+  pointer-events: none;
+}
+
+.gto-event-poster-top {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  z-index: 2;
+}
+
+.gto-event-poster-bottom {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  z-index: 2;
+}
+
+.gto-event-status-pill {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(10, 14, 23, 0.88);
+}
+
+.gto-event-status-pill.open {
+  color: #4ade80;
+  border: 1px solid rgba(74, 222, 128, 0.45);
+  box-shadow: 0 0 8px rgba(74, 222, 128, 0.2);
+}
+
+.gto-event-status-pill.live {
+  color: #f87171;
+  border: 1px solid rgba(248, 113, 113, 0.55);
+  box-shadow: 0 0 10px rgba(248, 113, 113, 0.35);
+  animation: pulse-border 1.8s infinite;
+}
+
+@keyframes pulse-border {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(0.98); }
+}
+
+.gto-event-status-pill.soon {
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.45);
+}
+
+.gto-event-status-pill.finished {
+  color: #94a3b8;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  background: rgba(15, 23, 42, 0.92);
+}
+
+.gto-btn-results {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--gto-surface-raised);
+  border: 1px solid var(--gto-border);
+  color: #E2E8F0;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  flex: 1;
+}
+
+.gto-btn-results:hover {
+  background: #1c2742;
+  border-color: var(--gto-blue);
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 120, 191, 0.25);
+}
+
+.gto-event-dates-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #fff;
+  background: rgba(0, 120, 191, 0.85);
+  padding: 4px 12px;
+  border-radius: 9999px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.gto-event-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+.gto-badge-federal {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border-radius: var(--gto-radius-xs);
+  background: rgba(237, 28, 36, 0.2);
+  border: 1px solid rgba(237, 28, 36, 0.45);
+  color: #FFA3A6;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(4px);
+}
+
+.gto-badge-regional {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border-radius: var(--gto-radius-xs);
+  background: rgba(0, 120, 191, 0.2);
+  border: 1px solid rgba(0, 120, 191, 0.45);
+  color: #7DD3FC;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(4px);
+}
+
+.gto-event-status {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--gto-success);
+}
+
+.gto-event-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #FFFFFF;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.gto-event-info-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--gto-text-secondary);
+}
+
+.gto-event-info-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gto-event-info-row svg {
+  width: 15px;
+  height: 15px;
+  color: var(--gto-text-muted);
+  flex-shrink: 0;
+}
+
+.gto-event-location-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gto-event-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 6px;
+}
+
+.gto-btn-apply {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 18px;
+  border-radius: 9999px;
+  background: var(--gto-blue);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  transition: var(--transition-fast);
+}
+
+.gto-btn-apply:hover {
+  background: var(--gto-blue-hover);
+}
+
+/* --- Книга Рекордов России (Records) --- */
+.gto-records-controls {
+  background: var(--gto-surface);
+  border: 1px solid var(--gto-border);
+  border-radius: var(--gto-radius);
+  padding: 16px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.gto-sex-toggle {
+  display: flex;
+  align-items: center;
+  align-self: center;
+  background: var(--gto-surface-raised);
+  padding: 4px;
+  border-radius: 9999px;
+  border: 1px solid var(--gto-border);
+}
+
+.gto-sex-btn {
+  padding: 8px 24px;
+  border-radius: 9999px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gto-text-secondary);
+  transition: var(--transition-fast);
+}
+
+.gto-sex-btn.active {
+  background: var(--gto-red);
+  color: #FFFFFF;
+  box-shadow: 0 2px 10px var(--gto-red-glow);
+}
+
+.gto-sex-btn.blue.active {
+  background: var(--gto-blue);
+  box-shadow: 0 2px 10px var(--gto-blue-glow);
+}
+
+.gto-age-tabs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.gto-age-btn {
+  padding: 7px 16px;
+  border-radius: 9999px;
+  background: var(--gto-surface-raised);
+  border: 1px solid var(--gto-border);
+  color: var(--gto-text-secondary);
+  font-size: 13px;
+  font-weight: 700;
+  transition: var(--transition-fast);
+}
+
+.gto-age-btn:hover {
+  color: #fff;
+  border-color: var(--gto-text-muted);
+}
+
+.gto-age-btn.active {
+  background: var(--gto-surface-hover);
+  color: #fff;
+  border-color: var(--gto-gold);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+}
+
+/* Records Controls Header & View Switcher */
+.gto-records-view-toggle {
+  display: inline-flex;
+  background: var(--gto-surface);
+  border: 1px solid var(--gto-border);
+  border-radius: 9999px;
+  padding: 3px;
+  gap: 3px;
+}
+
+.gto-view-mode-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  background: transparent;
+  border: none;
+  color: var(--gto-text-secondary);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.gto-view-mode-btn:hover {
+  color: #fff;
+}
+
+.gto-view-mode-btn.active {
+  background: var(--gto-blue);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 120, 191, 0.4);
+}
+
+/* --- Discipline Picker Trigger & Filter Reset --- */
+.gto-discipline-trigger-card {
+  width: 100%;
+  background: var(--gto-surface-raised);
+  border: 1px solid var(--gto-border);
+  border-radius: 9999px;
+  padding: 6px 14px 6px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: #fff;
+  text-align: left;
+}
+
+.gto-discipline-trigger-card:hover {
+  border-color: var(--gto-blue);
+  background: #18233a;
+  box-shadow: 0 0 16px rgba(0, 120, 191, 0.25);
+}
+
+.gto-discipline-trigger-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+
+.gto-discipline-trigger-icon {
+  font-size: 18px;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 50%;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gto-discipline-trigger-text-wrap {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.gto-discipline-trigger-hint {
+  font-size: 10.5px;
+  color: var(--gto-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+}
+
+.gto-discipline-trigger-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gto-discipline-trigger-chevron {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--gto-blue-hover);
+  background: rgba(0, 120, 191, 0.12);
+  border: 1px solid rgba(0, 120, 191, 0.25);
+  padding: 6px 12px;
+  border-radius: 9999px;
+  white-space: nowrap;
+  transition: var(--transition-fast);
+}
+
+.gto-discipline-trigger-card:hover .gto-discipline-trigger-chevron {
+  background: var(--gto-blue);
+  color: #fff;
+}
+
+.gto-filter-reset-link {
+  background: none;
+  border: none;
+  color: var(--gto-text-muted);
+  font-size: 11px;
+  cursor: pointer;
+  padding: 2px 4px;
+  text-decoration: underline;
+  transition: color 0.15s ease;
+}
+
+.gto-filter-reset-link:hover {
+  color: var(--gto-red);
+}
+
+/* --- Discipline Selection Modal Grid & Tiles --- */
+.gto-disc-modal-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.gto-disc-modal-search-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.gto-disc-modal-categories {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scrollbar-width: thin;
+}
+
+.gto-disc-modal-cat-btn {
+  padding: 5px 12px;
+  border-radius: 9999px;
+  background: var(--gto-surface-raised);
+  border: 1px solid var(--gto-border);
+  color: var(--gto-text-secondary);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+.gto-disc-modal-cat-btn:hover,
+.gto-disc-modal-cat-btn.active {
+  background: var(--gto-blue);
+  color: #fff;
+  border-color: var(--gto-blue);
+  box-shadow: 0 2px 8px rgba(0, 120, 191, 0.35);
+}
+
+.gto-disc-modal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+  max-height: 52vh;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.gto-disc-modal-tile {
+  background: var(--gto-surface-raised);
+  border: 1px solid var(--gto-border);
+  border-radius: var(--gto-radius-sm);
+  padding: 11px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: left;
+  position: relative;
+}
+
+.gto-disc-modal-tile:hover {
+  border-color: var(--gto-blue);
+  background: #18233a;
+  transform: translateY(-1px);
+}
+
+.gto-disc-modal-tile.active {
+  border-color: var(--gto-gold);
+  background: rgba(245, 158, 11, 0.1);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.25);
+}
+
+.gto-disc-modal-tile-icon {
+  font-size: 22px;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  border-radius: var(--gto-radius-sm);
+  background: rgba(255, 255, 255, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gto-disc-modal-tile-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.gto-disc-modal-tile-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.35;
+  margin-bottom: 4px;
+}
+
+.gto-disc-modal-tile-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--gto-text-muted);
+}
+
+.gto-disc-modal-tile-badge {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--gto-gold);
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-weight: 700;
+}
+
+.gto-disc-modal-tile-active-badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gto-gold);
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+/* Quick Discipline Chips */
+.gto-quick-disc-chips {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: thin;
+}
+
+.gto-disc-chip-btn {
+  padding: 5px 14px;
+  font-size: 11.5px;
+  font-weight: 700;
+  border-radius: 9999px;
+  background: var(--gto-surface-raised);
+  border: 1px solid var(--gto-border);
+  color: var(--gto-text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+.gto-disc-chip-btn:hover {
+  color: #fff;
+  border-color: var(--gto-text-muted);
+}
+
+.gto-disc-chip-btn.active {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--gto-gold);
+  border-color: var(--gto-gold);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.25);
+}
+
+/* --- Книга Рекордов России: Зал Славы --- */
+.gto-records-hero-banner {
+  background: linear-gradient(135deg, rgba(20, 27, 45, 0.92) 0%, rgba(13, 18, 30, 0.98) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 18px;
+  padding: 24px 22px;
+  margin-bottom: 22px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.gto-records-hero-banner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #F59E0B, #FBBF24, transparent);
+}
+
+.gto-records-stat-badges {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 18px;
+}
+
+@media (max-width: 768px) {
+  .gto-records-stat-badges {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+}
+
+.gto-record-stat-pill {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 9999px;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.gto-record-stat-num {
+  font-family: var(--gto-font-display);
+  font-size: 18px;
+  font-weight: 900;
+  color: #FBBF24;
+  line-height: 1;
+}
+
+.gto-record-stat-desc {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--gto-text-secondary);
+  margin-top: 0;
+  white-space: nowrap;
+}
+
+
+
+/* Records Protocol Table View */
+.gto-records-grid.table-mode {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+.gto-table-scroll-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--gto-blue-hover);
+  background: rgba(0, 120, 191, 0.12);
+  border: 1px dashed rgba(0, 120, 191, 0.4);
+  border-radius: var(--gto-radius-sm);
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (min-width: 1100px) {
+  .gto-table-scroll-hint {
+    display: none;
+  }
+}
+
+.gto-records-table-wrap {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--gto-border);
+  border-radius: var(--gto-radius);
+  background: var(--gto-surface);
+  margin-bottom: 30px;
+  scrollbar-width: thin;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.gto-records-table-wrap::-webkit-scrollbar {
+  height: 6px;
+}
+
+.gto-records-table-wrap::-webkit-scrollbar-track {
+  background: rgba(10, 14, 23, 0.8);
+}
+
+.gto-records-table-wrap::-webkit-scrollbar-thumb {
+  background: var(--gto-blue);
+  border-radius: 3px;
+}
+
+.gto-records-table {
+  width: 100%;
+  min-width: 780px;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+}
+
+.gto-records-table th {
+  padding: 12px 14px;
+  background: #0e1420;
+  color: var(--gto-text-muted);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--gto-border);
+  white-space: nowrap;
+}
+
+.gto-records-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--gto-text-secondary);
+  vertical-align: middle;
+}
+
+.gto-records-table tr:hover td {
+  background: rgba(0, 120, 191, 0.08);
+  cursor: pointer;
+}
+
+.gto-table-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid var(--gto-gold);
+}
+
+.gto-table-avatar-ph {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1.5px solid rgba(245, 158, 11, 0.35);
+  color: var(--gto-gold);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+}
+
+.gto-table-result-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: var(--gto-gold);
+  border-radius: 9999px;
+  font-weight: 800;
+  font-family: var(--gto-font-display);
+  font-size: 14.5px;
+  letter-spacing: 0.02em;
+}
+
+/* Modal Poster and Certificate */
+.gto-modal-poster-wrap {
+  width: 100%;
+  max-height: 340px;
+  overflow: hidden;
+  border-radius: var(--gto-radius-sm);
+  position: relative;
+  margin-bottom: 16px;
+  background: #090d15;
+}
+
+.gto-modal-poster-img {
+  width: 100%;
+  max-height: 340px;
+  object-fit: cover;
+  display: block;
+}
+
+.gto-modal-poster-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.gto-cert-card {
+  padding: 4px;
+}
+.gto-cert-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--gto-border);
+  margin-bottom: 16px;
+}
+.gto-cert-emblem {
+  font-size: 36px;
+}
+.gto-cert-sub {
+  font-size: 10.5px;
+  font-weight: 800;
+  color: var(--gto-gold);
+  letter-spacing: 0.5px;
+}
+.gto-cert-title {
+  font-size: 20px;
+  font-weight: 900;
+  color: #fff;
+  margin: 2px 0 0 0;
+}
+.gto-cert-athlete-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+  background: var(--gto-surface-raised);
+  padding: 14px;
+  border-radius: var(--gto-radius-sm);
+  border: 1px solid var(--gto-border);
+}
+.gto-cert-avatar {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--gto-gold);
+}
+.gto-cert-avatar-ph {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: rgba(245, 158, 11, 0.2);
+  border: 2px solid var(--gto-gold);
+  color: var(--gto-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+.gto-cert-name {
+  font-size: 17px;
+  font-weight: 800;
+  color: #fff;
+}
+.gto-cert-meta {
+  font-size: 13px;
+  color: var(--gto-text-secondary);
+  margin-top: 3px;
+}
+.gto-cert-result-box {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.14) 0%, rgba(20, 26, 40, 0.85) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: var(--gto-radius-sm);
+  padding: 16px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+.gto-cert-disc-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--gto-text-muted);
+  letter-spacing: 0.5px;
+}
+.gto-cert-discipline {
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+  margin: 4px 0 10px 0;
+}
+.gto-cert-res-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--gto-gold);
+  letter-spacing: 0.5px;
+}
+.gto-cert-val {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--gto-gold);
+  font-family: var(--font-mono, monospace);
+  text-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+}
+.gto-cert-details {
+  font-size: 12.5px;
+  color: var(--gto-text-secondary);
+  line-height: 1.6;
+}
+
+.gto-news-article-content {
+  color: var(--gto-text-secondary);
+  font-size: 14.5px;
+  line-height: 1.65;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+.gto-news-article-content .mce-resizehandle,
+.gto-news-article-content [data-mce-bogus],
+.gto-news-article-content .null,
+.gto-news-article-content .new_photo_grid {
+  display: none !important;
+  visibility: hidden !important;
+  position: static !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  overflow: hidden !important;
+}
+
+.gto-news-article-content p {
+  margin-bottom: 14px;
+  line-height: 1.65;
+}
+
+.gto-news-article-content h1,
+.gto-news-article-content h2,
+.gto-news-article-content h3 {
+  color: #FFFFFF;
+  margin: 18px 0 10px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.gto-news-article-content h1 { font-size: 19px; }
+.gto-news-article-content h2 { font-size: 17px; }
+.gto-news-article-content h3 { font-size: 15.5px; }
+
+.gto-news-article-content img {
+  max-width: 100% !important;
+  height: auto !important;
+  border-radius: var(--gto-radius-sm);
+  margin: 14px 0;
+  border: 1px solid var(--gto-border);
+  display: block;
+  box-sizing: border-box;
+}
+
+.gto-news-article-content ul,
+.gto-news-article-content ol {
+  padding-left: 22px;
+  margin-bottom: 14px;
+}
+
+.gto-news-article-content li {
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.gto-news-article-content a {
+  color: var(--gto-blue);
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+/* --- Региональные отделения (49 Федераций) --- */
+.gto-regions-header-box {
+  background: linear-gradient(135deg, #131A2C 0%, #0F1524 100%);
+  border: 1px solid var(--gto-border);
+  border-radius: var(--gto-radius);
+  padding: 24px;
+  margin-bottom: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.gto-regions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 18px;
+  margin-bottom: 30px;
+}
+
+.gto-region-card {
+  background: var(--gto-glass-bg);
+  backdrop-filter: blur(var(--gto-glass-blur));
+  -webkit-backdrop-filter: blur(var(--gto-glass-blur));
+  border: 1px solid var(--gto-glass-border);
+  border-radius: var(--gto-radius);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: transform var(--transition-smooth), border-color var(--transition-smooth), box-shadow var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+.gto-region-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #38BDF8, #1E40AF, transparent);
+  opacity: 0.8;
+}
+
+.gto-region-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(56, 189, 248, 0.45);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4), 0 0 20px rgba(56, 189, 248, 0.15);
+}
+
+.gto-region-card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.gto-region-emblem-wrap {
+  width: 52px;
+  height: 60px;
+  min-width: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.4));
+}
+
+.gto-region-shield-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.gto-region-title-wrap {
+  flex: 1;
+  min-width: 0;
+}
+
+.gto-region-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+
+.gto-region-code-badge {
+  font-family: var(--gto-mono);
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #F8FAFC;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  letter-spacing: 0.5px;
+}
+
+.gto-region-district-tag {
+  font-size: 10px;
+  font-weight: 700;
+  color: #38BDF8;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 2px 7px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.gto-region-name {
+  font-family: var(--gto-font-display);
+  font-size: 16px;
+  font-weight: 800;
+  color: #FFFFFF;
+  line-height: 1.3;
+}
+
+.gto-region-president-box {
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--gto-radius-sm);
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gto-region-president {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #E2E8F0;
+}
+
+.gto-region-contacts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 12px;
+  color: var(--gto-text-secondary);
+}
+
+.gto-region-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gto-region-contact-item svg {
+  width: 14px;
+  height: 14px;
+  color: var(--gto-text-muted);
+  flex-shrink: 0;
+}
+
+/* Баннер открытия отделения */
+.gto-open-branch-banner {
+  background: linear-gradient(135deg, rgba(237, 28, 36, 0.15) 0%, rgba(0, 120, 191, 0.15) 100%);
+  border: 1px solid var(--gto-border-active);
+  border-radius: var(--gto-radius);
+  padding: 28px;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+/* --- Rutube Медиатека --- */
+.gto-media-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  margin-bottom: 36px;
+}
+
+.gto-player-container {
+  background: var(--gto-surface);
+  border: 1px solid var(--gto-border);
+  border-radius: var(--gto-radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.gto-iframe-wrap {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%;
+  background: #000;
+}
+
+.gto-iframe-wrap iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.gto-player-info {
+  padding: 18px;
+}
+
+.gto-player-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.gto-playlist {
+  background: var(--gto-surface);
+  border: 1px solid var(--gto-border);
+  border-radius: var(--gto-radius);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 520px;
+  overflow-y: auto;
+}
+
+.gto-playlist-item {
+  display: flex;
+  gap: 12px;
+  padding: 10px;
+  border-radius: var(--gto-radius-sm);
+  background: var(--gto-surface-raised);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.gto-playlist-item:hover {
+  background: var(--gto-surface-hover);
+  border-color: var(--gto-border);
+}
+
+.gto-playlist-item.active {
+  border-color: var(--gto-blue);
+  background: rgba(0, 120, 191, 0.15);
+}
+
+.gto-playlist-thumb {
+  width: 90px;
+  height: 54px;
+  object-fit: cover;
+  border-radius: var(--gto-radius-xs);
+  flex-shrink: 0;
+}
+
+.gto-playlist-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* --- О Федерации (About) --- */
+.gto-about-hero {
+  background: var(--gto-surface);
+  border: 1px solid var(--gto-border);
+  border-radius: var(--gto-radius);
+  padding: 28px;
+  margin-bottom: 24px;
+}
+
+.gto-about-text {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--gto-text-secondary);
+  white-space: pre-line;
+}
+
+.gto-leadership-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.gto-leader-card {
+  background: var(--gto-surface);
+  border: 1px solid var(--gto-border);
+  border-radius: var(--gto-radius);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gto-leader-role {
+  font-size: 11.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--gto-blue-hover);
+  letter-spacing: 0.5px;
+}
+
+.gto-leader-name {
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.gto-leader-desc {
+  font-size: 13px;
+  color: var(--gto-text-muted);
+}
+
+.gto-disciplines-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.gto-discipline-card {
+  background: var(--gto-surface);
+  border: 1px solid var(--gto-border);
+  border-radius: var(--gto-radius);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.gto-discipline-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gto-discipline-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13.5px;
+  color: var(--gto-text-secondary);
+}
+
+.gto-discipline-list li::before {
+  content: "• ";
+  color: var(--gto-red);
+  font-weight: 900;
+}
+
+.gto-docs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.gto-doc-item {
+  background: var(--gto-surface);
+  border: 1px solid var(--gto-border);
+  border-radius: var(--gto-radius-sm);
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  transition: var(--transition-fast);
+}
+
+.gto-doc-item:hover {
+  background: var(--gto-surface-hover);
+  border-color: var(--gto-blue);
+}
+
+.gto-doc-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.gto-doc-meta {
+  font-size: 12px;
+  color: var(--gto-text-muted);
+}
+
+/* --- Калькулятор нормативов ГТО --- */
+.gto-calc-card {
+  background: var(--gto-surface);
+  border: 1px solid var(--gto-border);
+  border-radius: var(--gto-radius);
+  padding: 28px;
+  margin-bottom: 30px;
+}
+
+.gto-calc-selectors {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.gto-calc-table-wrap {
+  overflow-x: auto;
+}
+
+.gto-calc-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.gto-calc-table th {
+  padding: 12px 14px;
+  background: var(--gto-surface-raised);
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--gto-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--gto-border);
+}
+
+.gto-calc-table td {
+  padding: 14px;
+  border-bottom: 1px solid var(--gto-border);
+  font-size: 13.5px;
+}
+
+.gto-calc-input {
+  width: 90px;
+  padding: 6px 10px;
+  border-radius: var(--gto-radius-xs);
+  background: var(--gto-surface-raised);
+  border: 1px solid var(--gto-border);
+  color: #fff;
+  font-weight: 700;
+  text-align: center;
+  outline: none;
+}
+
+.gto-calc-input:focus {
+  border-color: var(--gto-blue);
+}
+
+.badge-gold {
+  color: var(--gto-gold);
+  font-weight: 800;
+}
+.badge-silver {
+  color: var(--gto-silver);
+  font-weight: 800;
+}
+.badge-bronze {
+  color: var(--gto-bronze);
+  font-weight: 800;
+}
+
+/* --- Личный Кабинет атлета --- */
+.gto-cabinet-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+  gap: 22px;
+  margin-bottom: 30px;
+}
+
+.gto-profile-card {
+  background: var(--gto-surface);
+  border: 1px solid var(--gto-border);
+  border-radius: var(--gto-radius);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+}
+
+.gto-profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gto-blue) 0%, #004D80 100%);
+  border: 3px solid var(--gto-surface-raised);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 32px;
+  font-weight: 900;
+}
+
+.gto-profile-name {
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.gto-profile-uin {
+  font-family: var(--gto-mono);
+  font-size: 12.5px;
+  color: var(--gto-text-secondary);
+  background: var(--gto-surface-raised);
+  padding: 4px 10px;
+  border-radius: 9999px;
+  border: 1px solid var(--gto-border);
+}
+
+.gto-form-card {
+  background: var(--gto-surface);
+  border: 1px solid var(--gto-border);
+  border-radius: var(--gto-radius);
+  padding: 28px;
+}
+
+.gto-form-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.gto-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.gto-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.gto-form-group.full {
+  grid-column: 1 / -1;
+}
+
+.gto-label {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--gto-text-secondary);
+}
+
+.gto-input-field {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: var(--gto-radius-sm);
+  background: var(--gto-surface-raised);
+  border: 1px solid var(--gto-border);
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+  transition: var(--transition-fast);
+}
+
+.gto-input-field:focus {
+  border-color: var(--gto-blue);
+  box-shadow: 0 0 0 3px rgba(0, 120, 191, 0.2);
+}
+
+/* --- Нижняя навигация для мобильных (Bottom Nav) --- */
+.gto-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: calc(60px + var(--sab));
+  z-index: 1000;
+  background: rgba(10, 14, 23, 0.96);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: center;
+  justify-items: center;
+  padding: 0 4px var(--sab) 4px;
+  box-sizing: border-box;
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.5);
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  contain: layout paint;
+}
+
+.gto-bottom-nav-indicator {
+  display: none !important;
+}
+
+.gto-bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 3px;
+  width: 100%;
+  height: 56px;
+  padding: 4px 2px;
+  border-radius: 12px;
+  color: var(--gto-text-muted);
+  font-size: 10.5px;
+  font-weight: 700;
+  transition: color 0.15s ease, background-color 0.15s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  position: relative;
+}
+
+.gto-bottom-nav-item:active {
+  transform: scale(0.94);
+}
+
+.gto-bottom-nav-item svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  display: block;
+  margin: 0 auto;
+}
+
+.gto-bottom-nav-item.active {
+  color: #38BDF8;
+  background: rgba(56, 189, 248, 0.08);
+}
+
+.gto-bottom-nav-item.active svg {
+  stroke: #38BDF8;
+  filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.6));
+}
+
+/* --- Модальные окна --- */
+.gto-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease;
+}
+
+.gto-modal-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.gto-modal-card {
+  background: #111728;
+  border: 1px solid var(--gto-border-active);
+  border-radius: var(--gto-radius);
+  max-width: 640px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: var(--gto-shadow);
+  transform: scale(0.95);
+  transition: transform 0.22s ease;
+  padding: 24px;
+}
+
+.gto-modal-backdrop.active .gto-modal-card {
+  transform: scale(1);
+}
+
+.gto-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--gto-border);
+}
+
+.gto-modal-close {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--gto-radius-sm);
+  background: var(--gto-surface-raised);
+  color: #fff;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- Всплывающие уведомления (Toast) --- */
+.gto-toast {
+  position: fixed;
+  bottom: calc(75px + var(--sab));
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #1A2337;
+  border: 1px solid var(--gto-blue);
+  color: #FFFFFF;
+  padding: 12px 22px;
+  border-radius: 9999px;
+  font-size: 13.5px;
+  font-weight: 700;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  z-index: 500;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.gto-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ==========================================================================
+   Стили для Главных событий, Видео и Правил вида спорта (2026)
+   ========================================================================== */
+
+/* --- Главные события (Featured Events) --- */
+.gto-featured-events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+  margin-bottom: 36px;
+}
+
+.gto-featured-event-card {
+  background: var(--gto-surface);
+  border: 1px solid rgba(0, 120, 191, 0.35);
+  border-radius: var(--gto-radius);
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 120, 191, 0.1);
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.gto-featured-event-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--gto-blue);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 120, 191, 0.25);
+}
+
+.gto-featured-poster-wrap {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  cursor: pointer;
+  background: #080D1A;
+}
+
+.gto-featured-poster-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.gto-featured-event-card:hover .gto-featured-poster-img {
+  transform: scale(1.05);
+}
+
+.gto-featured-play-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(0, 120, 191, 0.85);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  box-shadow: 0 0 25px rgba(0, 120, 191, 0.6);
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.gto-featured-poster-wrap:hover .gto-featured-play-badge {
+  transform: translate(-50%, -50%) scale(1.15);
+  background: var(--gto-blue);
+  box-shadow: 0 0 35px rgba(0, 120, 191, 0.9);
+}
+
+.gto-featured-body {
+  padding: 18px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.gto-featured-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.35;
+  margin-bottom: 12px;
+}
+
+/* Кнопка видео для карточек */
+.gto-btn-video {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: rgba(0, 120, 191, 0.15);
+  border: 1px solid var(--gto-blue);
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 700;
+  border-radius: var(--gto-radius-sm);
+  cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.gto-btn-video:hover {
+  background: var(--gto-blue);
+  transform: translateY(-1px);
+}
+
+/* --- Главные видео (Video Showcase & Grid) --- */
+.gto-video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+  margin-bottom: 32px;
+}
+
+.gto-video-card {
+  background: var(--gto-surface);
+  border: 1px solid var(--gto-border);
+  border-radius: var(--gto-radius);
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.gto-video-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--gto-blue);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 120, 191, 0.2);
+}
+
+.gto-video-thumb-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  overflow: hidden;
+}
+
+.gto-video-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.gto-video-card:hover .gto-video-thumb {
+  transform: scale(1.06);
+}
+
+.gto-video-duration {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  letter-spacing: 0.5px;
+}
+
+.gto-video-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: var(--gto-blue);
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(0, 120, 191, 0.4);
+}
+
+.gto-video-body {
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.gto-video-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.4;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.gto-video-desc {
+  font-size: 12.5px;
+  color: var(--gto-text-secondary);
+  line-height: 1.5;
+  margin-bottom: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.gto-video-meta {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11.5px;
+  color: var(--gto-text-muted);
+}
+
+/* --- Правила вида спорта (Rules Section) --- */
+.gto-rules-hero {
+  background: linear-gradient(135deg, rgba(0, 120, 191, 0.15) 0%, rgba(10, 14, 23, 0.8) 100%), var(--gto-surface);
+  border: 1px solid rgba(0, 120, 191, 0.35);
+  border-radius: var(--gto-radius);
+  padding: 28px 24px;
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+}
+
+.gto-rules-subnav {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--gto-border);
+}
+
+.gto-rules-tab-btn {
+  padding: 10px 18px;
+  border-radius: var(--gto-radius-sm);
+  background: var(--gto-surface);
+  border: 1px solid var(--gto-border);
+  color: var(--gto-text-secondary);
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--transition-fast);
+}
+
+.gto-rules-tab-btn.active, .gto-rules-tab-btn:hover {
+  background: var(--gto-blue);
+  color: #fff;
+  border-color: var(--gto-blue);
+}
+
+.gto-rep-box {
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  border-radius: var(--gto-radius-sm);
+  padding: 16px;
+  margin-bottom: 14px;
+}
+
+.gto-rep-box-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #34D399;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.gto-norep-box {
+  background: rgba(218, 41, 28, 0.08);
+  border: 1px solid rgba(218, 41, 28, 0.35);
+  border-radius: var(--gto-radius-sm);
+  padding: 16px;
+  margin-bottom: 14px;
+}
+
+.gto-norep-box-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #F87171;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.gto-norep-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--gto-text-secondary);
+}
+
+.gto-norep-list li {
+  position: relative;
+  padding-left: 18px;
+}
+
+.gto-norep-list li::before {
+  content: "✕";
+  position: absolute;
+  left: 0;
+  color: #F87171;
+  font-weight: 800;
+}
+
+/* --- VK Media & Photobank --- */
+.gto-vk-photobank {
+  margin-top: 36px;
+}
+
+.gto-vk-group-card {
+  position: relative;
+  background: var(--gto-surface);
+  border: 1px solid var(--gto-border);
+  border-radius: var(--gto-radius);
+  overflow: hidden;
+  margin-bottom: 22px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.gto-vk-cover-wrap {
+  position: relative;
+  width: 100%;
+  min-height: 160px;
+  background: #000330;
+  overflow: hidden;
+}
+
+.gto-vk-cover-img {
+  width: 100%;
+  height: 100%;
+  min-height: 160px;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.85;
+  display: block;
+}
+
+.gto-vk-cover-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(10, 14, 23, 0.95) 0%, rgba(10, 14, 23, 0.4) 60%, rgba(10, 14, 23, 0.2) 100%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 18px 24px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.gto-vk-info-block {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.gto-vk-avatar-box {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  flex-shrink: 0;
+}
+
+.gto-vk-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.gto-vk-group-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 4px 0;
+}
+
+.gto-vk-group-sub {
+  font-size: 12.5px;
+  color: var(--gto-text-secondary);
+  margin: 0;
+}
+
+.gto-vk-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.gto-vk-photo-card {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #0d1527;
+  border: none;
+  aspect-ratio: 16 / 10;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
+}
+
+.gto-vk-photo-card:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 28px rgba(0, 120, 191, 0.4);
+}
+
+.gto-vk-photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.gto-vk-photo-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(5, 12, 24, 0.88) 0%, rgba(5, 12, 24, 0.3) 40%, transparent 70%);
+  display: flex;
+  align-items: flex-end;
+  padding: 12px;
+  transition: background var(--transition-fast);
+}
+
+.gto-vk-photo-card:hover .gto-vk-photo-overlay {
+  background: linear-gradient(0deg, rgba(0, 100, 180, 0.88) 0%, rgba(5, 12, 24, 0.4) 45%, transparent 70%);
+}
+
+.gto-vk-photo-caption {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.35;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+
+/* --- VK Albums & Photobank System --- */
+.gto-album-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 2px 12px 2px;
+  margin-bottom: 16px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.gto-album-tabs::-webkit-scrollbar {
+  height: 4px;
+}
+
+.gto-album-tabs::-webkit-scrollbar-thumb {
+  background: var(--gto-border);
+  border-radius: 9999px;
+}
+
+.gto-album-pill {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  background: var(--gto-surface-raised);
+  border: 1px solid var(--gto-border);
+  color: var(--gto-text-secondary);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform var(--transition-smooth), background var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.gto-album-pill:hover {
+  border-color: var(--gto-blue-hover);
+  color: #fff;
+  background: var(--gto-surface-hover);
+  transform: translateY(-1px);
+}
+
+.gto-album-pill:active {
+  transform: scale(0.97);
+}
+
+.gto-album-pill.active {
+  background: var(--gto-blue);
+  border-color: var(--gto-blue-hover);
+  color: #fff;
+  box-shadow: 0 4px 14px var(--gto-blue-glow);
+}
+
+.gto-album-pill-count {
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.gto-album-active-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid var(--gto-border);
+  border-left: 4px solid var(--gto-blue-hover);
+  border-radius: var(--gto-radius-sm);
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.gto-album-info-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.gto-album-thumb-preview {
+  width: 56px;
+  height: 56px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid var(--gto-border);
+  flex-shrink: 0;
+}
+
+.gto-album-info-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.gto-album-info-sub {
+  font-size: 12.5px;
+  color: var(--gto-text-secondary);
+}
+
+
+
+.gto-modal-photo-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--gto-border);
+  flex-wrap: wrap;
+}
+
+/* --- Vertical Stream of Albums (листаются вниз) --- */
+.gto-vk-albums-stream {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin-top: 14px;
+}
+
+.gto-album-block {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--gto-border);
+  border-radius: var(--gto-radius-md);
+  padding: 22px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.gto-album-block:hover {
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+
+.gto-album-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  flex-wrap: wrap;
+}
+
+.gto-album-header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.gto-album-block-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: #fff;
+  margin: 3px 0 6px 0;
+  line-height: 1.35;
+}
+
+.gto-album-block-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--gto-text-secondary);
+  flex-wrap: wrap;
+}
+
+/* --- Media Mode Switcher (Фото vs Видео) --- */
+.gto-media-mode-bar {
+  display: flex;
+  gap: 8px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid var(--gto-border);
+  border-radius: var(--gto-radius-md);
+  padding: 6px;
+  margin-bottom: 24px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.gto-media-mode-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 9999px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--gto-text-secondary);
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 0.2px;
+}
+
+.gto-media-mode-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.gto-media-mode-btn.active {
+  background: linear-gradient(135deg, #0284c7, #2563eb);
+  color: #fff;
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.35);
+}
+
+/* Platform Tag for Video Playlists */
+.gto-playlist-platform-tag {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  font-size: 9.5px;
+  font-weight: 900;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.gto-playlist-platform-tag.vk {
+  background: #0077FF;
+  color: #fff;
+}
+
+.gto-playlist-platform-tag.rutube {
+  background: #E50914;
+  color: #fff;
+}
+
+/* --- Accordion Albums (Эстетичный, чистый вид с плавным раскрытием) --- */
+.gto-accordion-album {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-bottom: 14px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+}
+
+.gto-accordion-album:hover {
+  border-color: rgba(56, 189, 248, 0.35);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+  transform: translateY(-2px);
+}
+
+.gto-accordion-album.expanded {
+  border-color: rgba(56, 189, 248, 0.6);
+  box-shadow: 0 10px 32px rgba(0, 120, 191, 0.25);
+  background: rgba(15, 23, 42, 0.95);
+}
+
+.gto-accordion-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  cursor: pointer;
+  user-select: none;
+  gap: 16px;
+  transition: background var(--transition-fast);
+  flex-wrap: wrap;
+}
+
+.gto-accordion-header:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.gto-accordion-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  min-width: 230px;
+}
+
+.gto-accordion-thumb-wrap {
+  width: 110px;
+  height: 68px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #000;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.gto-accordion-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border: none !important;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gto-accordion-album:hover .gto-accordion-thumb {
+  transform: scale(1.06);
+}
+
+.gto-accordion-titles {
+  min-width: 0;
+  flex: 1;
+}
+
+.gto-accordion-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 6px 0;
+  line-height: 1.35;
+  letter-spacing: -0.2px;
+}
+
+.gto-accordion-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--gto-text-secondary);
+  flex-wrap: wrap;
+}
+
+.gto-meta-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.gto-meta-pill.blue {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+}
+
+.gto-accordion-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.gto-accordion-toggle-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #38bdf8;
+  font-size: 12.5px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.gto-accordion-album.expanded .gto-accordion-toggle-badge {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.gto-accordion-chevron {
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 10px;
+  display: inline-block;
+}
+
+.gto-accordion-album.expanded .gto-accordion-chevron {
+  transform: rotate(180deg);
+}
+
+.gto-accordion-body {
+  display: none;
+  padding: 16px 18px 22px 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(10, 14, 23, 0.55);
+}
+
+.gto-accordion-album.expanded .gto-accordion-body {
+  display: block;
+  animation: gtoFadeIn 0.25s ease-out forwards;
+}
+
+@keyframes gtoFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Tournament Media & Photo Badges & Modals --- */
+.gto-event-photo-count-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  color: #93c5fd;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.gto-event-photo-count-pill:hover {
+  background: rgba(59, 130, 246, 0.35);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.gto-event-video-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.gto-event-video-badge-pill:hover {
+  background: rgba(239, 68, 68, 0.35);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.gto-modal-upcoming-notice {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: var(--gto-radius-sm);
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+
+.gto-modal-upcoming-notice .gto-modal-notice-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.gto-modal-media-section {
+  background: var(--gto-surface-raised);
+  border: 1px solid var(--gto-border);
+  border-radius: var(--gto-radius-sm);
+  padding: 14px;
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+
+.gto-modal-media-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.gto-modal-video-switchers {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.gto-modal-video-btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--gto-border);
+  color: var(--gto-text-secondary);
+  font-size: 11.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.gto-modal-video-btn:hover,
+.gto-modal-video-btn.active {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.5);
+  color: #fff;
+  font-weight: 700;
+}
+
+.gto-modal-photo-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+}
+
+@media (max-width: 640px) {
+  .gto-modal-photo-preview-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.gto-modal-photo-thumb {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #000;
+}
+
+.gto-modal-photo-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.25s ease;
+}
+
+.gto-modal-photo-thumb:hover img {
+  transform: scale(1.08);
+}
+
+.gto-modal-photo-zoom-hint {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 9999px;
+  padding: 3px 8px;
+  font-size: 10px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.gto-modal-photo-thumb:hover .gto-modal-photo-zoom-hint {
+  opacity: 1;
+}
+
+/* --- Hero Background Video Control --- */
+.gto-hero-video-toggle {
+  position: absolute;
+  bottom: 16px;
+  right: 20px;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 12px;
+  background: rgba(10, 14, 23, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  color: #fff;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.gto-hero-video-toggle:hover {
+  background: rgba(10, 14, 23, 0.9);
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: translateY(-1px);
+}
+.gto-hero-video-toggle.paused .gto-live-dot {
+  background: #94a3b8;
+  box-shadow: none;
+}
+
+/* --- Records Curation Chips --- */
+.gto-records-curation-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  flex-wrap: wrap;
+}
+.gto-curation-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  color: var(--gto-text-muted);
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+.gto-curation-chips-wrap {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  -webkit-overflow-scrolling: touch;
+}
+.gto-curation-chip {
+  padding: 6px 13px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--gto-border);
+  color: var(--gto-text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+.gto-curation-chip:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+.gto-curation-chip.active {
+  background: rgba(245, 158, 11, 0.18);
+  border-color: rgba(245, 158, 11, 0.5);
+  color: #fef08a;
+  font-weight: 700;
+}
+
+/* --- Photos Search Box --- */
+.gto-photos-search-box {
+  margin: 10px 0 16px 0;
+}
+.gto-search-clear-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: 0;
+  color: var(--gto-text-muted);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+/* --- Mobile Bottom Nav Badges & Active Glow --- */
+.gto-bottom-nav-item {
+  position: relative;
+}
+.gto-nav-badge {
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  transform: translateX(4px);
+  background: #f59e0b;
+  color: #000;
+  font-size: 8.5px;
+  font-weight: 900;
+  padding: 1px 4.5px;
+  border-radius: 999px;
+  line-height: 1.2;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+  pointer-events: none;
+  z-index: 2;
+}
+.gto-nav-badge.blue {
+  background: #38bdf8;
+  color: #032035;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+}
+.gto-nav-badge.red {
+  background: #ef4444;
+  color: #fff;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+  animation: pulseLiveBadge 2s infinite ease-in-out;
+}
+@keyframes pulseLiveBadge {
+  0%, 100% { transform: translateX(4px) scale(1); opacity: 1; }
+  50% { transform: translateX(4px) scale(1.12); opacity: 0.9; }
+}
+.gto-bottom-nav-item.active {
+  color: #38bdf8;
+}
+.gto-bottom-nav-item.active svg {
+  filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.6));
+}
+
+/* --- Digital Athlete ID Badge --- */
+.gto-digital-badge-wrap {
+  perspective: 1000px;
+  margin: 16px auto;
+  max-width: 380px;
+}
+.gto-digital-badge-card {
+  position: relative;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+  color: #fff;
+}
+.gto-digital-badge-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gto-tricolor-gradient);
+}
+.gto-digital-badge-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.gto-digital-badge-logo {
+  height: 38px;
+  object-fit: contain;
+}
+.gto-digital-badge-chip {
+  width: 36px;
+  height: 28px;
+  background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+  border-radius: 5px;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.4);
+}
+.gto-digital-badge-name {
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: 0.3px;
+  margin-bottom: 4px;
+}
+.gto-digital-badge-uin {
+  font-family: monospace;
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  color: #94a3b8;
+  margin-bottom: 14px;
+}
+.gto-digital-badge-footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 12px;
+}
+.gto-digital-badge-qr {
+  background: #fff;
+  padding: 6px;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+/* --- Tournament Application Modal --- */
+.gto-apply-modal-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.gto-apply-tour-card {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);
+  border: 1px solid rgba(230, 57, 70, 0.35);
+  border-radius: var(--gto-radius-sm);
+  padding: 14px 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+.gto-apply-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 600px) {
+  .gto-apply-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- Federation Homepage & Official News Redesign --- */
+.gto-featured-news-hero {
+  margin-bottom: 28px;
+  width: 100%;
+  max-width: 100%;
+}
+
+.gto-featured-news-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+  background: var(--gto-glass-bg);
+  backdrop-filter: blur(var(--gto-glass-blur));
+  -webkit-backdrop-filter: blur(var(--gto-glass-blur));
+  border: 1px solid var(--gto-glass-border);
+  border-radius: var(--gto-radius);
+  overflow: hidden;
+  box-shadow: var(--gto-shadow-float);
+  cursor: pointer;
+  transition: transform var(--transition-smooth), border-color var(--transition-smooth), box-shadow var(--transition-smooth);
+  width: 100%;
+  min-width: 0;
+  position: relative;
+  will-change: transform;
+}
+
+.gto-featured-news-card:hover {
+  border-color: rgba(56, 189, 248, 0.45);
+  transform: translateY(-4px);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45), 0 0 24px rgba(56, 189, 248, 0.15);
+}
+
+.gto-featured-news-card:active {
+  transform: scale(0.985);
+}
+
+.gto-featured-news-media {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  min-height: 320px;
+  overflow: hidden;
+  background: #090D15;
+}
+
+.gto-featured-news-media-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(10, 14, 23, 0.45) 0%, rgba(10, 14, 23, 0.1) 40%, rgba(10, 14, 23, 0.8) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.gto-featured-news-img {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  object-fit: cover;
+  object-position: center 32%;
+  display: block;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gto-featured-news-card:hover .gto-featured-news-img {
+  transform: scale(1.035);
+}
+
+.gto-featured-news-overlay-top {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  right: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.gto-featured-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(225, 29, 72, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 10px rgba(225, 29, 72, 0.4);
+}
+
+.gto-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  box-shadow: 0 0 8px #FFFFFF;
+  animation: pulseDotGto 1.6s infinite ease-in-out;
+}
+
+@keyframes pulseDotGto {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.35); opacity: 0.6; }
+}
+
+.gto-featured-date-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(10, 14, 23, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--gto-text-secondary);
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 9999px;
+}
+
+.gto-featured-news-body {
+  padding: 28px 30px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.gto-featured-news-main-text {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.gto-featured-news-kicker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.gto-featured-location-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 3px 10px;
+  border-radius: 9999px;
+}
+
+.gto-featured-news-title {
+  font-family: var(--gto-font-display);
+  font-size: 23px;
+  font-weight: 800;
+  color: #FFFFFF;
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+  margin: 0;
+}
+
+.gto-featured-news-excerpt {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--gto-text-secondary);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.gto-featured-tags {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.gto-featured-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gto-text-secondary);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 4px 10px;
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+
+.gto-featured-news-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--gto-border);
+  padding-top: 14px;
+  margin-top: auto;
+  gap: 12px;
+}
+
+.gto-featured-author {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gto-text-muted);
+}
+
+/* --- Federation Pillars & Prestige Block --- */
+.gto-fed-overview-section {
+  background: linear-gradient(180deg, rgba(17, 24, 40, 0.9) 0%, rgba(13, 19, 32, 0.95) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--gto-radius);
+  padding: 28px;
+  margin-bottom: 36px;
+  position: relative;
+  overflow: hidden;
+}
+
+.gto-fed-overview-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #fff 0%, #0055b5 50%, #e63946 100%);
+}
+
+.gto-fed-status-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 22px;
+}
+
+.gto-fed-pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.gto-fed-pillar-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--gto-radius-sm);
+  padding: 16px;
+  transition: all 0.2s ease;
+}
+
+.gto-fed-pillar-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(230, 57, 70, 0.3);
+  transform: translateY(-2px);
+}
+
+.gto-fed-pillar-icon {
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+
+.gto-fed-pillar-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.gto-fed-pillar-desc {
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--gto-text-secondary);
+}
+
+.gto-fed-quote-bar {
+  background: rgba(230, 57, 70, 0.06);
+  border-left: 3px solid var(--gto-red);
+  padding: 14px 18px;
+  border-radius: 0 var(--gto-radius-sm) var(--gto-radius-sm) 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.gto-services-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 18px;
+  margin-bottom: 34px;
+  width: 100%;
+}
+
+.gto-service-chip {
+  background: var(--gto-glass-bg);
+  backdrop-filter: blur(var(--gto-glass-blur));
+  -webkit-backdrop-filter: blur(var(--gto-glass-blur));
+  border: 1px solid var(--gto-glass-border);
+  border-radius: 9999px;
+  padding: 10px 18px 10px 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: left;
+  gap: 12px;
+  cursor: pointer;
+  box-shadow: var(--gto-shadow-sm);
+  transition: transform var(--transition-smooth), border-color var(--transition-smooth), box-shadow var(--transition-smooth), background var(--transition-fast);
+  min-width: 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.gto-service-chip:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(56, 189, 248, 0.45);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 0 16px rgba(56, 189, 248, 0.18);
+}
+
+.gto-service-chip:active {
+  transform: scale(0.98);
+}
+
+.gto-service-chip-icon {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  border-radius: 50%;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  flex-shrink: 0;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.15);
+}
+
+.gto-service-chip-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  min-width: 0;
+  overflow: hidden;
+  flex: 1;
+}
+
+.gto-service-chip-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #FFFFFF;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.25;
+}
+
+.gto-service-chip-sub {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gto-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+}
+
+.gto-service-chip-arrow {
+  margin-left: auto;
+  font-size: 14px;
+  color: var(--gto-text-muted);
+  transition: transform var(--transition-fast), color var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.gto-service-chip:hover .gto-service-chip-arrow {
+  color: #38bdf8;
+  transform: translateX(3px);
+}
+
+/* ==========================================================================
+   5 Core Pillars App UI Components
+   ========================================================================== */
+
+/* --- Quick App Actions Bar (Overview) --- */
+.gto-quick-app-bar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 18px 0 28px 0;
+  width: 100%;
+}
+
+.gto-quick-app-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: var(--gto-glass-bg);
+  backdrop-filter: blur(var(--gto-glass-blur));
+  -webkit-backdrop-filter: blur(var(--gto-glass-blur));
+  border: 1px solid var(--gto-glass-border);
+  border-radius: var(--gto-radius);
+  color: #FFFFFF;
+  cursor: pointer;
+  text-align: left;
+  transition: all var(--transition-smooth);
+  min-width: 0;
+  user-select: none;
+}
+
+.gto-quick-app-btn:hover {
+  transform: translateY(-2px);
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 0 16px rgba(56, 189, 248, 0.15);
+}
+
+.gto-quick-app-btn:active {
+  transform: scale(0.98);
+}
+
+.gto-quick-app-btn.primary .gto-quick-app-icon {
+  background: rgba(225, 29, 72, 0.15);
+  border-color: rgba(225, 29, 72, 0.35);
+  color: #FB7185;
+}
+
+.gto-quick-app-btn.gold .gto-quick-app-icon {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.35);
+  color: #FBBF24;
+}
+
+.gto-quick-app-btn.blue .gto-quick-app-icon {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: rgba(56, 189, 248, 0.35);
+  color: #38BDF8;
+}
+
+.gto-quick-app-icon {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  border: 1px solid;
+  flex-shrink: 0;
+}
+
+.gto-quick-app-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.gto-quick-app-title {
+  font-family: var(--gto-font-display);
+  font-size: 16px;
+  font-weight: 800;
+  color: #FFFFFF;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gto-quick-app-sub {
+  font-size: 12px;
+  color: var(--gto-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+}
+
+/* --- Subnav Segmented Navigation (Media & Federation Tabs) --- */
+.gto-subnav-bar {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 8px !important;
+  padding: 6px !important;
+  background: rgba(15, 23, 42, 0.75) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: var(--gto-radius) !important;
+  margin-bottom: 24px !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  scrollbar-width: none !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.gto-subnav-bar::-webkit-scrollbar {
+  display: none !important;
+}
+
+.gto-subnav-btn {
+  flex: 0 0 auto !important;
+  min-width: auto !important;
+  padding: 10px 16px !important;
+  font-family: var(--gto-font-sans) !important;
+  font-size: 13.5px !important;
+  font-weight: 700 !important;
+  color: var(--gto-text-secondary) !important;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  border-radius: var(--gto-radius-sm) !important;
+  cursor: pointer !important;
+  transition: all var(--transition-fast) !important;
+  white-space: nowrap !important;
+  text-align: center !important;
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  user-select: none !important;
+  box-sizing: border-box !important;
+  min-height: 40px !important;
+}
+
+.gto-subnav-btn svg {
+  flex-shrink: 0 !important;
+  width: 16px !important;
+  height: 16px !important;
+  display: inline-block !important;
+}
+
+.gto-subnav-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 7px;
+  font-size: 11px;
+  font-weight: 800;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+  margin-left: 2px;
+}
+
+.gto-subnav-btn:hover {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.gto-subnav-btn.active {
+  color: #FFFFFF;
+  background: linear-gradient(135deg, rgba(0, 136, 255, 0.35), rgba(30, 58, 138, 0.65));
+  border-color: rgba(56, 189, 248, 0.5);
+  box-shadow: 0 4px 16px rgba(0, 136, 255, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.gto-subnav-btn.active .gto-subnav-badge {
+  background: rgba(56, 189, 248, 0.3);
+  color: #38BDF8;
+}
+
+.gto-subview-pane {
+  animation: fadeInGto 0.25s ease-out;
+}
+
+/* --- Личный кабинет: Баннер авторизации и Привилегии атлета --- */
+.gto-cabinet-auth-card {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 58, 138, 0.35));
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: var(--gto-radius);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.gto-cabinet-auth-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 260px;
+  flex: 1;
+}
+
+.gto-cabinet-auth-icon {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 14px;
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #38BDF8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gto-cabinet-auth-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.gto-cabinet-privileges-wrap {
+  margin-top: 28px;
+  margin-bottom: 30px;
+}
+
+.gto-cabinet-privileges-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.gto-privilege-card {
+  background: var(--gto-surface);
+  border: 1px solid var(--gto-border);
+  border-radius: var(--gto-radius);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all var(--transition-fast);
+}
+
+.gto-privilege-card:hover {
+  border-color: rgba(56, 189, 248, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.gto-privilege-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gto-privilege-icon.gold {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #FBBF24;
+}
+
+.gto-privilege-icon.blue {
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: #38BDF8;
+}
+
+.gto-privilege-icon.green {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #34D399;
+}
+
+.gto-privilege-icon.red {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #F87171;
+}
+
+.gto-privilege-icon.purple {
+  background: rgba(168, 85, 247, 0.15);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  color: #C084FC;
+}
+
+.gto-privilege-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #FFFFFF;
+  line-height: 1.3;
+}
+
+.gto-privilege-desc {
+  font-size: 12.5px;
+  color: var(--gto-text-secondary);
+  line-height: 1.5;
+}
+
+/* --- Records Page App Experience («Иду на рекорд») --- */
+.gto-records-app-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.gto-records-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.gto-app-category-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.gto-app-cat-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: var(--gto-surface);
+  border: 1px solid var(--gto-border);
+  border-radius: 9999px;
+  color: var(--gto-text-secondary);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.gto-app-cat-btn:hover {
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.25);
+  background: var(--gto-surface-hover);
+}
+
+.gto-app-cat-btn.active {
+  color: #0A0E17;
+  background: linear-gradient(135deg, #FBBF24, #F59E0B);
+  border-color: #FCD34D;
+  font-weight: 800;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+}
+
+.gto-app-cat-icon {
+  font-size: 15px;
+}
+
+.gto-records-app-filter-strip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+
+.gto-sex-toggle {
+  display: inline-flex;
+  padding: 3px;
+  background: var(--gto-surface);
+  border: 1px solid var(--gto-border);
+  border-radius: 9999px;
+  gap: 2px;
+}
+
+.gto-sex-btn {
+  padding: 6px 14px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--gto-text-secondary);
+  background: transparent;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.gto-sex-btn.active {
+  background: rgba(255, 255, 255, 0.16);
+  color: #FFFFFF;
+}
+
+.gto-sex-btn.blue.active {
+  background: #2563EB;
+  color: #FFFFFF;
+}
+
+.gto-select-pill {
+  background: var(--gto-surface);
+  border: 1px solid var(--gto-border);
+  color: var(--gto-text);
+  padding: 8px 14px;
+  border-radius: 9999px;
+  font-size: 12.5px;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+}
+
+.gto-select-pill:focus {
+  border-color: var(--gto-blue);
+}
+
+/* ==========================================================================
+   КНИГА РЕКОРДОВ РОССИИ • «ИДУ НА РЕКОРД» (RECORDS - COMPACT & REFINED)
+   ========================================================================== */
+
+/* 1. Компактный заголовочный блок раздела */
+.gto-records-header-box {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.9) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  border-radius: 14px;
+  padding: 14px 18px;
+  margin-bottom: 12px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.gto-records-header-box::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #FBBF24, #EF4444, #38BDF8);
+}
+
+.gto-records-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.gto-records-compact-title {
+  font-size: 19px;
+  font-weight: 900;
+  color: #FFFFFF;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.gto-records-compact-title .gold {
+  color: #FBBF24;
+}
+
+.gto-records-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* 5 Компактных метрик в аккуратную ленту */
+.gto-records-metrics-strip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.gto-rec-metric-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  padding: 3px 9px;
+  border-radius: 9999px;
+  font-size: 11px;
+}
+
+.gto-rec-metric-pill .val {
+  font-family: var(--gto-font-display);
+  font-weight: 800;
+  font-size: 12.5px;
+  color: #FFFFFF;
+}
+
+.gto-rec-metric-pill .val.gold {
+  color: #FBBF24;
+}
+
+.gto-rec-metric-pill .val.blue {
+  color: #38BDF8;
+}
+
+.gto-rec-metric-pill .lbl {
+  color: var(--gto-text-secondary);
+  font-size: 10.5px;
+}
+
+/* 2. Компактная под-лента: Абсолютный рекорд + 3 шага регламента */
+.gto-records-sub-strip {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 900px) {
+  .gto-records-sub-strip {
+    grid-template-columns: 1fr;
+  }
+}
+
+.gto-rec-hero-card {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.gto-rec-hero-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: #FBBF24;
+}
+
+.gto-rec-hero-avatar-wrap {
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  max-width: 44px !important;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.gto-rec-hero-avatar-circle {
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 50% !important;
+  border: 1.5px solid #FBBF24 !important;
+  overflow: hidden !important;
+  background: rgba(251, 191, 36, 0.1) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.gto-rec-hero-avatar-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+.gto-rec-hero-badge {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  background: #F59E0B;
+  color: #000;
+  font-size: 10px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid #0A0E17;
+}
+
+.gto-rec-hero-val {
+  font-family: var(--gto-font-display);
+  font-size: 20px;
+  font-weight: 900;
+  color: #FBBF24;
+  line-height: 1;
+}
+
+/* Компактные 3 шага регламента */
+.gto-rec-compact-steps {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid var(--gto-glass-border);
+  border-radius: 12px;
+  padding: 8px 12px;
+}
+
+.gto-rec-compact-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+}
+
+.gto-rec-compact-step .step-badge {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  border-radius: 50%;
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  color: #FBBF24;
+  font-weight: 800;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gto-rec-compact-step .step-title {
+  font-weight: 700;
+  color: #FFFFFF;
+  display: inline;
+  margin-right: 3px;
+}
+
+.gto-rec-compact-step .step-sub {
+  color: var(--gto-text-secondary);
+  display: inline;
+  font-size: 10.5px;
+}
+
+/* 3. Компактная карточка рекорда */
+.gto-records-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.gto-rec-compact-card {
+  background: var(--gto-glass-bg);
+  backdrop-filter: blur(var(--gto-glass-blur));
+  -webkit-backdrop-filter: blur(var(--gto-glass-blur));
+  border: 1px solid var(--gto-glass-border);
+  border-radius: 11px;
+  padding: 11px 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+.gto-rec-compact-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(251, 191, 36, 0.4);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.gto-rec-gold-stripe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2.5px;
+  background: linear-gradient(90deg, #FBBF24, transparent);
+}
+
+.gto-rec-compact-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.gto-rec-compact-athlete {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.gto-rec-compact-avatar {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid rgba(251, 191, 36, 0.45);
+}
+
+.gto-rec-compact-avatar-ph {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  border-radius: 50%;
+  background: rgba(251, 191, 36, 0.12);
+  border: 1.5px solid rgba(251, 191, 36, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gto-rec-compact-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.gto-rec-compact-name {
+  font-weight: 800;
+  font-size: 13px;
+  color: #FFFFFF;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.25;
+}
+
+.gto-rec-compact-city {
+  font-size: 10.5px;
+  color: var(--gto-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+}
+
+.gto-rec-compact-result-box {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.gto-rec-micro-badge {
+  font-size: 8px;
+  font-weight: 800;
+  color: #FBBF24;
+  letter-spacing: 0.3px;
+}
+
+.gto-rec-compact-val {
+  font-family: var(--gto-font-display);
+  font-size: 17px;
+  font-weight: 900;
+  color: #FBBF24;
+  line-height: 1.1;
+  text-shadow: 0 0 8px rgba(251, 191, 36, 0.25);
+}
+
+.gto-rec-disc-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 3px 7px;
+  border-radius: 6px;
+  font-size: 11px;
+}
+
+.gto-rec-compact-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding-top: 5px;
+  border-top: 1px solid var(--gto-border);
+}
+
+.gto-rec-tags-row {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.gto-rec-pill {
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 1.5px 5px;
+  border-radius: 9999px;
+  border: 1px solid;
+}
+
+.gto-rec-pill.sex-m {
+  background: rgba(56, 189, 248, 0.1);
+  border-color: rgba(56, 189, 248, 0.3);
+  color: #38BDF8;
+}
+
+.gto-rec-pill.sex-w {
+  background: rgba(244, 114, 182, 0.1);
+  border-color: rgba(244, 114, 182, 0.3);
+  color: #F472B6;
+}
+
+.gto-rec-pill.age {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: var(--gto-text-secondary);
+}
+
+.gto-rec-compact-event {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  color: var(--gto-text-secondary);
+  overflow: hidden;
+}
+
+.gto-rec-card-actions {
+  display: flex;
+  gap: 5px;
+  margin-top: 1px;
+}
+
+.gto-rec-card-actions .gto-btn-primary,
+.gto-rec-card-actions .gto-btn-outline {
+  flex: 1;
+  padding: 4px 7px;
+  font-size: 10.5px;
+  justify-content: center;
+  border-radius: 6px;
+}
+
+/* --- Interactive Discipline Slider (Tier 1) --- */
+.gto-rec-disciplines-slider {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 4px 0 10px 0;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.gto-rec-disciplines-slider::-webkit-scrollbar {
+  display: none;
+}
+
+.gto-rec-disc-tab {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  color: var(--gto-text-secondary);
+  font-family: var(--gto-font-sans);
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.gto-rec-disc-tab svg {
+  flex-shrink: 0;
+  color: #FBBF24;
+}
+
+.gto-rec-disc-tab:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
+}
+
+.gto-rec-disc-tab.active {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.25), rgba(245, 158, 11, 0.45));
+  border-color: #FBBF24;
+  color: #FFFFFF;
+  box-shadow: 0 2px 12px rgba(251, 191, 36, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.gto-rec-disc-tab.active svg {
+  color: #FFFFFF;
+  filter: drop-shadow(0 0 4px #FBBF24);
+}
+
+/* --- Unified Records Toolbar (Tier 2) --- */
+.gto-rec-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 8px 12px;
+  margin-bottom: 14px;
+}
+
+.gto-rec-seg-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 3px;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.gto-rec-seg-btn {
+  flex: 0 0 auto;
+  background: transparent;
+  border: none;
+  color: var(--gto-text-secondary);
+  font-family: var(--gto-font-sans);
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 6px 11px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.gto-rec-seg-btn:hover {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.gto-rec-seg-btn.active {
+  color: #FFFFFF;
+  background: rgba(56, 189, 248, 0.25);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  font-weight: 800;
+}
+
+/* --- Official No Rep Modal & Criteria --- */
+.gto-norep-modal-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.gto-norep-header-banner {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.12), rgba(251, 191, 36, 0.12));
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 12px;
+  padding: 14px 18px;
+}
+
+.gto-norep-disc-pills {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scrollbar-width: none;
+}
+
+.gto-norep-disc-pills::-webkit-scrollbar {
+  display: none;
+}
+
+.gto-norep-disc-btn {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 13px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  color: var(--gto-text-secondary);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.gto-norep-disc-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+}
+
+.gto-norep-disc-btn.active {
+  background: linear-gradient(135deg, rgba(0, 136, 255, 0.35), rgba(30, 58, 138, 0.65));
+  border-color: #38BDF8;
+  color: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(0, 136, 255, 0.3);
+}
+
+.gto-rep-box {
+  background: rgba(34, 197, 94, 0.08);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.gto-rep-box-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #22C55E;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.gto-norep-box {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.gto-norep-box-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #EF4444;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.gto-norep-list {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--gto-text-secondary);
+  line-height: 1.5;
+}
+
+.gto-norep-video-rules {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 10px;
+  padding: 14px;
+}
+
+/* --- Print Styles for Diplomas & Plans --- */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #gto-modal-backdrop.active,
+  #gto-modal-backdrop.active .gto-modal-card,
+  #gto-modal-backdrop.active #gto-modal-content,
+  #gto-modal-backdrop.active #gto-modal-content * {
+    visibility: visible;
+  }
+  #gto-modal-backdrop {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: auto;
+    background: #fff !important;
+    padding: 0 !important;
+  }
+  .gto-modal-card {
+    box-shadow: none !important;
+    border: none !important;
+    background: #fff !important;
+    color: #000 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  .gto-cert-card {
+    border: 2px solid #b45309 !important;
+    background: #fff !important;
+    color: #000 !important;
+    page-break-inside: avoid;
+  }
+  .gto-cert-val, .gto-cert-name, .gto-cert-title {
+    color: #000 !important;
+  }
+  .gto-modal-header button, .gto-btn-primary, .gto-btn-outline, .gto-top-bar, .gto-bottom-nav {
+    display: none !important;
+  }
+}

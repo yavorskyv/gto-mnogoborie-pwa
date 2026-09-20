@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07111f">
+<title>Многоборье ГТО — было и стало</title>
+<meta name="description" content="Что было на сайте gto.com.ru и что стало в приложении Федерации многоборья ГТО России — сравнение со скриншотами. На компьютере — десктопные экраны, на телефоне — мобильные.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Unbounded:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07111f;--card:#101d2d;--line:rgba(255,255,255,.09);--text:#f4f7fb;--muted:#a3b4c7;
+  --red:#ff4a4f;--green:#31c987;--blue:#5aa2ff;--amber:#f5b544;--old:#8ea2ba;
+  --display:"Unbounded",sans-serif;--body:"Inter",sans-serif;
+  --ph-h:min(56svh,520px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:radial-gradient(circle at 82% -8%,#12335b 0,transparent 42%),radial-gradient(circle at 8% 108%,#3a0f14 0,transparent 40%),var(--bg);color:var(--text);font-family:var(--body);line-height:1.5;scroll-snap-type:y proximity;overflow-x:hidden}
+.grid-bg{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:56px 56px;mask-image:radial-gradient(circle at 50% 35%,#000,transparent 90%)}
+.progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:50;background:linear-gradient(90deg,var(--red),var(--amber),var(--green));transition:width .12s}
+section{min-height:100svh;scroll-snap-align:start;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:52px clamp(16px,4vw,64px) 68px;position:relative}
+.wrap{width:100%;max-width:1180px;margin:0 auto}
+.eyebrow{display:inline-flex;gap:8px;color:var(--red);font-size:clamp(10px,1.4vw,12px);font-weight:800;letter-spacing:.18em;text-transform:uppercase}
+.eyebrow.g{color:var(--green)}.eyebrow.b{color:var(--blue)}.eyebrow.a{color:var(--amber)}
+h1{font-family:var(--display);font-weight:900;line-height:1.02;letter-spacing:-.03em;font-size:clamp(32px,7.5vw,78px)}
+h2{font-family:var(--display);font-weight:800;line-height:1.07;letter-spacing:-.02em;font-size:clamp(22px,3.6vw,40px)}
+.lead{color:var(--muted);font-size:clamp(14px,1.9vw,20px);max-width:62ch;margin-top:16px}
+.snum{position:absolute;top:clamp(14px,4vw,32px);right:clamp(16px,4vw,64px);font-family:var(--display);font-weight:800;color:rgba(255,255,255,.16);font-size:clamp(12px,1.5vw,15px);letter-spacing:.1em}
+.hero-badge{display:inline-flex;gap:10px;align-items:center;padding:9px 16px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.03);font-size:13px;font-weight:700;color:#cdd9e7;margin-bottom:22px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:30px;color:var(--muted);font-size:14px}.hero-meta b{color:var(--text)}
+.scroll-hint{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:12px;letter-spacing:.1em;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:8px;animation:bob 1.8s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,7px)}}
+.cmp-head{text-align:center;margin-bottom:16px}
+.tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:6px 12px;border-radius:999px;border:1px solid var(--line);color:#cdd9e7;margin-bottom:10px}
+.cap{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.cap.old{color:var(--old)}.cap.new{color:var(--green)}
+.arrow{font-family:var(--display);font-weight:900;font-size:clamp(20px,2.6vw,32px);color:var(--green);flex:0 0 auto}
+/* ---- DESKTOP screenshots (browser windows) ---- */
+.stage-dt{display:flex;gap:clamp(14px,2.4vw,32px);align-items:center;justify-content:center}
+.win{display:flex;flex-direction:column;gap:9px;align-items:center;width:100%;max-width:560px;min-width:0}
+.win .frame-box{width:100%;border-radius:12px;overflow:hidden;border:1px solid #223349;background:#0d1626;box-shadow:0 24px 55px rgba(0,0,0,.5)}
+.win.old .frame-box{border-color:#2a3242;filter:saturate(.9)}
+.win.new .frame-box{border-color:#25493c;box-shadow:0 24px 55px rgba(49,201,135,.16)}
+.win .bar{display:flex;gap:6px;align-items:center;padding:8px 12px;background:#12203400;background:linear-gradient(#131f30,#0f1927);border-bottom:1px solid #1c2a3d}
+.win .bar i{width:9px;height:9px;border-radius:50%;background:#33465f;display:block}
+.win .bar i:first-child{background:#ff5f57}.win .bar i:nth-child(2){background:#febc2e}.win .bar i:nth-child(3){background:#28c840}
+.win .bar span{margin-left:10px;font-size:11px;color:#6c7f96;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.win img{width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top center;display:block}
+.win .ghost{aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--old);font-weight:700;font-size:15px;line-height:1.5;padding:22px;background:repeating-linear-gradient(135deg,rgba(255,255,255,.02) 0 12px,transparent 12px 24px)}
+/* ---- PHONE screenshots ---- */
+.stage-ph{display:none;gap:24px;align-items:center;justify-content:center}
+.frame{display:flex;flex-direction:column;align-items:center;gap:10px}
+.phone{height:var(--ph-h);aspect-ratio:390/844;border-radius:30px;overflow:hidden;border:5px solid #1b2740;background:#0a1522;box-shadow:0 26px 60px rgba(0,0,0,.5)}
+.frame.old .phone{border-color:#2a3242;filter:saturate(.9)}
+.frame.new .phone{border-color:#25493c;box-shadow:0 26px 60px rgba(49,201,135,.18)}
+.phone img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+.phone.empty{display:flex;align-items:center;justify-content:center;text-align:center;color:var(--old);font-weight:700;font-size:15px;line-height:1.5;padding:22px;border-style:dashed;border-color:#2a3242;background:repeating-linear-gradient(135deg,rgba(255,255,255,.02) 0 12px,transparent 12px 24px)}
+.seg{display:none;margin:16px auto 0;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:4px;gap:4px}
+.seg button{border:0;background:transparent;color:var(--muted);font-family:var(--body);font-weight:700;font-size:14px;padding:8px 22px;border-radius:999px;cursor:pointer;transition:.15s}
+.seg button.on{color:#07111f;background:#fff}
+.cmp[data-view="old"] .seg button[data-v="old"]{color:#07111f;background:var(--old)}
+/* ---- text ---- */
+.cmp-text{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);gap:clamp(16px,3vw,40px);max-width:900px;margin:22px auto 0;align-items:start}
+.was{color:var(--old);font-size:clamp(13px,1.6vw,15px);line-height:1.5;border-left:3px solid #2a3242;padding-left:14px}
+.was b{color:#c3cfdd;display:block;margin-bottom:4px;font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+.now{list-style:none;display:grid;gap:9px}
+.now .nlab{color:var(--green);font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.now li{display:grid;grid-template-columns:20px 1fr;gap:9px;font-size:clamp(13px,1.6vw,15px);color:#e3ebf4;line-height:1.4}
+.now li i{font-style:normal;color:var(--green);font-weight:900}
+/* stats + closing */
+.fgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(10px,1.6vw,16px);margin-top:28px}
+.fcard{border:1px solid var(--line);border-radius:18px;padding:clamp(14px,2vw,22px);background:var(--card)}
+.fcard .n{font-family:var(--display);font-weight:900;font-size:clamp(20px,3vw,38px);line-height:1}
+.fcard .n.red{color:var(--red)}.fcard .n.green{color:var(--green)}.fcard .n.blue{color:var(--blue)}.fcard .n.amber{color:var(--amber)}
+.fcard .l{color:var(--muted);font-size:13px;margin-top:9px;line-height:1.4}
+.pill-list{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.pill{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:10px 16px;font-size:13px;font-weight:600;color:#dfe7f0}.pill b{color:var(--green)}
+.cta{display:inline-flex;align-items:center;gap:12px;margin-top:28px;padding:16px 26px;border-radius:16px;background:#d81f26;color:#fff;font-weight:800;text-decoration:none;font-size:16px;box-shadow:0 16px 40px rgba(255,74,79,.24)}
+.cta.ghost{background:transparent;border:1px solid var(--line);color:#dfe7f0;box-shadow:none}
+.cta-row{display:flex;flex-wrap:wrap;gap:14px}
+.foot{margin-top:32px;color:var(--muted);font-size:13px;line-height:1.7}.foot a{color:var(--blue);text-decoration:none}
+.center{text-align:center}
+@media(max-width:860px){
+  section{padding:52px 16px 64px}
+  :root{--ph-h:min(52svh,460px)}
+  .stage-dt{display:none}
+  .stage-ph{display:flex}
+  .arrow{display:none}
+  .seg{display:inline-flex}
+  .stage-ph .frame.old{display:none}
+  .cmp[data-view="old"] .stage-ph .frame.old{display:flex}
+  .cmp[data-view="old"] .stage-ph .frame.new{display:none}
+  .cmp-text{grid-template-columns:1fr;gap:14px;max-width:460px}
+  .fgrid{grid-template-columns:1fr 1fr}
+  h2{text-align:center}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="progress" id="progress"></div>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="snum" id="snum-hero"></span>
+    <div class="hero-badge">Федерация многоборья ГТО России · 2026</div>
+    <h1>Было — <span style="color:var(--old)">сайт</span>.<br>Стало — <span style="color:var(--green)">приложение</span>.</h1>
+    <p class="lead">Слева — как выглядел портал <b style="color:#c3cfdd">gto.com.ru</b>. Справа — что стало в приложении: живой календарь и результаты, рекорды, медиа, интерактивная карта регионов, калькулятор нормативов, тренировочные инструменты и кабинет атлета. На компьютере показаны десктопные экраны, на телефоне — мобильные. Все данные — из первоисточника, приложение работает офлайн.</p>
+    <div class="hero-meta"><span><b>113</b> стартов</span><span><b>321</b> рекорд</span><span><b>49</b> регионов</span><span><b>3 203</b> атлета</span><span><b>PWA</b> офлайн</span></div>
+  </div>
+  <div class="scroll-hint">Листайте<span>↓</span></div>
+</section>
+
+<div id="slides"></div>
+
+<section>
+  <div class="wrap">
+    <span class="snum" id="snum-stats"></span>
+    <div class="center"><span class="eyebrow b">Техника и охват</span></div>
+    <h2 class="center">Что под капотом</h2>
+    <div class="fgrid">
+      <div class="fcard"><div class="n red">адаптив</div><div class="l">одна база — экраны под компьютер и телефон</div></div>
+      <div class="fcard"><div class="n green">офлайн</div><div class="l">сервис-воркер и кэш, работает без сети</div></div>
+      <div class="fcard"><div class="n blue">PWA</div><div class="l">установка на телефон как приложение</div></div>
+      <div class="fcard"><div class="n amber">0</div><div class="l">выдуманных данных — только gto.com.ru</div></div>
+    </div>
+    <p class="lead center" style="margin-left:auto;margin-right:auto">Vanilla JS без тяжёлых фреймворков, gzip, HTTPS. Данные собраны из открытых материалов Федерации: календарь, протоколы, рекорды, медиа и региональные отделения.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <span class="snum" id="snum-end"></span>
+    <span class="eyebrow g">Итог</span>
+    <h1 style="font-size:clamp(28px,6vw,58px)">От сайта —<br>к <span style="color:var(--green)">платформе</span></h1>
+    <div class="pill-list">
+      <span class="pill">Только <b>реальные</b> данные</span>
+      <span class="pill">Работает <b>офлайн</b></span>
+      <span class="pill"><b>Калькулятор</b> нормативов</span>
+      <span class="pill"><b>Карта</b> 49 регионов</span>
+      <span class="pill">Кабинет <b>атлета</b></span>
+    </div>
+    <div class="cta-row">
+      <a class="cta" href="./index.html">Открыть приложение →</a>
+      <a class="cta ghost" href="https://gto.com.ru/" target="_blank" rel="noopener">Первоисточник gto.com.ru ↗</a>
+    </div>
+    <div class="foot">Федерация многоборья ГТО России · Мобильное приложение (PWA)<br>Приложение: <a href="https://201-51-30-44.sslip.io/">201-51-30-44.sslip.io</a> · Данные: <a href="https://gto.com.ru/" target="_blank" rel="noopener">gto.com.ru</a></div>
+  </div>
+</section>
+
+<script>
+const P = './assets/pres/';
+// было/стало — разделы, которые были на сайте и переработаны
+const COMPARE = [
+  { tag:'Главная', title:'Главный экран', key:'home',
+    was:'Статичная витрина: слоган и общие цифры, без действий.',
+    bullets:['Живое видео на фоне и быстрые действия','Афиша ближайших стартов','Реальные счётчики: 113 стартов, 321 рекорд'] },
+  { tag:'Соревнования', title:'Календарь стартов', key:'events',
+    was:'Общий список соревнований без фильтров и статусов.',
+    bullets:['113 стартов ЕКП с фильтрами по городу, формату, году','Статусы: идёт регистрация / предстоящие / прошедшие','Карточки с результатами, документами и .ics в календарь'] },
+  { tag:'Рекорды', title:'Рекорды России', key:'records',
+    was:'Две вкладки «Женщины / Мужчины», без фильтрации.',
+    bullets:['321 официальный рекорд','Фильтры по полу, возрасту и дисциплине','Иконки дисциплин и удобная группировка'] },
+  { tag:'Медиа', title:'Медиацентр', key:'media',
+    was:'«Фото и видео» одним блоком, вперемешку.',
+    bullets:['324 видео Rutube и VK с фильтром','Фотоальбомы соревнований из VK','Встроенный плеер 16:9 и галерея'] },
+  { tag:'Регионы', title:'География многоборья', key:'regions',
+    was:'Страница «Контакты» — текстовый список отделений.',
+    bullets:['Интерактивная карта России','Гербы 49 регионов, контакты и маршрут','Поиск и фильтр по федеральным округам'] },
+];
+// чего на сайте не было (новые разделы)
+const NEW = [
+  { tag:'Сервис', title:'Калькулятор нормативов', key:'calculator',
+    bullets:['18 ступеней по нормативам ВФСК ГТО','Расчёт на Золотой / Серебряный / Бронзовый знак','Сравнение с рекордами и справка о льготах'] },
+  { tag:'Сервис', title:'WOD-таймер', key:'timer',
+    bullets:['Режимы Табата, EMOM, AMRAP, секундомер','Звуковые сигналы через Web Audio','Для тренировок и подготовки к нормативам'] },
+  { tag:'Судейство', title:'Судейские стандарты', key:'standards',
+    bullets:['Критерии зачёта и незачёта (No-Rep)','Разбор по каждому упражнению','Единые правила для атлетов и судей'] },
+  { tag:'Атлеты', title:'Поиск атлета', key:'athlete',
+    bullets:['Сквозной поиск по 3 203 профилям спортсменов','История выступлений и личные рекорды','Работает офлайн после первой загрузки'] },
+  { tag:'Кабинет', title:'«Герой ГТО» — кабинет атлета', key:'hero',
+    bullets:['Личная карточка с настоящим QR','Сканер QR и видеофиксация тренировки','Данные хранятся только на устройстве'] },
+  { tag:'Прототип', title:'Рабочее место судьи', key:'admin',
+    bullets:['Очередь судейского отсмотра','Покадровый видеоплеер и стандарты No-Rep','Фиксация повторов'], note:'Прототип — контур проведения соревнований' },
+];
+
+const slidesEl = document.getElementById('slides');
+const total = COMPARE.length + NEW.length + 4;
+let idx = 2;
+const snum = () => `${String(idx++).padStart(2,'0')} / ${String(total).padStart(2,'0')}`;
+
+function winHtml(kind, src, alt, host){
+  const body = src
+    ? `<img loading="lazy" src="${P}${src}.png" alt="${alt}">`
+    : `<div class="ghost">Такого раздела<br>на сайте не было</div>`;
+  return `<figure class="win ${kind}"><figcaption class="cap ${kind}">${kind==='old'?'Было · gto.com.ru':'Стало · приложение'}</figcaption>
+    <div class="frame-box"><div class="bar"><i></i><i></i><i></i><span>${host}</span></div>${body}</div></figure>`;
+}
+function phoneHtml(kind, src, alt){
+  const body = src ? `<div class="phone"><img loading="lazy" src="${P}${src}.png" alt="${alt}"></div>` : `<div class="phone empty">Такого раздела<br>на сайте не было</div>`;
+  return `<figure class="frame ${kind}"><figcaption class="cap ${kind}">${kind==='old'?'Было · gto.com.ru':'Стало · приложение'}</figcaption>${body}</figure>`;
+}
+function slide(f, isNew){
+  const oldDt = isNew ? null : 'dt-old-'+f.key;
+  const oldPh = isNew ? null : 'old-'+f.key;
+  const s = document.createElement('section');
+  s.className = 'cmp'; s.dataset.view = 'new';
+  s.innerHTML = `
+    <span class="snum">${snum()}</span>
+    <div class="wrap">
+      <div class="cmp-head"><span class="tag">${f.tag}</span><h2>${f.title}</h2></div>
+      <div class="stage-dt">
+        ${winHtml('old', oldDt, 'Было: '+f.title, 'gto.com.ru')}
+        <div class="arrow">→</div>
+        ${winHtml('new', 'dt-'+f.key, 'Стало: '+f.title, '201-51-30-44.sslip.io')}
+      </div>
+      <div class="stage-ph">
+        ${phoneHtml('old', oldPh, 'Было: '+f.title)}
+        ${phoneHtml('new', f.key, 'Стало: '+f.title)}
+      </div>
+      <div class="seg" role="tablist" aria-label="Было или стало">
+        <button type="button" data-v="old">Было</button>
+        <button type="button" data-v="new" class="on">Стало</button>
+      </div>
+      <div class="cmp-text">
+        <p class="was"><b>Было</b>${isNew ? 'Раздела не существовало на сайте.' : f.was}</p>
+        <ul class="now"><li style="grid-column:1/-1"><span class="nlab">Стало</span></li>${f.bullets.map(b=>`<li><i>✓</i><span>${b}</span></li>`).join('')}${f.note?`<li style="grid-column:1/-1;color:var(--amber);font-size:12px;margin-top:4px"><span>⚠ ${f.note}</span></li>`:''}</ul>
+      </div>
+    </div>`;
+  slidesEl.appendChild(s);
+}
+
+COMPARE.forEach(f => slide(f, false));
+
+const div = document.createElement('section');
+div.innerHTML = `
+  <span class="snum">${snum()}</span>
+  <div class="wrap center">
+    <span class="eyebrow a">Новые разделы</span>
+    <h1 style="font-size:clamp(28px,6vw,60px)">Чего на сайте<br><span style="color:var(--amber)">не было вообще</span></h1>
+    <p class="lead" style="margin-left:auto;margin-right:auto">Калькулятор нормативов, тренировочные инструменты, судейские стандарты, поиск атлета и личный кабинет «Герой ГТО» — этих разделов на gto.com.ru не существовало.</p>
+  </div>`;
+slidesEl.appendChild(div);
+
+NEW.forEach(f => slide(f, true));
+
+document.getElementById('snum-hero').textContent = `01 / ${String(total).padStart(2,'0')}`;
+document.getElementById('snum-stats').textContent = `${String(total-1).padStart(2,'0')} / ${String(total).padStart(2,'0')}`;
+document.getElementById('snum-end').textContent = `${String(total).padStart(2,'0')} / ${String(total).padStart(2,'0')}`;
+
+document.addEventListener('click', e => {
+  const btn = e.target.closest('.seg button');
+  if(!btn) return;
+  const cmp = btn.closest('.cmp');
+  cmp.dataset.view = btn.dataset.v;
+  cmp.querySelectorAll('.seg button').forEach(b => b.classList.toggle('on', b === btn));
+});
+
+const bar=document.getElementById('progress');
+const upd=()=>{const h=document.documentElement;const m=h.scrollHeight-h.clientHeight;bar.style.width=(m>0?h.scrollTop/m*100:0)+'%';};
+addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);upd();
+</script>
+</body>
+</html>

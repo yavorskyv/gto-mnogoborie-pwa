@@ -1,0 +1,2019 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Лидерборды · Мобайл</title>
+<meta name="description" content="Мобильное приложение leaderboards.ru: все турниры, живое табло, расписание и профиль атлета.">
+<link rel="manifest" href="/gto2026/app.webmanifest">
+<meta name="theme-color" content="#07090d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Лидерборды">
+<link rel="apple-touch-icon" href="/uploads/pwa_icon_192.png">
+<link rel="icon" type="image/png" href="/uploads/pwa_icon_192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --lb-bg:#07090d;--lb-bg-2:#0b1020;--lb-surface:#111422;--lb-surface-raised:#181d2b;--lb-surface-hi:#1e2434;
+    --lb-border:rgba(255,255,255,.09);--lb-border-accent:rgba(255,114,0,.32);
+    --lb-text:#f7f8fb;--lb-muted:#a7afbd;--lb-dim:#7d8698;
+    --lb-accent:#ff7200;--lb-accent-light:#ff9d4d;--lb-accent-soft:rgba(255,114,0,.10);
+    --lb-success:#25d366;--lb-gold:#fbbf24;--lb-gold-3:#d97706;--lb-silver:#cbd5e1;--lb-bronze:#b45309;
+    --lb-danger:#ef4444;--lb-info:#38bdf8;
+    --lb-radius:18px;--lb-radius-sm:12px;
+    --lb-font:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    --lb-display:'Oswald',Inter,-apple-system,BlinkMacSystemFont,sans-serif;
+    --lb-mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+    --nav-h:74px;
+    --safe-top:env(safe-area-inset-top,0px);
+    --safe-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  [hidden]{display:none!important;}
+  body{background:#04060a;color:var(--lb-text);font-family:var(--lb-font);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;min-height:100vh;display:flex;align-items:center;justify-content:center;}
+  .device-bg{position:fixed;inset:0;z-index:0;background:radial-gradient(900px 500px at 25% 0%,rgba(255,114,0,.10),transparent 55%),radial-gradient(700px 500px at 90% 100%,rgba(56,189,248,.06),transparent 55%),linear-gradient(135deg,#05080c,#0a0e18 55%,#05070b);}
+  .app{position:relative;z-index:1;width:100%;max-width:430px;height:100vh;height:100dvh;max-height:100dvh;padding-top:var(--safe-top);background:radial-gradient(700px 400px at 80% -8%,rgba(255,114,0,.10),transparent 60%),linear-gradient(180deg,var(--lb-bg-2) 0%,var(--lb-bg) 26%);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.6);}
+  @media(min-width:480px){.app{height:900px;max-height:94vh;padding-top:0;border-radius:34px;border:1px solid rgba(255,255,255,.08);}}
+  .screen{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding-bottom:calc(var(--nav-h) + 20px);}
+  .screen::-webkit-scrollbar{width:0;}
+  .view{display:none;animation:fade .25s ease;}
+  .view.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+  .pad{padding:0 18px;}
+
+  .app-head{position:sticky;top:0;z-index:10;padding:16px 18px 12px;background:linear-gradient(180deg,rgba(11,16,32,.96),rgba(11,16,32,.72));backdrop-filter:blur(14px);border-bottom:1px solid var(--lb-border);}
+  .head-row{display:flex;align-items:center;gap:12px;}
+  .head-title{font-family:var(--lb-display);font-size:28px;font-weight:700;line-height:1.08;text-wrap:balance;}
+  .head-sub{font-size:12.5px;color:var(--lb-muted);margin-top:2px;}
+  .head-ava{margin-left:auto;width:44px;height:44px;flex:none;border-radius:14px;cursor:pointer;background:var(--lb-accent);display:grid;place-items:center;font-size:19px;border:0;}
+  .head-ava svg{width:21px;height:21px;stroke:#fff;fill:none;stroke-width:2;}
+  .head-back{width:38px;height:38px;flex:none;border-radius:11px;border:1px solid var(--lb-border);background:var(--lb-surface);color:var(--lb-text);font-size:20px;cursor:pointer;display:grid;place-items:center;}
+
+  .search{display:flex;align-items:center;gap:9px;margin-top:14px;background:var(--lb-surface);border:1px solid var(--lb-border);border-radius:13px;padding:11px 14px;}
+  .search svg{width:17px;height:17px;stroke:var(--lb-dim);flex:none;fill:none;stroke-width:2;}
+  .search input{flex:1;background:none;border:0;color:var(--lb-text);font-family:inherit;font-size:14.5px;min-width:0;}
+  .search input:focus{outline:none;}
+  .search input::placeholder{color:var(--lb-dim);}
+
+  .chips{display:flex;gap:8px;overflow-x:auto;padding:14px 18px 4px;scrollbar-width:none;}
+  .chips::-webkit-scrollbar{display:none;}
+  .chip{flex:none;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;padding:8px 15px;border-radius:999px;border:1px solid var(--lb-border);background:var(--lb-surface);color:var(--lb-muted);transition:.16s ease;}
+  .chip.active{background:var(--lb-accent-soft);border-color:var(--lb-border-accent);color:var(--lb-accent-light);}
+  .chip .c{font-family:var(--lb-mono);font-size:11px;opacity:.7;margin-left:3px;}
+
+  .t-list{display:flex;flex-direction:column;gap:14px;padding:16px 18px 8px;}
+  .t-card{position:relative;overflow:hidden;cursor:pointer;background:var(--lb-surface);border:1px solid var(--lb-border);border-radius:var(--lb-radius);transition:.18s ease;}
+  .t-card:active{transform:scale(.985);}
+  .t-cover{height:auto;aspect-ratio:16/9;position:relative;overflow:hidden;}
+  .t-cover::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(7,9,13,.04),rgba(7,9,13,.24));pointer-events:none;}
+  /* обложка: чёткий постер (contain) поверх размытого фона из него же — без пустых полос по бокам */
+  .cover-bg{position:absolute;inset:0;z-index:0;overflow:hidden;}
+  .cover-bg::before{content:"";position:absolute;inset:-8%;background:var(--cimg,none) center/cover no-repeat;filter:blur(24px) brightness(.5) saturate(1.15);}
+  .cover-bg::after{content:"";position:absolute;inset:0;background:var(--cimg,none) center/contain no-repeat;}
+  .t-cover-tag{position:absolute;top:12px;left:12px;z-index:2;}
+  .t-body{padding:14px 16px 16px;}
+  .t-name{font-family:var(--lb-display);font-size:19px;font-weight:600;line-height:1.2;text-wrap:balance;}
+  .t-meta{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;font-size:12.5px;color:var(--lb-muted);}
+  .t-meta span{display:inline-flex;align-items:center;gap:5px;}
+  .t-meta svg{width:14px;height:14px;stroke:var(--lb-dim);flex:none;fill:none;stroke-width:2;}
+  .t-foot{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:13px;border-top:1px solid var(--lb-border);}
+  .t-part{font-size:12.5px;color:var(--lb-muted);}
+  .t-part b{color:var(--lb-text);font-family:var(--lb-mono);}
+  .t-cta{appearance:none;border:0;background:none;padding:8px 0 8px 12px;font-family:inherit;font-size:13px;font-weight:800;color:var(--lb-accent-light);cursor:pointer;}
+
+  .pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;letter-spacing:.04em;padding:5px 10px;border-radius:999px;text-transform:uppercase;}
+  .pill-live{background:rgba(37,211,102,.14);color:var(--lb-success);border:1px solid rgba(37,211,102,.32);}
+  .pill-reg{background:rgba(56,189,248,.14);color:var(--lb-info);border:1px solid rgba(56,189,248,.3);}
+  .pill-soon{background:rgba(251,191,36,.14);color:var(--lb-gold);border:1px solid rgba(251,191,36,.3);}
+  .pill-done{background:rgba(148,163,184,.12);color:var(--lb-silver);border:1px solid rgba(148,163,184,.25);}
+  .dot{width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 0 3px rgba(37,211,102,.18);animation:pulse 1.6s ease infinite;}
+  @keyframes pulse{50%{opacity:.35;}}
+
+  .d-cover{height:180px;position:relative;overflow:hidden;background-size:cover;background-position:center;}
+  .d-cover::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(7,9,13,.45) 0%,rgba(7,9,13,.2) 40%,var(--lb-bg) 100%);pointer-events:none;}
+  .d-back{position:absolute;top:16px;left:16px;z-index:3;width:40px;height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:rgba(7,9,13,.5);backdrop-filter:blur(8px);color:#fff;font-size:20px;cursor:pointer;display:grid;place-items:center;}
+  .d-share{position:absolute;top:16px;right:16px;z-index:3;width:40px;height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:rgba(7,9,13,.5);backdrop-filter:blur(8px);color:#fff;font-size:17px;cursor:pointer;display:grid;place-items:center;}
+  .d-share:active{transform:scale(.92);}
+  .lb-toast{position:fixed;left:50%;bottom:calc(var(--nav-h) + 24px + env(safe-area-inset-bottom,0));transform:translate(-50%,20px);z-index:300;background:var(--lb-surface-hi);color:var(--lb-text);border:1px solid var(--lb-border);border-radius:12px;padding:11px 18px;font-size:13.5px;font-weight:600;box-shadow:0 12px 34px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;max-width:80%;text-align:center;}
+  .lb-toast.show{opacity:1;transform:translate(-50%,0);}
+  .d-cover-info{position:absolute;left:18px;right:18px;bottom:14px;z-index:3;}
+  .d-title{font-family:var(--lb-display);font-size:24px;font-weight:700;letter-spacing:.005em;line-height:1.08;text-wrap:balance;margin-top:8px;}
+
+  .tabs{display:flex;gap:2px;padding:12px 10px 0;position:sticky;top:0;z-index:5;background:linear-gradient(180deg,var(--lb-bg),rgba(7,9,13,.92));border-bottom:1px solid var(--lb-border);overflow-x:auto;scrollbar-width:none;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{flex:none;text-align:center;font-size:13px;font-weight:700;color:var(--lb-muted);padding:11px 14px;cursor:pointer;border-bottom:2px solid transparent;transition:.15s ease;white-space:nowrap;}
+  .tab.active{color:var(--lb-text);border-bottom-color:var(--lb-accent);}
+  .subview{display:none;}
+  .subview.active{display:block;}
+
+  .cat-chips{display:flex;gap:7px;overflow-x:auto;padding:12px 14px 4px;scrollbar-width:none;}
+  .cat-chips::-webkit-scrollbar{display:none;}
+
+  .lb-rows{display:flex;flex-direction:column;padding:8px 12px;}
+  .lb-row{display:flex;align-items:center;gap:11px;padding:12px 8px;cursor:pointer;transition:.15s ease;}
+  .lb-row:active{background:rgba(255,255,255,.03);}
+  .lb-row + .lb-row{border-top:1px solid var(--lb-border);}
+  .rank{width:34px;height:34px;flex:none;border-radius:11px;display:grid;place-items:center;font-weight:800;font-size:14px;font-family:var(--lb-mono);background:var(--lb-surface-raised);color:var(--lb-muted);border:1px solid var(--lb-border);}
+  .rank-1{background:linear-gradient(135deg,#fbbf24,#d97706);color:#1a1200;border-color:transparent;}
+  .rank-2{background:linear-gradient(135deg,#e2e8f0,#94a3b8);color:#161b26;border-color:transparent;}
+  .rank-3{background:linear-gradient(135deg,#d9884f,#b45309);color:#1a0f00;border-color:transparent;}
+  .aw-list{margin-top:10px;display:flex;flex-direction:column;gap:8px;}
+  .aw-row{display:flex;align-items:center;gap:10px;}
+  .aw-row .rank{font-size:18px;}
+  .aw-nm{min-width:0;flex:1;} .aw-nm .a{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;} .aw-nm .b{font-size:12px;color:var(--lb-muted);}
+  .aw-pts{flex:none;text-align:right;} .aw-pts .p{font-family:var(--lb-mono);font-weight:800;font-size:16px;} .aw-pts .u{font-size:10px;color:var(--lb-dim);text-transform:uppercase;letter-spacing:.04em;}
+  .pod-wrap{padding-bottom:18px;}
+  .board-podium{background:var(--lb-surface);border:1px solid var(--lb-border);border-radius:16px;padding:6px 10px 18px;margin-bottom:14px;}
+  .a-tourn{display:flex;align-items:center;gap:8px;width:100%;margin-top:10px;padding:9px 12px;border-radius:12px;border:1px solid var(--lb-border-accent);background:var(--lb-accent-soft);color:var(--lb-text);font-family:inherit;cursor:pointer;text-align:left;}
+  .a-tourn-ic{flex:none;font-size:15px;}
+  .a-tourn-nm{flex:1;min-width:0;font-weight:700;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .a-tourn-sw{flex:none;font-size:11px;font-weight:700;color:var(--lb-accent-light);text-transform:uppercase;letter-spacing:.04em;}
+  .a-pick{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:14px;border-radius:14px;border:1px solid var(--lb-border);background:var(--lb-surface);color:var(--lb-text);font-family:inherit;cursor:pointer;margin-bottom:10px;transition:border-color .15s ease,transform .1s ease;}
+  .a-pick:active{transform:scale(.99);}
+  .a-pick.cur{border-color:var(--lb-border-accent);background:var(--lb-accent-soft);}
+  .a-pick .pk-main{flex:1;min-width:0;}
+  .a-pick .pk-nm{font-weight:800;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .a-pick .pk-sub{font-size:12px;color:var(--lb-muted);margin-top:3px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+  .pk-dot{width:7px;height:7px;border-radius:50%;flex:none;}
+  .pk-dot.ready{background:var(--lb-success);} .pk-dot.attention{background:var(--lb-gold);} .pk-dot.blocked,.pk-dot.error{background:var(--lb-danger);} .pk-dot.finalized{background:var(--lb-dim);} .pk-dot.active{background:var(--lb-info);}
+  .pk-live{font-size:10px;font-weight:800;color:var(--lb-accent-light);border:1px solid var(--lb-border-accent);border-radius:6px;padding:1px 6px;text-transform:uppercase;}
+  .a-pick .arr{flex:none;color:var(--lb-dim);font-size:20px;}
+  .podium{display:flex;align-items:flex-end;justify-content:center;gap:10px;margin-top:14px;}
+  .pod-col{flex:1;max-width:33%;display:flex;flex-direction:column;align-items:center;gap:8px;}
+  .pod-card{width:100%;text-align:center;background:var(--lb-surface-raised);border:1px solid var(--lb-border);border-radius:14px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .pod-card .reg-badge{width:40px;height:40px;}
+  .pod-nm{font-weight:800;font-size:12px;line-height:1.15;} .pod-reg{font-size:10px;color:var(--lb-muted);} .pod-p{font-family:var(--lb-mono);font-size:12px;color:var(--lb-accent-light);font-weight:700;}
+  .pod-base{width:100%;border-radius:12px 12px 0 0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:8px;gap:2px;}
+  .pod-base span{font-size:22px;} .pod-base b{font-family:var(--lb-mono);font-size:15px;}
+  .aw-ann{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--lb-border);}
+  .aw-ann:last-child{border-bottom:0;} .aw-ann-p{flex:none;font-family:var(--lb-mono);font-size:12px;color:var(--lb-dim);width:64px;}
+  .aw-ann-n{flex:1;font-weight:700;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;} .aw-ann-pt{flex:none;font-family:var(--lb-mono);font-size:13px;color:var(--lb-accent-light);}
+  .lb-team{flex:1;min-width:0;}
+  .lb-name{font-weight:700;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .lb-reg{font-size:12px;color:var(--lb-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .lb-pts{text-align:right;flex:none;}
+  .lb-pts .p{font-family:var(--lb-mono);font-weight:800;font-size:16px;font-variant-numeric:tabular-nums;}
+  .lb-pts .u{font-size:10px;color:var(--lb-dim);}
+
+  .sched{padding:8px 18px 18px;display:flex;flex-direction:column;gap:10px;}
+  .sched-day{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--lb-dim);padding:12px 0 2px;}
+  .sched-item{background:var(--lb-surface);border:1px solid var(--lb-border);border-radius:var(--lb-radius-sm);padding:13px 14px;display:flex;gap:12px;align-items:baseline;}
+  .sched-item.live{border-color:var(--lb-border-accent);background:linear-gradient(120deg,var(--lb-surface) 55%,rgba(255,114,0,.07));}
+  .sched-item.next{border-color:rgba(56,189,248,.3);}
+  .sched-item.event{background:rgba(255,255,255,.02);border-style:dashed;border-color:var(--lb-border);}
+  .sched-item .chev{color:var(--lb-dim);font-size:16px;align-self:center;flex:none;}
+  .ev-tag{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--lb-muted);background:var(--lb-surface-raised);border:1px solid var(--lb-border);border-radius:6px;padding:2px 7px;vertical-align:1px;}
+  .sched-time{font-family:var(--lb-mono);font-size:13px;font-weight:700;color:var(--lb-accent-light);flex:none;width:44px;}
+  .sched-t{font-size:14px;font-weight:600;line-height:1.3;}
+  .sched-c{font-size:12px;color:var(--lb-muted);margin-top:2px;}
+
+  .cx{padding:14px 18px 18px;display:flex;flex-direction:column;gap:14px;}
+  .cx-card{background:var(--lb-surface);border:1px solid var(--lb-border);border-radius:var(--lb-radius);overflow:hidden;}
+  .cx-img{height:120px;background-size:cover;background-position:center;background-color:var(--lb-surface-raised);}
+  .cx-b{padding:14px 16px 16px;}
+  .cx-num{font-family:var(--lb-mono);font-size:11px;font-weight:700;color:var(--lb-accent-light);letter-spacing:.06em;}
+  .cx-name{font-family:var(--lb-display);font-size:18px;font-weight:600;margin:3px 0 8px;line-height:1.25;text-wrap:balance;}
+  .cx-part{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--lb-border);font-size:13px;}
+  .cx-part .pn{color:var(--lb-muted);}
+  .cx-part .pc{font-family:var(--lb-mono);color:var(--lb-text);flex:none;}
+  .cx-desc{font-size:12.5px;color:var(--lb-muted);line-height:1.55;margin-top:10px;white-space:pre-line;max-height:5.2em;overflow:hidden;position:relative;}
+  .cx-desc.open{max-height:none;}
+  .cx-more{font-size:12px;color:var(--lb-accent-light);font-weight:600;margin-top:6px;cursor:pointer;}
+
+  .about{padding:16px 18px 24px;}
+  .about h4{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--lb-dim);margin:18px 0 8px;}
+  .about p{font-size:14px;color:var(--lb-muted);line-height:1.6;white-space:pre-line;text-wrap:pretty;}
+  .kv{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--lb-border);font-size:13.5px;}
+  .kv .k{color:var(--lb-muted);}
+  .kv .v{text-align:right;font-weight:600;}
+  .about a.btn{display:block;text-align:center;margin-top:16px;padding:13px;border-radius:14px;background:linear-gradient(135deg,var(--lb-accent),var(--lb-gold-3));color:#fff;font-weight:800;font-size:14px;text-decoration:none;}
+
+  /* timer banner */
+  .timer-banner{margin:12px 14px 0;padding:14px 16px;border-radius:var(--lb-radius);background:linear-gradient(120deg,var(--lb-surface-raised),rgba(255,114,0,.08));border:1px solid var(--lb-border-accent);display:flex;align-items:center;gap:14px;}
+  .timer-banner .big{font-family:var(--lb-mono);font-size:30px;font-weight:800;font-variant-numeric:tabular-nums;}
+  .timer-banner .lbl{font-size:12px;color:var(--lb-muted);}
+  .timer-banner .nm{font-size:13.5px;font-weight:700;}
+
+  /* profile */
+  .prof-hero{position:relative;padding:28px 18px 18px;text-align:center;overflow:hidden;}
+  .prof-hero::before{content:"";position:absolute;inset:0;background:radial-gradient(400px 200px at 50% 0%,rgba(255,114,0,.16),transparent 65%);}
+  .prof-ava{position:relative;width:88px;height:88px;margin:0 auto 12px;border-radius:26px;background:linear-gradient(135deg,var(--lb-accent),var(--lb-gold-3));display:grid;place-items:center;box-shadow:0 12px 30px rgba(255,114,0,.35);}
+  .prof-ava svg{width:44px;height:44px;stroke:#fff;fill:none;stroke-width:1.8;}
+  .prof-name{position:relative;font-family:var(--lb-display);font-size:26px;font-weight:700;letter-spacing:.01em;}
+  .prof-tag{position:relative;font-size:13px;color:var(--lb-muted);margin-top:4px;max-width:32ch;margin-left:auto;margin-right:auto;}
+  .prof-cta{margin:6px 18px 0;display:flex;flex-direction:column;gap:10px;}
+  .p-section{font-family:var(--lb-display);font-size:14px;font-weight:600;color:var(--lb-muted);margin:12px 2px 0;text-transform:uppercase;}
+  .pbtn{display:flex;align-items:center;gap:12px;padding:15px 16px;border-radius:var(--lb-radius);background:var(--lb-surface);border:1px solid var(--lb-border);cursor:pointer;text-decoration:none;color:var(--lb-text);transition:.16s ease;}
+  .pbtn:active{transform:scale(.99);}
+  .pbtn.accent{background:linear-gradient(120deg,var(--lb-surface),rgba(255,114,0,.06));border-color:var(--lb-border-accent);}
+  .pbtn .ic{width:42px;height:42px;flex:none;border-radius:12px;background:var(--lb-surface-raised);display:grid;place-items:center;font-size:20px;}
+  .pbtn .tt{flex:1;}
+  .pbtn .a{font-weight:800;font-size:14.5px;}
+  .pbtn .b{font-size:12.5px;color:var(--lb-muted);}
+  .pbtn .arr{color:var(--lb-dim);font-size:20px;}
+  .prof-note{font-size:11.5px;color:var(--lb-dim);text-align:center;padding:18px 26px;line-height:1.5;}
+  .prof-ava .ini{font-family:var(--lb-display);font-weight:700;font-size:34px;color:#fff;letter-spacing:.02em;text-transform:uppercase;}
+  .prof-stats{position:relative;display:flex;gap:10px;justify-content:center;margin-top:16px;}
+  .ps{background:var(--lb-surface);border:1px solid var(--lb-border);border-radius:14px;padding:10px 6px;text-align:center;}
+  .ps .v{font-family:var(--lb-display);font-weight:700;font-size:22px;line-height:1;}
+  .ps .v.gold{color:var(--lb-gold);}
+  .ps .l{font-size:10.5px;color:var(--lb-dim);margin-top:4px;text-transform:uppercase;letter-spacing:.04em;}
+  .prof-stats .ps{flex:1;max-width:110px;}
+  .prof-cabinet{margin:16px 18px 0;display:flex;flex-direction:column;gap:10px;}
+  .cab-h{font-family:var(--lb-display);font-weight:600;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--lb-muted);padding:6px 2px 0;}
+  .cab-card{background:var(--lb-surface);border:1px solid var(--lb-border);border-radius:16px;padding:14px;}
+  .cab-t{display:flex;align-items:center;gap:10px;}
+  .cab-t .nm{flex:1;min-width:0;font-weight:800;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .cab-place{flex:none;text-align:right;}
+  .cab-place .p{font-family:var(--lb-mono);font-weight:800;font-size:16px;}
+  .cab-place .u{font-size:10px;color:var(--lb-dim);text-transform:uppercase;letter-spacing:.04em;}
+  .cab-sub{font-size:12.5px;color:var(--lb-muted);margin-top:4px;}
+  .cab-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--lb-accent-light);border:1px solid var(--lb-border-accent);border-radius:7px;padding:2px 7px;margin-top:8px;}
+  .badge-card{background:linear-gradient(160deg,var(--lb-surface-raised),var(--lb-surface));border:1px solid var(--lb-border-accent);border-radius:18px;padding:18px 16px;text-align:center;position:relative;overflow:hidden;}
+  .badge-card::before{content:"";position:absolute;inset:0;background:radial-gradient(300px 140px at 50% 0%,rgba(255,114,0,.14),transparent 70%);pointer-events:none;}
+  .badge-title{font-family:var(--lb-display);font-weight:600;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--lb-accent-light);}
+  .badge-qr{position:relative;width:184px;height:184px;margin:12px auto 10px;border-radius:14px;overflow:hidden;background:#fff;box-shadow:0 10px 26px rgba(0,0,0,.4);}
+  .badge-qr svg{display:block;width:100%;height:100%;}
+  .badge-nm{font-family:var(--lb-display);font-weight:700;font-size:19px;line-height:1.1;}
+  .badge-sub{font-size:12.5px;color:var(--lb-muted);margin-top:3px;}
+  .badge-hint{font-size:11px;color:var(--lb-dim);margin-top:10px;}
+
+  /* states */
+  .center-state{text-align:center;color:var(--lb-dim);padding:48px 26px;font-size:14px;line-height:1.55;}
+  .spinner{width:30px;height:30px;border:3px solid var(--lb-border);border-top-color:var(--lb-accent);border-radius:50%;margin:0 auto 14px;animation:spin .8s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .skel{background:linear-gradient(90deg,var(--lb-surface) 25%,var(--lb-surface-raised) 50%,var(--lb-surface) 75%);background-size:200% 100%;animation:sh 1.4s ease infinite;border-radius:var(--lb-radius);}
+  @keyframes sh{to{background-position:-200% 0;}}
+  .retry{margin-top:12px;display:inline-block;padding:9px 18px;border-radius:10px;background:var(--lb-accent-soft);border:1px solid var(--lb-border-accent);color:var(--lb-accent-light);font-weight:700;font-size:13px;cursor:pointer;}
+
+  .botnav{position:absolute;left:0;right:0;bottom:0;z-index:20;height:calc(var(--nav-h) + var(--safe-bottom));display:flex;background:rgba(9,12,20,.94);backdrop-filter:blur(18px);border-top:1px solid var(--lb-border);padding-bottom:var(--safe-bottom);}
+  .nav-item{flex:1;background:none;border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;color:var(--lb-dim);font-family:inherit;transition:color .15s ease,transform .12s ease;-webkit-tap-highlight-color:transparent;}
+  .nav-item:active{transform:scale(.92);}
+  .nav-item svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:2;transition:stroke-width .15s ease;}
+  .nav-item span{font-size:11.5px;font-weight:600;letter-spacing:.01em;}
+  .nav-item.active{color:var(--lb-accent-light);}
+  .nav-item.active svg{stroke-width:2.4;}
+  .nav-item.active span{font-weight:700;}
+
+  /* modal */
+  .modal{position:absolute;inset:0;z-index:40;display:none;align-items:flex-end;}
+  .modal.open{display:flex;}
+  .modal-bd{position:absolute;inset:0;background:rgba(4,6,10,.7);backdrop-filter:blur(3px);}
+  .sheet{position:relative;width:100%;background:var(--lb-surface);border-top-left-radius:24px;border-top-right-radius:24px;border-top:1px solid var(--lb-border);padding:10px 18px calc(24px + env(safe-area-inset-bottom,0));max-height:90%;overflow-y:auto;overscroll-behavior:contain;animation:up .18s ease-out;}
+  @keyframes up{from{transform:translateY(100%);}to{transform:none;}}
+  .grip{width:40px;height:4px;border-radius:2px;background:var(--lb-border);margin:6px auto 14px;}
+  .sheet h3{font-family:var(--lb-display);font-size:20px;font-weight:600;line-height:1.2;text-wrap:balance;padding-right:34px;}
+  .sheet-close{position:absolute;right:14px;top:12px;width:40px;height:40px;border-radius:12px;border:1px solid var(--lb-border);background:var(--lb-surface-raised);color:var(--lb-muted);font:24px/1 var(--lb-font);cursor:pointer;display:grid;place-items:center;z-index:2;}
+  .sheet .sub{font-size:12.5px;color:var(--lb-muted);margin-bottom:14px;}
+  .brk{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-top:1px solid var(--lb-border);font-size:13.5px;}
+  .brk .bn{color:var(--lb-text);flex:1;min-width:0;}
+  .brk .bn small{display:block;color:var(--lb-muted);font-size:11.5px;}
+  .brk .bs{font-family:var(--lb-mono);color:var(--lb-accent-light);flex:none;text-align:right;}
+  .brk{cursor:pointer;align-items:center;}
+  .brk:active{opacity:.6;}
+  .brk .bp{font-family:var(--lb-mono);font-weight:800;flex:none;width:44px;text-align:right;}
+  .brk .brank{font-family:var(--lb-mono);font-size:11px;color:var(--lb-dim);flex:none;width:34px;text-align:right;}
+  .brk .chev{flex:none;color:var(--lb-dim);font-size:16px;margin-left:2px;}
+  .cx-card{cursor:pointer;}
+  .cx-card:active{transform:scale(.99);}
+  .sheet-nav{display:flex;align-items:center;gap:10px;margin:-4px 0 8px;}
+  .sheet-back{width:32px;height:32px;flex:none;border-radius:9px;border:1px solid var(--lb-border);background:var(--lb-surface-raised);color:var(--lb-text);font-size:18px;cursor:pointer;display:grid;place-items:center;}
+  .sheet .lb-rows{padding:2px 0;}
+  .sheet .lb-row{cursor:pointer;}
+  .lb-cat{font-size:11px;color:var(--lb-dim);}
+  .sheet-meta{font-size:13px;color:var(--lb-muted);line-height:1.55;white-space:pre-line;margin-bottom:10px;}
+  .sheet-part{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-top:1px solid var(--lb-border);font-size:13px;}
+  .sheet-part .pn{color:var(--lb-muted);}
+  .sheet-part .pc{font-family:var(--lb-mono);flex:none;}
+
+  /* region monogram badge */
+  .reg-badge{position:relative;overflow:hidden;width:30px;height:30px;flex:none;border-radius:9px;display:grid;place-items:center;font-size:11px;font-weight:800;color:#0a0a0a;font-family:var(--lb-mono);letter-spacing:-.02em;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);}
+  .reg-badge .mono{position:relative;z-index:0;}
+  /* региональные эмблемы прозрачные и нечитаемы на 30px → показываем цветную монограмму; эмблему включаем только на крупных бейджах */
+  .reg-badge img{display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:2px;z-index:1;background:#fff;}
+  .pp-card .reg-badge img{display:block;}
+  .lane .reg-badge{width:34px;height:34px;}
+  .lb-row .reg-badge{margin-right:-2px;}
+
+  /* full standings table */
+  .seg{display:flex;gap:4px;padding:12px 14px 0;}
+  .seg button{flex:1;font-family:inherit;font-size:12.5px;font-weight:700;padding:9px;border-radius:10px;border:1px solid var(--lb-border);background:var(--lb-surface);color:var(--lb-muted);cursor:pointer;}
+  .seg button.active{background:var(--lb-accent-soft);border-color:var(--lb-border-accent);color:var(--lb-accent-light);}
+  .ftable-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding:12px 0 0;}
+  .ftable{border-collapse:separate;border-spacing:0;font-size:12.5px;min-width:100%;}
+  .ftable th,.ftable td{padding:9px 8px;text-align:center;white-space:nowrap;border-bottom:1px solid var(--lb-border);font-variant-numeric:tabular-nums;font-family:var(--lb-mono);}
+  .ftable thead th{position:sticky;top:0;background:var(--lb-surface-raised);color:var(--lb-dim);font-size:11px;font-weight:700;cursor:pointer;z-index:2;}
+  .ftable .sticky{position:sticky;left:0;background:var(--lb-bg);z-index:3;width:34px;}
+  .ftable thead .sticky{z-index:4;background:var(--lb-surface-raised);}
+  .ftable .sticky2{position:sticky;left:34px;background:var(--lb-bg);z-index:3;text-align:left;min-width:150px;max-width:170px;font-family:var(--lb-font);}
+  .ftable thead .sticky2{z-index:4;background:var(--lb-surface-raised);}
+  .ftable tbody tr{cursor:pointer;}
+  .ftable tbody tr:active td{background:rgba(255,255,255,.03);}
+  .ftable .tl{text-align:left;}
+  .ftable .tname{font-weight:700;font-family:var(--lb-font);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:158px;}
+  .ftable .treg{font-size:10.5px;color:var(--lb-muted);font-family:var(--lb-font);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:158px;}
+  .ftable .rk{font-weight:800;color:var(--lb-text);}
+  .ftable .tot{font-weight:800;color:var(--lb-accent-light);background:rgba(255,114,0,.06);}
+  .ftable td.hascore{color:var(--lb-text);}
+  .ftable td.empty{color:var(--lb-dim);}
+
+  /* heat detail sheet */
+  .lane{display:flex;align-items:center;gap:11px;padding:12px 0;border-top:1px solid var(--lb-border);}
+  .lane:first-of-type{border-top:0;}
+  .lane-no{width:26px;height:26px;flex:none;border-radius:8px;background:var(--lb-surface-raised);border:1px solid var(--lb-border);display:grid;place-items:center;font-size:12px;font-weight:800;font-family:var(--lb-mono);color:var(--lb-muted);}
+  .lane-main{flex:1;min-width:0;}
+  .lane-name{font-weight:700;font-size:14px;}
+  .lane-judge{font-size:11.5px;color:var(--lb-muted);}
+  .members{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+  .mchip{font-size:11.5px;color:var(--lb-muted);background:var(--lb-surface-raised);border:1px solid var(--lb-border);border-radius:999px;padding:4px 10px;}
+  .sched-item{cursor:pointer;}
+  .sched-item:active{opacity:.6;}
+
+  /* judge panel */
+  .j-wrap{padding:16px 18px 24px;}
+  .j-step{display:flex;flex-direction:column;gap:12px;}
+  .j-label{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--lb-dim);margin-top:6px;}
+  .j-input,.j-select{width:100%;min-height:48px;background:var(--lb-surface);border:1px solid var(--lb-border);border-radius:12px;color:var(--lb-text);font-family:inherit;font-size:16px;padding:12px 14px;}
+  .j-input:focus,.j-select:focus{outline:none;border-color:var(--lb-border-accent);}
+  .j-btn{width:100%;min-height:48px;border:0;border-radius:14px;background:var(--lb-accent);color:#fff;font-family:inherit;font-weight:800;font-size:15px;padding:13px 15px;cursor:pointer;}
+  .j-btn.sec{background:var(--lb-surface-raised);color:var(--lb-text);border:1px solid var(--lb-border);}
+  .j-btn:disabled{opacity:.6;}
+  .reg-form{display:grid;gap:12px;margin-top:14px;}
+  .reg-label{display:grid;gap:6px;color:var(--lb-muted);font-size:12px;font-weight:700;}
+  .reg-members{display:grid;gap:10px;}
+  .reg-note{padding:12px;border-radius:12px;background:var(--lb-surface-raised);border:1px solid var(--lb-border);color:var(--lb-muted);font-size:12.5px;line-height:1.45;}
+  .reg-check{display:flex;gap:9px;align-items:flex-start;color:var(--lb-muted);font-size:12px;line-height:1.4;}
+  .reg-check input{margin-top:2px;accent-color:var(--lb-accent);}
+  .reg-error{color:#ff8a80;font-size:13px;line-height:1.4;}
+  .reg-label input::file-selector-button{border:0;border-radius:9px;background:var(--lb-surface-hi);color:var(--lb-text);font-family:inherit;font-weight:700;padding:9px 11px;margin-right:10px;cursor:pointer;}
+  .j-note{font-size:12.5px;color:var(--lb-muted);line-height:1.5;}
+  .j-pick{display:flex;align-items:center;gap:12px;padding:14px;border-radius:14px;background:var(--lb-surface);border:1px solid var(--lb-border);cursor:pointer;margin-bottom:10px;}
+  .j-pick:active{transform:scale(.99);}
+  .j-pick .n{flex:1;min-width:0;}
+  .j-pick .n .a{font-weight:700;font-size:14.5px;}
+  .j-pick .n .b{font-size:12px;color:var(--lb-muted);}
+  .j-pick .arr{color:var(--lb-dim);font-size:18px;}
+  .j-status{border-radius:12px;padding:12px 14px;font-weight:700;font-size:13.5px;text-align:center;}
+  .j-status.err{background:rgba(239,68,68,.12);color:#fca5a5;border:1px solid rgba(239,68,68,.25);}
+  .j-status.ok{background:rgba(37,211,102,.12);color:var(--lb-success);border:1px solid rgba(37,211,102,.28);}
+  .lane-score{background:var(--lb-surface);border:1px solid var(--lb-border);border-radius:14px;padding:14px;margin-bottom:12px;}
+  .lane-score-h{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+  .lane-score-h .ln{width:26px;height:26px;flex:none;border-radius:8px;background:var(--lb-surface-raised);border:1px solid var(--lb-border);display:grid;place-items:center;font-size:12px;font-weight:800;font-family:var(--lb-mono);color:var(--lb-muted);}
+  .lane-score-h .nm{font-weight:700;font-size:14px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .part-in{display:flex;align-items:center;gap:10px;margin-bottom:9px;}
+  .part-in label{flex:1;font-size:12.5px;color:var(--lb-muted);min-width:0;}
+  .part-in input[type=text]{width:96px;flex:none;text-align:center;font-family:var(--lb-mono);font-size:15px;font-weight:700;background:var(--lb-bg);border:1px solid var(--lb-border);border-radius:10px;color:var(--lb-text);padding:9px;}
+  .part-in input:focus{outline:none;border-color:var(--lb-border-accent);}
+  .dns{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--lb-muted);cursor:pointer;flex:none;}
+  .dns input{width:16px;height:16px;accent-color:var(--lb-danger);}
+
+  /* admin center */
+  .a-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px;}
+  .a-card{background:var(--lb-surface);border:1px solid var(--lb-border);border-radius:14px;padding:14px;margin-bottom:12px;}
+  .a-mobile-nav{margin-top:10px;}
+  .a-mobile-nav .j-select{background:var(--lb-surface-raised);border-color:var(--lb-border-accent);font-weight:700;}
+  .a-quick{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:0 0 14px;}
+  .a-quick button{min-height:58px;border:1px solid var(--lb-border);border-radius:13px;background:var(--lb-surface);color:var(--lb-text);font-family:inherit;font-size:13px;font-weight:700;text-align:left;padding:11px 12px;cursor:pointer;}
+  .a-quick button span{display:block;color:var(--lb-accent-light);font-size:18px;margin-bottom:3px;}
+  .admin-search{margin:0 0 12px;}
+  @media(max-width:479px){#a-tabs{display:none!important;}.j-wrap{padding-top:12px;}.app-head:has(#a-nav-wrap:not([hidden])){padding-bottom:10px;}}
+  .a-card h4{font-size:14px;font-weight:800;margin-bottom:8px;}
+  .readi-ready{color:var(--lb-success);}.readi-attention{color:var(--lb-gold);}.readi-not_ready{color:var(--lb-danger);}
+  .a-issue{display:flex;gap:9px;align-items:center;padding:9px 0;border-top:1px solid var(--lb-border);font-size:13px;}
+  .a-issue:first-child{border-top:0;}
+  .a-issue .sev{width:8px;height:8px;border-radius:50%;flex:none;}
+  .sev-critical{background:var(--lb-danger);}.sev-warning{background:var(--lb-gold);}.sev-info{background:var(--lb-info);}
+
+  /* skeleton loaders */
+  .skel{background:linear-gradient(90deg,var(--lb-surface) 25%,var(--lb-surface-raised) 37%,var(--lb-surface) 63%);background-size:400% 100%;animation:shimmer 1.3s ease infinite;border-radius:12px;}
+  @keyframes shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
+  .skel-card{height:150px;margin-bottom:14px;border-radius:var(--lb-radius);}
+  .skel-row{height:56px;margin-bottom:8px;}
+  /* pull-to-refresh */
+  .ptr-ind{position:absolute;top:10px;left:0;right:0;text-align:center;font-size:12px;font-weight:700;color:var(--lb-muted);opacity:0;pointer-events:none;z-index:30;transition:opacity .15s ease;}
+  .ptr-ind.ready{color:var(--lb-accent-light);}
+  .ptr-ind.spin::before{content:"";display:inline-block;width:14px;height:14px;border:2px solid var(--lb-border);border-top-color:var(--lb-accent);border-radius:50%;vertical-align:-2px;margin-right:6px;animation:spin .8s linear infinite;}
+
+  /* result cards (team breakdown by complex) */
+  .rescard{background:var(--lb-surface);border:1px solid var(--lb-border);border-radius:14px;padding:13px 14px;margin-bottom:10px;cursor:pointer;}
+  .rescard:active{opacity:.75;}
+  .rescard-name{font-weight:700;font-size:14px;line-height:1.3;}
+  .rescard-chev{font-size:11px;color:var(--lb-dim);font-weight:600;float:right;margin-left:8px;}
+  .rescard-parts{margin:9px 0 2px;display:flex;flex-direction:column;gap:6px;}
+  .respart{display:flex;justify-content:space-between;gap:12px;font-size:13px;align-items:baseline;}
+  .respart .pn{color:var(--lb-muted);min-width:0;line-height:1.3;}
+  .respart .pv{flex:none;font-family:var(--lb-mono);font-weight:700;color:var(--lb-text);white-space:nowrap;}
+  .respart .pm{color:var(--lb-dim);font-weight:600;font-size:11px;margin-left:6px;font-family:var(--lb-font);}
+  .rescard-f2{display:flex;gap:8px;margin-top:12px;padding-top:11px;border-top:1px solid var(--lb-border);}
+  .rf-stat{flex:1;text-align:center;background:var(--lb-surface-raised);border:1px solid var(--lb-border);border-radius:10px;padding:8px 4px;}
+  .rf-stat .v{font-family:var(--lb-mono);font-weight:800;font-size:18px;line-height:1;}
+  .rf-stat .v.accent{color:var(--lb-accent-light);}
+  .rf-stat .l{font-size:10px;color:var(--lb-muted);margin-top:4px;text-transform:uppercase;letter-spacing:.05em;}
+  .rf-stat.p1{background:linear-gradient(135deg,#fbbf24,#d97706);border-color:transparent;}.rf-stat.p1 .v,.rf-stat.p1 .l{color:#1a1200;}
+  .rf-stat.p2{background:linear-gradient(135deg,#e2e8f0,#94a3b8);border-color:transparent;}.rf-stat.p2 .v,.rf-stat.p2 .l{color:#161b26;}
+  .rf-stat.p3{background:linear-gradient(135deg,#d9884f,#b45309);border-color:transparent;}.rf-stat.p3 .v,.rf-stat.p3 .l{color:#1a0f00;}
+
+  /* photo gallery */
+  .ph-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:12px 14px;}
+  .ph-cell{aspect-ratio:1;overflow:hidden;border-radius:8px;background:var(--lb-surface-raised);display:block;}
+  .ph-cell img{width:100%;height:100%;object-fit:cover;display:block;}
+
+  button,a,input,select{touch-action:manipulation;}
+  :focus-visible{outline:2px solid var(--lb-accent-light);outline-offset:3px;border-radius:8px;}
+  /* fullscreen podium presentation (projection) */
+  .pp-overlay{position:fixed;inset:0;z-index:200;display:none;flex-direction:column;align-items:center;justify-content:center;padding:calc(3vh + env(safe-area-inset-top,0)) 4vw calc(3vh + env(safe-area-inset-bottom,0));background:radial-gradient(1200px 700px at 50% -10%,rgba(255,114,0,.16),transparent 60%),linear-gradient(180deg,#05070b,#0a0e18);color:var(--lb-text);}
+  .pp-overlay.open{display:flex;}
+  .pp-close{position:absolute;top:calc(14px + env(safe-area-inset-top,0));right:16px;width:44px;height:44px;border-radius:12px;border:1px solid var(--lb-border);background:var(--lb-surface);color:var(--lb-text);font-size:20px;cursor:pointer;z-index:2;}
+  .pp-head{text-align:center;margin-bottom:min(6vh,48px);}
+  .pp-cat{font-family:var(--lb-display);font-weight:700;font-size:clamp(26px,6vw,72px);line-height:1.05;}
+  .pp-tname{color:var(--lb-muted);font-size:clamp(12px,1.6vw,22px);margin-top:8px;}
+  .pp-podium{display:flex;align-items:flex-end;justify-content:center;gap:clamp(10px,2vw,32px);width:100%;max-width:1100px;height:min(58vh,560px);}
+  .pp-col{flex:1;max-width:33%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:clamp(8px,1.5vh,18px);height:100%;}
+  .pp-card{width:100%;text-align:center;background:var(--lb-surface-raised);border:1px solid var(--lb-border);border-radius:18px;padding:clamp(10px,1.6vh,20px) 8px;display:flex;flex-direction:column;align-items:center;gap:6px;}
+  .pp-card .reg-badge{width:clamp(46px,6vw,88px);height:clamp(46px,6vw,88px);border-radius:16px;}
+  .pp-nm{font-family:var(--lb-display);font-weight:700;font-size:clamp(15px,2.2vw,30px);line-height:1.1;}
+  .pp-reg{color:var(--lb-muted);font-size:clamp(11px,1.3vw,18px);}
+  .pp-pts{font-family:var(--lb-mono);font-weight:800;color:var(--lb-accent-light);font-size:clamp(13px,1.5vw,22px);}
+  .pp-base{width:100%;min-height:56px;border-radius:16px 16px 0 0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:clamp(8px,1.5vh,16px);gap:2px;font-size:clamp(26px,4vw,56px);}
+  .pp-base b{font-family:var(--lb-mono);font-size:clamp(18px,2.5vw,34px);}
+  .pp-nav{display:flex;align-items:center;gap:16px;margin-top:min(5vh,40px);}
+  .pp-nav button{padding:12px 20px;border-radius:12px;border:1px solid var(--lb-border);background:var(--lb-surface);color:var(--lb-text);font-family:inherit;font-weight:700;font-size:clamp(14px,1.5vw,18px);cursor:pointer;}
+  .pp-nav button:disabled{opacity:.35;}
+  .pp-count{font-family:var(--lb-mono);color:var(--lb-muted);min-width:64px;text-align:center;}
+  @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="device-bg"></div>
+<div class="app">
+  <div class="screen" id="screen">
+
+    <!-- TOURNAMENTS -->
+    <div class="view active" id="v-tournaments">
+      <div class="app-head">
+        <div class="head-row">
+          <div>
+            <div class="head-title">Турниры</div>
+            <div class="head-sub">Функциональное многоборье · leaderboards.ru</div>
+          </div>
+          <button class="head-ava" data-nav="profile" aria-label="Профиль">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+          </button>
+        </div>
+        <div class="search">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="t-search" placeholder="Поиск турнира или города…">
+        </div>
+      </div>
+      <div id="home-live"></div>
+      <div class="chips" id="t-chips"></div>
+      <div class="t-list" id="t-list"><div class="center-state"><div class="spinner"></div>Загружаю турниры…</div></div>
+    </div>
+
+    <!-- DETAIL -->
+    <div class="view" id="v-detail">
+      <div class="d-cover" id="d-cover">
+        <div class="cover-bg" id="d-cover-bg"></div>
+        <button class="d-back" id="d-back" aria-label="Назад">‹</button>
+        <button class="d-share" id="d-share" aria-label="Поделиться турниром">📤</button>
+        <div class="d-cover-info"><div id="d-pill"></div><h1 class="d-title" id="d-title"></h1></div>
+      </div>
+      <div id="d-timer"></div>
+      <div class="tabs" id="d-tabs">
+        <div class="tab active" data-sub="board">Табло</div>
+        <div class="tab" data-sub="table">Таблица</div>
+        <div class="tab" data-sub="sched">Расписание</div>
+        <div class="tab" data-sub="cx">Комплексы</div>
+        <div class="tab" data-sub="photos">Фото</div>
+        <div class="tab" data-sub="about">О турнире</div>
+      </div>
+      <div class="subview active" id="sub-board">
+        <div class="cat-chips" id="d-cats"></div>
+        <div class="lb-rows" id="d-board"></div>
+      </div>
+      <div class="subview" id="sub-table">
+        <div class="cat-chips" id="dt-cats"></div>
+        <div id="d-table"></div>
+      </div>
+      <div class="subview" id="sub-sched"><div class="cat-chips" id="ds-cats"></div><div class="sched" id="d-sched"></div></div>
+      <div class="subview" id="sub-cx"><div class="cat-chips" id="dc-cats"></div><div class="cx" id="d-cx"></div></div>
+      <div class="subview" id="sub-photos"><div id="d-photos"></div></div>
+      <div class="subview" id="sub-about"><div class="about" id="d-about"></div></div>
+    </div>
+
+    <!-- BOARD (live) -->
+    <div class="view" id="v-board">
+      <div class="app-head">
+        <div class="head-title">Табло</div>
+        <div class="head-sub" id="board-sub">Живой турнир</div>
+      </div>
+      <div id="board-timer"></div>
+      <div class="cat-chips" id="b-cats"></div>
+      <div class="lb-rows" id="b-board"><div class="center-state"><div class="spinner"></div>Загружаю табло…</div></div>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="view" id="v-profile">
+      <div class="prof-hero">
+        <div class="prof-ava" id="p-ava"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></div>
+        <div class="prof-name" id="p-name">Гость</div>
+        <div class="prof-tag" id="p-tag">Войдите, чтобы видеть свои турниры, результаты и бейдж в одном профиле.</div>
+        <div class="prof-stats" id="p-stats" hidden></div>
+      </div>
+      <div class="prof-cabinet" id="prof-cabinet" hidden></div>
+      <div class="prof-cta">
+        <div class="p-section">Личное</div>
+        <div class="pbtn accent" id="p-login">
+          <div class="ic">🪪</div>
+          <div class="tt"><div class="a" id="p-login-a">Войти по email</div><div class="b" id="p-login-b">Мои турниры и результаты — один профиль</div></div>
+          <span class="arr">›</span>
+        </div>
+        <div class="pbtn" id="p-find">
+          <div class="ic">🔎</div>
+          <div class="tt"><div class="a">Найти свои результаты</div><div class="b">Поиск по фамилии во всех турнирах</div></div>
+          <span class="arr">›</span>
+        </div>
+        <div class="pbtn" id="p-feed">
+          <div class="ic">📰</div>
+          <div class="tt"><div class="a">Новости</div><div class="b">Лента активного турнира</div></div>
+          <span class="arr">›</span>
+        </div>
+        <div class="pbtn" id="p-push">
+          <div class="ic">🔔</div>
+          <div class="tt"><div class="a">Уведомления</div><div class="b" id="p-push-b">Заходы, результаты и новости турнира</div></div>
+          <span class="arr">›</span>
+        </div>
+        <div class="p-section">Работа на турнире</div>
+        <div class="pbtn" id="p-judge">
+          <div class="ic">⚖️</div>
+          <div class="tt"><div class="a">Я судья</div><div class="b">Вход по ключу турнира и ввод результатов</div></div>
+          <span class="arr">›</span>
+        </div>
+        <div class="pbtn" id="p-admin">
+          <div class="ic">🛠</div>
+          <div class="tt"><div class="a">Организатор</div><div class="b">Центр управления турниром</div></div>
+          <span class="arr">›</span>
+        </div>
+      </div>
+      <div class="prof-note">Все турниры — один спортивный профиль. Вход по e-mail или телефону в личном кабинете.</div>
+    </div>
+
+    <!-- JUDGE -->
+    <div class="view" id="v-judge">
+      <div class="app-head">
+        <div class="head-row">
+          <button class="head-back" id="j-back" aria-label="Назад">‹</button>
+          <div>
+            <div class="head-title">Судейская</div>
+            <div class="head-sub" id="j-sub">Ввод результатов заходов</div>
+          </div>
+        </div>
+      </div>
+      <div class="j-wrap" id="judge-body"></div>
+    </div>
+
+    <!-- ADMIN -->
+    <div class="view" id="v-admin">
+      <div class="app-head">
+        <div class="head-row">
+          <button class="head-back" id="a-back" aria-label="Назад">‹</button>
+          <div><div class="head-title">Организатор</div><div class="head-sub" id="a-sub">Центр управления</div></div>
+          <button class="head-back" id="a-logout" title="Выйти" hidden style="margin-left:auto;font-size:15px;">⎋</button>
+        </div>
+        <button class="a-tourn" id="a-tourn" hidden><span class="a-tourn-ic">🏆</span><span class="a-tourn-nm" id="a-tourn-nm"></span><span class="a-tourn-sw">сменить</span></button>
+        <div class="chips" id="a-tabs" hidden style="padding:12px 0 2px;">
+          <div class="chip active" data-atab="overview">Обзор</div>
+          <div class="chip" data-atab="heats">Заходы</div>
+          <div class="chip" data-atab="judging">Судейство</div>
+          <div class="chip" data-atab="checkin">Чек-ин</div>
+          <div class="chip" data-atab="teams">Команды</div>
+          <div class="chip" data-atab="judges">Судьи</div>
+          <div class="chip" data-atab="appeals">Апелляции</div>
+          <div class="chip" data-atab="awards">Награждение</div>
+          <div class="chip" data-atab="broadcast">Рассылка</div>
+          <div class="chip" data-atab="final">Финал</div>
+        </div>
+        <div class="a-mobile-nav" id="a-nav-wrap" hidden><select class="j-select" id="a-nav-select" aria-label="Раздел админки">
+          <optgroup label="День турнира"><option value="overview">Обзор дня</option><option value="heats">Заходы и таймер</option><option value="judging">Судейство</option><option value="checkin">Чек-ин</option></optgroup>
+          <optgroup label="Участники"><option value="teams">Команды</option><option value="judges">Судьи</option><option value="appeals">Апелляции</option></optgroup>
+          <optgroup label="Завершение"><option value="awards">Награждение</option><option value="broadcast">Рассылка</option><option value="final">Финал турнира</option></optgroup>
+        </select></div>
+      </div>
+      <div class="j-wrap" id="admin-body"></div>
+    </div>
+
+  </div>
+
+  <nav class="botnav" id="botnav">
+    <button class="nav-item active" data-nav="tournaments">
+      <svg viewBox="0 0 24 24"><path d="M6 2v6a6 6 0 0 0 12 0V2"/><path d="M4 22h16"/><path d="M10 22v-4h4v4"/></svg><span>Турниры</span>
+    </button>
+    <button class="nav-item" data-nav="board">
+      <svg viewBox="0 0 24 24"><path d="M8 21V9M16 21V5M4 21v-4M20 21v-8"/></svg><span>Табло</span>
+    </button>
+    <button class="nav-item" data-nav="profile">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Профиль</span>
+    </button>
+  </nav>
+
+  <div class="modal" id="sheet-modal">
+    <div class="modal-bd" id="sheet-bd"></div>
+    <div class="sheet" id="sheet-body"></div>
+  </div>
+
+</div>
+
+<script>
+/* qrcode-generator 1.4.4 (MIT, inlined for offline QR) */
+var qrcode=function(){function i(t,r){function a(t,r){g=function(t){for(var r=new Array(t),e=0;e<t;e+=1){r[e]=new Array(t);for(var n=0;n<t;n+=1)r[e][n]=null}return r}(l=4*u+17),e(0,0),e(l-7,0),e(0,l-7),i(),o(),v(t,r),7<=u&&h(t),null==n&&(n=w(u,f,c)),d(n,r)}var u=t,f=y[r],g=null,l=0,n=null,c=[],s={},e=function(t,r){for(var e=-1;e<=7;e+=1)if(!(t+e<=-1||l<=t+e))for(var n=-1;n<=7;n+=1)r+n<=-1||l<=r+n||(g[t+e][r+n]=0<=e&&e<=6&&(0==n||6==n)||0<=n&&n<=6&&(0==e||6==e)||2<=e&&e<=4&&2<=n&&n<=4)},o=function(){for(var t=8;t<l-8;t+=1)null==g[t][6]&&(g[t][6]=t%2==0);for(var r=8;r<l-8;r+=1)null==g[6][r]&&(g[6][r]=r%2==0)},i=function(){for(var t=B.getPatternPosition(u),r=0;r<t.length;r+=1)for(var e=0;e<t.length;e+=1){var n=t[r],o=t[e];if(null==g[n][o])for(var i=-2;i<=2;i+=1)for(var a=-2;a<=2;a+=1)g[n+i][o+a]=-2==i||2==i||-2==a||2==a||0==i&&0==a}},h=function(t){for(var r=B.getBCHTypeNumber(u),e=0;e<18;e+=1){var n=!t&&1==(r>>e&1);g[Math.floor(e/3)][e%3+l-8-3]=n}for(e=0;e<18;e+=1){n=!t&&1==(r>>e&1);g[e%3+l-8-3][Math.floor(e/3)]=n}},v=function(t,r){for(var e=f<<3|r,n=B.getBCHTypeInfo(e),o=0;o<15;o+=1){var i=!t&&1==(n>>o&1);o<6?g[o][8]=i:o<8?g[o+1][8]=i:g[l-15+o][8]=i}for(o=0;o<15;o+=1){i=!t&&1==(n>>o&1);o<8?g[8][l-o-1]=i:o<9?g[8][15-o-1+1]=i:g[8][15-o-1]=i}g[l-8][8]=!t},d=function(t,r){for(var e=-1,n=l-1,o=7,i=0,a=B.getMaskFunction(r),u=l-1;0<u;u-=2)for(6==u&&(u-=1);;){for(var f=0;f<2;f+=1)if(null==g[n][u-f]){var c=!1;i<t.length&&(c=1==(t[i]>>>o&1)),a(n,u-f)&&(c=!c),g[n][u-f]=c,-1==(o-=1)&&(i+=1,o=7)}if((n+=e)<0||l<=n){n-=e,e=-e;break}}},w=function(t,r,e){for(var n=b.getRSBlocks(t,r),o=M(),i=0;i<e.length;i+=1){var a=e[i];o.put(a.getMode(),4),o.put(a.getLength(),B.getLengthInBits(a.getMode(),t)),a.write(o)}var u=0;for(i=0;i<n.length;i+=1)u+=n[i].dataCount;if(o.getLengthInBits()>8*u)throw"code length overflow. ("+o.getLengthInBits()+">"+8*u+")";for(o.getLengthInBits()+4<=8*u&&o.put(0,4);o.getLengthInBits()%8!=0;)o.putBit(!1);for(;!(o.getLengthInBits()>=8*u||(o.put(236,8),o.getLengthInBits()>=8*u));)o.put(17,8);return function(t,r){for(var e=0,n=0,o=0,i=new Array(r.length),a=new Array(r.length),u=0;u<r.length;u+=1){var f=r[u].dataCount,c=r[u].totalCount-f;n=Math.max(n,f),o=Math.max(o,c),i[u]=new Array(f);for(var g=0;g<i[u].length;g+=1)i[u][g]=255&t.getBuffer()[g+e];e+=f;var l=B.getErrorCorrectPolynomial(c),h=C(i[u],l.getLength()-1).mod(l);a[u]=new Array(l.getLength()-1);for(g=0;g<a[u].length;g+=1){var s=g+h.getLength()-a[u].length;a[u][g]=0<=s?h.getAt(s):0}}var v=0;for(g=0;g<r.length;g+=1)v+=r[g].totalCount;var d=new Array(v),w=0;for(g=0;g<n;g+=1)for(u=0;u<r.length;u+=1)g<i[u].length&&(d[w]=i[u][g],w+=1);for(g=0;g<o;g+=1)for(u=0;u<r.length;u+=1)g<a[u].length&&(d[w]=a[u][g],w+=1);return d}(o,n)};s.addData=function(t,r){var e=null;switch(r=r||"Byte"){case"Numeric":e=x(t);break;case"Alphanumeric":e=m(t);break;case"Byte":e=L(t);break;case"Kanji":e=D(t);break;default:throw"mode:"+r}c.push(e),n=null},s.isDark=function(t,r){if(t<0||l<=t||r<0||l<=r)throw t+","+r;return g[t][r]},s.getModuleCount=function(){return l},s.make=function(){if(u<1){for(var t=1;t<40;t++){for(var r=b.getRSBlocks(t,f),e=M(),n=0;n<c.length;n++){var o=c[n];e.put(o.getMode(),4),e.put(o.getLength(),B.getLengthInBits(o.getMode(),t)),o.write(e)}var i=0;for(n=0;n<r.length;n++)i+=r[n].dataCount;if(e.getLengthInBits()<=8*i)break}u=t}a(!1,function(){for(var t=0,r=0,e=0;e<8;e+=1){a(!0,e);var n=B.getLostPoint(s);(0==e||n<t)&&(t=n,r=e)}return r}())},s.createTableTag=function(t,r){t=t||2;var e="";e+='<table style="',e+=" border-width: 0px; border-style: none;",e+=" border-collapse: collapse;",e+=" padding: 0px; margin: "+(r=void 0===r?4*t:r)+"px;",e+='">',e+="<tbody>";for(var n=0;n<s.getModuleCount();n+=1){e+="<tr>";for(var o=0;o<s.getModuleCount();o+=1)e+='<td style="',e+=" border-width: 0px; border-style: none;",e+=" border-collapse: collapse;",e+=" padding: 0px; margin: 0px;",e+=" width: "+t+"px;",e+=" height: "+t+"px;",e+=" background-color: ",e+=s.isDark(n,o)?"#000000":"#ffffff",e+=";",e+='"/>';e+="</tr>"}return e+="</tbody>",e+="</table>"},s.createSvgTag=function(t,r,e,n){var o={};"object"==typeof t&&(t=(o=t).cellSize,r=o.margin,e=o.alt,n=o.title),t=t||2,r=void 0===r?4*t:r,(e="string"==typeof e?{text:e}:e||{}).text=e.text||null,e.id=e.text?e.id||"qrcode-description":null,(n="string"==typeof n?{text:n}:n||{}).text=n.text||null,n.id=n.text?n.id||"qrcode-title":null;var i,a,u,f,c=s.getModuleCount()*t+2*r,g="";for(f="l"+t+",0 0,"+t+" -"+t+",0 0,-"+t+"z ",g+='<svg version="1.1" xmlns="http://www.w3.org/2000/svg"',g+=o.scalable?"":' width="'+c+'px" height="'+c+'px"',g+=' viewBox="0 0 '+c+" "+c+'" ',g+=' preserveAspectRatio="xMinYMin meet"',g+=n.text||e.text?' role="img" aria-labelledby="'+p([n.id,e.id].join(" ").trim())+'"':"",g+=">",g+=n.text?'<title id="'+p(n.id)+'">'+p(n.text)+"</title>":"",g+=e.text?'<description id="'+p(e.id)+'">'+p(e.text)+"</description>":"",g+='<rect width="100%" height="100%" fill="white" cx="0" cy="0"/>',g+='<path d="',a=0;a<s.getModuleCount();a+=1)for(u=a*t+r,i=0;i<s.getModuleCount();i+=1)s.isDark(a,i)&&(g+="M"+(i*t+r)+","+u+f);return g+='" stroke="transparent" fill="black"/>',g+="</svg>"},s.createDataURL=function(o,t){o=o||2,t=void 0===t?4*o:t;var r=s.getModuleCount()*o+2*t,i=t,a=r-t;return I(r,r,function(t,r){if(i<=t&&t<a&&i<=r&&r<a){var e=Math.floor((t-i)/o),n=Math.floor((r-i)/o);return s.isDark(n,e)?0:1}return 1})},s.createImgTag=function(t,r,e){t=t||2,r=void 0===r?4*t:r;var n=s.getModuleCount()*t+2*r,o="";return o+="<img",o+=' src="',o+=s.createDataURL(t,r),o+='"',o+=' width="',o+=n,o+='"',o+=' height="',o+=n,o+='"',e&&(o+=' alt="',o+=p(e),o+='"'),o+="/>"};var p=function(t){for(var r="",e=0;e<t.length;e+=1){var n=t.charAt(e);switch(n){case"<":r+="&lt;";break;case">":r+="&gt;";break;case"&":r+="&amp;";break;case'"':r+="&quot;";break;default:r+=n}}return r};return s.createASCII=function(t,r){if((t=t||1)<2)return function(t){t=void 0===t?2:t;var r,e,n,o,i,a=1*s.getModuleCount()+2*t,u=t,f=a-t,c={"██":"█","█ ":"▀"," █":"▄","  ":" "},g={"██":"▀","█ ":"▀"," █":" ","  ":" "},l="";for(r=0;r<a;r+=2){for(n=Math.floor((r-u)/1),o=Math.floor((r+1-u)/1),e=0;e<a;e+=1)i="█",u<=e&&e<f&&u<=r&&r<f&&s.isDark(n,Math.floor((e-u)/1))&&(i=" "),u<=e&&e<f&&u<=r+1&&r+1<f&&s.isDark(o,Math.floor((e-u)/1))?i+=" ":i+="█",l+=t<1&&f<=r+1?g[i]:c[i];l+="\n"}return a%2&&0<t?l.substring(0,l.length-a-1)+Array(1+a).join("▀"):l.substring(0,l.length-1)}(r);t-=1,r=void 0===r?2*t:r;var e,n,o,i,a=s.getModuleCount()*t+2*r,u=r,f=a-r,c=Array(t+1).join("██"),g=Array(t+1).join("  "),l="",h="";for(e=0;e<a;e+=1){for(o=Math.floor((e-u)/t),h="",n=0;n<a;n+=1)i=1,u<=n&&n<f&&u<=e&&e<f&&s.isDark(o,Math.floor((n-u)/t))&&(i=0),h+=i?c:g;for(o=0;o<t;o+=1)l+=h+"\n"}return l.substring(0,l.length-1)},s.renderTo2dContext=function(t,r){r=r||2;for(var e=s.getModuleCount(),n=0;n<e;n++)for(var o=0;o<e;o++)t.fillStyle=s.isDark(n,o)?"black":"white",t.fillRect(n*r,o*r,r,r)},s}i.stringToBytes=(i.stringToBytesFuncs={default:function(t){for(var r=[],e=0;e<t.length;e+=1){var n=t.charCodeAt(e);r.push(255&n)}return r}}).default,i.createStringToBytes=function(u,f){var i=function(){function t(){var t=r.read();if(-1==t)throw"eof";return t}for(var r=S(u),e=0,n={};;){var o=r.read();if(-1==o)break;var i=t(),a=t()<<8|t();n[String.fromCharCode(o<<8|i)]=a,e+=1}if(e!=f)throw e+" != "+f;return n}(),a="?".charCodeAt(0);return function(t){for(var r=[],e=0;e<t.length;e+=1){var n=t.charCodeAt(e);if(n<128)r.push(n);else{var o=i[t.charAt(e)];"number"==typeof o?(255&o)==o?r.push(o):(r.push(o>>>8),r.push(255&o)):r.push(a)}}return r}};var r,t,a=1,u=2,o=4,f=8,y={L:1,M:0,Q:3,H:2},e=0,n=1,c=2,g=3,l=4,h=5,s=6,v=7,B=(r=[[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50],[6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],[6,30,56,82],[6,30,58,86],[6,34,62,90],[6,28,50,72,94],[6,26,50,74,98],[6,30,54,78,102],[6,28,54,80,106],[6,32,58,84,110],[6,30,58,86,114],[6,34,62,90,118],[6,26,50,74,98,122],[6,30,54,78,102,126],[6,26,52,78,104,130],[6,30,56,82,108,134],[6,34,60,86,112,138],[6,30,58,86,114,142],[6,34,62,90,118,146],[6,30,54,78,102,126,150],[6,24,50,76,102,128,154],[6,28,54,80,106,132,158],[6,32,58,84,110,136,162],[6,26,54,82,110,138,166],[6,30,58,86,114,142,170]],(t={}).getBCHTypeInfo=function(t){for(var r=t<<10;0<=d(r)-d(1335);)r^=1335<<d(r)-d(1335);return 21522^(t<<10|r)},t.getBCHTypeNumber=function(t){for(var r=t<<12;0<=d(r)-d(7973);)r^=7973<<d(r)-d(7973);return t<<12|r},t.getPatternPosition=function(t){return r[t-1]},t.getMaskFunction=function(t){switch(t){case e:return function(t,r){return(t+r)%2==0};case n:return function(t,r){return t%2==0};case c:return function(t,r){return r%3==0};case g:return function(t,r){return(t+r)%3==0};case l:return function(t,r){return(Math.floor(t/2)+Math.floor(r/3))%2==0};case h:return function(t,r){return t*r%2+t*r%3==0};case s:return function(t,r){return(t*r%2+t*r%3)%2==0};case v:return function(t,r){return(t*r%3+(t+r)%2)%2==0};default:throw"bad maskPattern:"+t}},t.getErrorCorrectPolynomial=function(t){for(var r=C([1],0),e=0;e<t;e+=1)r=r.multiply(C([1,w.gexp(e)],0));return r},t.getLengthInBits=function(t,r){if(1<=r&&r<10)switch(t){case a:return 10;case u:return 9;case o:case f:return 8;default:throw"mode:"+t}else if(r<27)switch(t){case a:return 12;case u:return 11;case o:return 16;case f:return 10;default:throw"mode:"+t}else{if(!(r<41))throw"type:"+r;switch(t){case a:return 14;case u:return 13;case o:return 16;case f:return 12;default:throw"mode:"+t}}},t.getLostPoint=function(t){for(var r=t.getModuleCount(),e=0,n=0;n<r;n+=1)for(var o=0;o<r;o+=1){for(var i=0,a=t.isDark(n,o),u=-1;u<=1;u+=1)if(!(n+u<0||r<=n+u))for(var f=-1;f<=1;f+=1)o+f<0||r<=o+f||0==u&&0==f||a==t.isDark(n+u,o+f)&&(i+=1);5<i&&(e+=3+i-5)}for(n=0;n<r-1;n+=1)for(o=0;o<r-1;o+=1){var c=0;t.isDark(n,o)&&(c+=1),t.isDark(n+1,o)&&(c+=1),t.isDark(n,o+1)&&(c+=1),t.isDark(n+1,o+1)&&(c+=1),0!=c&&4!=c||(e+=3)}for(n=0;n<r;n+=1)for(o=0;o<r-6;o+=1)t.isDark(n,o)&&!t.isDark(n,o+1)&&t.isDark(n,o+2)&&t.isDark(n,o+3)&&t.isDark(n,o+4)&&!t.isDark(n,o+5)&&t.isDark(n,o+6)&&(e+=40);for(o=0;o<r;o+=1)for(n=0;n<r-6;n+=1)t.isDark(n,o)&&!t.isDark(n+1,o)&&t.isDark(n+2,o)&&t.isDark(n+3,o)&&t.isDark(n+4,o)&&!t.isDark(n+5,o)&&t.isDark(n+6,o)&&(e+=40);var g=0;for(o=0;o<r;o+=1)for(n=0;n<r;n+=1)t.isDark(n,o)&&(g+=1);return e+=Math.abs(100*g/r/r-50)/5*10},t);function d(t){for(var r=0;0!=t;)r+=1,t>>>=1;return r}var w=function(){for(var r=new Array(256),e=new Array(256),t=0;t<8;t+=1)r[t]=1<<t;for(t=8;t<256;t+=1)r[t]=r[t-4]^r[t-5]^r[t-6]^r[t-8];for(t=0;t<255;t+=1)e[r[t]]=t;var n={glog:function(t){if(t<1)throw"glog("+t+")";return e[t]},gexp:function(t){for(;t<0;)t+=255;for(;256<=t;)t-=255;return r[t]}};return n}();function C(n,o){if(void 0===n.length)throw n.length+"/"+o;var r=function(){for(var t=0;t<n.length&&0==n[t];)t+=1;for(var r=new Array(n.length-t+o),e=0;e<n.length-t;e+=1)r[e]=n[e+t];return r}(),i={getAt:function(t){return r[t]},getLength:function(){return r.length},multiply:function(t){for(var r=new Array(i.getLength()+t.getLength()-1),e=0;e<i.getLength();e+=1)for(var n=0;n<t.getLength();n+=1)r[e+n]^=w.gexp(w.glog(i.getAt(e))+w.glog(t.getAt(n)));return C(r,0)},mod:function(t){if(i.getLength()-t.getLength()<0)return i;for(var r=w.glog(i.getAt(0))-w.glog(t.getAt(0)),e=new Array(i.getLength()),n=0;n<i.getLength();n+=1)e[n]=i.getAt(n);for(n=0;n<t.getLength();n+=1)e[n]^=w.gexp(w.glog(t.getAt(n))+r);return C(e,0).mod(t)}};return i}function p(){var e=[],o={writeByte:function(t){e.push(255&t)},writeShort:function(t){o.writeByte(t),o.writeByte(t>>>8)},writeBytes:function(t,r,e){r=r||0,e=e||t.length;for(var n=0;n<e;n+=1)o.writeByte(t[n+r])},writeString:function(t){for(var r=0;r<t.length;r+=1)o.writeByte(t.charCodeAt(r))},toByteArray:function(){return e},toString:function(){var t="";t+="[";for(var r=0;r<e.length;r+=1)0<r&&(t+=","),t+=e[r];return t+="]"}};return o}var k,A,b=(k=[[1,26,19],[1,26,16],[1,26,13],[1,26,9],[1,44,34],[1,44,28],[1,44,22],[1,44,16],[1,70,55],[1,70,44],[2,35,17],[2,35,13],[1,100,80],[2,50,32],[2,50,24],[4,25,9],[1,134,108],[2,67,43],[2,33,15,2,34,16],[2,33,11,2,34,12],[2,86,68],[4,43,27],[4,43,19],[4,43,15],[2,98,78],[4,49,31],[2,32,14,4,33,15],[4,39,13,1,40,14],[2,121,97],[2,60,38,2,61,39],[4,40,18,2,41,19],[4,40,14,2,41,15],[2,146,116],[3,58,36,2,59,37],[4,36,16,4,37,17],[4,36,12,4,37,13],[2,86,68,2,87,69],[4,69,43,1,70,44],[6,43,19,2,44,20],[6,43,15,2,44,16],[4,101,81],[1,80,50,4,81,51],[4,50,22,4,51,23],[3,36,12,8,37,13],[2,116,92,2,117,93],[6,58,36,2,59,37],[4,46,20,6,47,21],[7,42,14,4,43,15],[4,133,107],[8,59,37,1,60,38],[8,44,20,4,45,21],[12,33,11,4,34,12],[3,145,115,1,146,116],[4,64,40,5,65,41],[11,36,16,5,37,17],[11,36,12,5,37,13],[5,109,87,1,110,88],[5,65,41,5,66,42],[5,54,24,7,55,25],[11,36,12,7,37,13],[5,122,98,1,123,99],[7,73,45,3,74,46],[15,43,19,2,44,20],[3,45,15,13,46,16],[1,135,107,5,136,108],[10,74,46,1,75,47],[1,50,22,15,51,23],[2,42,14,17,43,15],[5,150,120,1,151,121],[9,69,43,4,70,44],[17,50,22,1,51,23],[2,42,14,19,43,15],[3,141,113,4,142,114],[3,70,44,11,71,45],[17,47,21,4,48,22],[9,39,13,16,40,14],[3,135,107,5,136,108],[3,67,41,13,68,42],[15,54,24,5,55,25],[15,43,15,10,44,16],[4,144,116,4,145,117],[17,68,42],[17,50,22,6,51,23],[19,46,16,6,47,17],[2,139,111,7,140,112],[17,74,46],[7,54,24,16,55,25],[34,37,13],[4,151,121,5,152,122],[4,75,47,14,76,48],[11,54,24,14,55,25],[16,45,15,14,46,16],[6,147,117,4,148,118],[6,73,45,14,74,46],[11,54,24,16,55,25],[30,46,16,2,47,17],[8,132,106,4,133,107],[8,75,47,13,76,48],[7,54,24,22,55,25],[22,45,15,13,46,16],[10,142,114,2,143,115],[19,74,46,4,75,47],[28,50,22,6,51,23],[33,46,16,4,47,17],[8,152,122,4,153,123],[22,73,45,3,74,46],[8,53,23,26,54,24],[12,45,15,28,46,16],[3,147,117,10,148,118],[3,73,45,23,74,46],[4,54,24,31,55,25],[11,45,15,31,46,16],[7,146,116,7,147,117],[21,73,45,7,74,46],[1,53,23,37,54,24],[19,45,15,26,46,16],[5,145,115,10,146,116],[19,75,47,10,76,48],[15,54,24,25,55,25],[23,45,15,25,46,16],[13,145,115,3,146,116],[2,74,46,29,75,47],[42,54,24,1,55,25],[23,45,15,28,46,16],[17,145,115],[10,74,46,23,75,47],[10,54,24,35,55,25],[19,45,15,35,46,16],[17,145,115,1,146,116],[14,74,46,21,75,47],[29,54,24,19,55,25],[11,45,15,46,46,16],[13,145,115,6,146,116],[14,74,46,23,75,47],[44,54,24,7,55,25],[59,46,16,1,47,17],[12,151,121,7,152,122],[12,75,47,26,76,48],[39,54,24,14,55,25],[22,45,15,41,46,16],[6,151,121,14,152,122],[6,75,47,34,76,48],[46,54,24,10,55,25],[2,45,15,64,46,16],[17,152,122,4,153,123],[29,74,46,14,75,47],[49,54,24,10,55,25],[24,45,15,46,46,16],[4,152,122,18,153,123],[13,74,46,32,75,47],[48,54,24,14,55,25],[42,45,15,32,46,16],[20,147,117,4,148,118],[40,75,47,7,76,48],[43,54,24,22,55,25],[10,45,15,67,46,16],[19,148,118,6,149,119],[18,75,47,31,76,48],[34,54,24,34,55,25],[20,45,15,61,46,16]],(A={}).getRSBlocks=function(t,r){var e=function(t,r){switch(r){case y.L:return k[4*(t-1)+0];case y.M:return k[4*(t-1)+1];case y.Q:return k[4*(t-1)+2];case y.H:return k[4*(t-1)+3];default:return}}(t,r);if(void 0===e)throw"bad rs block @ typeNumber:"+t+"/errorCorrectionLevel:"+r;for(var n,o,i=e.length/3,a=[],u=0;u<i;u+=1)for(var f=e[3*u+0],c=e[3*u+1],g=e[3*u+2],l=0;l<f;l+=1)a.push((n=g,o=void 0,(o={}).totalCount=c,o.dataCount=n,o));return a},A),M=function(){var e=[],n=0,o={getBuffer:function(){return e},getAt:function(t){var r=Math.floor(t/8);return 1==(e[r]>>>7-t%8&1)},put:function(t,r){for(var e=0;e<r;e+=1)o.putBit(1==(t>>>r-e-1&1))},getLengthInBits:function(){return n},putBit:function(t){var r=Math.floor(n/8);e.length<=r&&e.push(0),t&&(e[r]|=128>>>n%8),n+=1}};return o},x=function(t){var r=a,n=t,e={getMode:function(){return r},getLength:function(t){return n.length},write:function(t){for(var r=n,e=0;e+2<r.length;)t.put(o(r.substring(e,e+3)),10),e+=3;e<r.length&&(r.length-e==1?t.put(o(r.substring(e,e+1)),4):r.length-e==2&&t.put(o(r.substring(e,e+2)),7))}},o=function(t){for(var r=0,e=0;e<t.length;e+=1)r=10*r+i(t.charAt(e));return r},i=function(t){if("0"<=t&&t<="9")return t.charCodeAt(0)-"0".charCodeAt(0);throw"illegal char :"+t};return e},m=function(t){var r=u,n=t,e={getMode:function(){return r},getLength:function(t){return n.length},write:function(t){for(var r=n,e=0;e+1<r.length;)t.put(45*o(r.charAt(e))+o(r.charAt(e+1)),11),e+=2;e<r.length&&t.put(o(r.charAt(e)),6)}},o=function(t){if("0"<=t&&t<="9")return t.charCodeAt(0)-"0".charCodeAt(0);if("A"<=t&&t<="Z")return t.charCodeAt(0)-"A".charCodeAt(0)+10;switch(t){case" ":return 36;case"$":return 37;case"%":return 38;case"*":return 39;case"+":return 40;case"-":return 41;case".":return 42;case"/":return 43;case":":return 44;default:throw"illegal char :"+t}};return e},L=function(t){var r=o,e=i.stringToBytes(t),n={getMode:function(){return r},getLength:function(t){return e.length},write:function(t){for(var r=0;r<e.length;r+=1)t.put(e[r],8)}};return n},D=function(t){var r=f,e=i.stringToBytesFuncs.SJIS;if(!e)throw"sjis not supported.";!function(){var t=e("友");if(2!=t.length||38726!=(t[0]<<8|t[1]))throw"sjis not supported."}();var o=e(t),n={getMode:function(){return r},getLength:function(t){return~~(o.length/2)},write:function(t){for(var r=o,e=0;e+1<r.length;){var n=(255&r[e])<<8|255&r[e+1];if(33088<=n&&n<=40956)n-=33088;else{if(!(57408<=n&&n<=60351))throw"illegal char at "+(e+1)+"/"+n;n-=49472}n=192*(n>>>8&255)+(255&n),t.put(n,13),e+=2}if(e<r.length)throw"illegal char at "+(e+1)}};return n},S=function(t){var e=t,n=0,o=0,i=0,r={read:function(){for(;i<8;){if(n>=e.length){if(0==i)return-1;throw"unexpected end of file./"+i}var t=e.charAt(n);if(n+=1,"="==t)return i=0,-1;t.match(/^\s$/)||(o=o<<6|a(t.charCodeAt(0)),i+=6)}var r=o>>>i-8&255;return i-=8,r}},a=function(t){if(65<=t&&t<=90)return t-65;if(97<=t&&t<=122)return t-97+26;if(48<=t&&t<=57)return t-48+52;if(43==t)return 62;if(47==t)return 63;throw"c:"+t};return r},I=function(t,r,e){for(var n=function(t,r){var n=t,o=r,l=new Array(t*r),e={setPixel:function(t,r,e){l[r*n+t]=e},write:function(t){t.writeString("GIF87a"),t.writeShort(n),t.writeShort(o),t.writeByte(128),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(255),t.writeByte(255),t.writeByte(255),t.writeString(","),t.writeShort(0),t.writeShort(0),t.writeShort(n),t.writeShort(o),t.writeByte(0);var r=i(2);t.writeByte(2);for(var e=0;255<r.length-e;)t.writeByte(255),t.writeBytes(r,e,255),e+=255;t.writeByte(r.length-e),t.writeBytes(r,e,r.length-e),t.writeByte(0),t.writeString(";")}},i=function(t){for(var r=1<<t,e=1+(1<<t),n=t+1,o=h(),i=0;i<r;i+=1)o.add(String.fromCharCode(i));o.add(String.fromCharCode(r)),o.add(String.fromCharCode(e));var a=p(),u=function(t){var e=t,n=0,o=0,r={write:function(t,r){if(t>>>r!=0)throw"length over";for(;8<=n+r;)e.writeByte(255&(t<<n|o)),r-=8-n,t>>>=8-n,n=o=0;o|=t<<n,n+=r},flush:function(){0<n&&e.writeByte(o)}};return r}(a);u.write(r,n);var f=0,c=String.fromCharCode(l[f]);for(f+=1;f<l.length;){var g=String.fromCharCode(l[f]);f+=1,o.contains(c+g)?c+=g:(u.write(o.indexOf(c),n),o.size()<4095&&(o.size()==1<<n&&(n+=1),o.add(c+g)),c=g)}return u.write(o.indexOf(c),n),u.write(e,n),u.flush(),a.toByteArray()},h=function(){var r={},e=0,n={add:function(t){if(n.contains(t))throw"dup key:"+t;r[t]=e,e+=1},size:function(){return e},indexOf:function(t){return r[t]},contains:function(t){return void 0!==r[t]}};return n};return e}(t,r),o=0;o<r;o+=1)for(var i=0;i<t;i+=1)n.setPixel(i,o,e(i,o));var a=p();n.write(a);for(var u=function(){function e(t){a+=String.fromCharCode(r(63&t))}var n=0,o=0,i=0,a="",t={},r=function(t){if(t<0);else{if(t<26)return 65+t;if(t<52)return t-26+97;if(t<62)return t-52+48;if(62==t)return 43;if(63==t)return 47}throw"n:"+t};return t.writeByte=function(t){for(n=n<<8|255&t,o+=8,i+=1;6<=o;)e(n>>>o-6),o-=6},t.flush=function(){if(0<o&&(e(n<<6-o),o=n=0),i%3!=0)for(var t=3-i%3,r=0;r<t;r+=1)a+="="},t.toString=function(){return a},t}(),f=a.toByteArray(),c=0;c<f.length;c+=1)u.writeByte(f[c]);return u.flush(),"data:image/gif;base64,"+u};return i}();qrcode.stringToBytesFuncs["UTF-8"]=function(t){return function(t){for(var r=[],e=0;e<t.length;e++){var n=t.charCodeAt(e);n<128?r.push(n):n<2048?r.push(192|n>>6,128|63&n):n<55296||57344<=n?r.push(224|n>>12,128|n>>6&63,128|63&n):(e++,n=65536+((1023&n)<<10|1023&t.charCodeAt(e)),r.push(240|n>>18,128|n>>12&63,128|n>>6&63,128|63&n))}return r}(t)},function(t){"function"==typeof define&&define.amd?define([],t):"object"==typeof exports&&(module.exports=t())}(function(){return qrcode});
+/* ================= API layer (same-origin) ================= */
+const API = {
+  async get(path){
+    const r = await fetch(path, {headers:{'Accept':'application/json'}, credentials:'same-origin'});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    return r.json();
+  }
+};
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=(s)=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+const STATUS={
+  live:{label:'Идёт',cls:'pill-live',dot:true},
+  upcoming:{label:'Скоро',cls:'pill-soon'},
+  registration:{label:'Регистрация',cls:'pill-reg'},
+  completed:{label:'Завершён',cls:'pill-done'}
+};
+const COVERS=['radial-gradient(120% 120% at 15% 0%,#ff9d4d,#ff7200 30%,#7a2e00)','radial-gradient(120% 120% at 85% 0%,#60a5fa,#2563eb 40%,#10203f)','radial-gradient(120% 120% at 20% 10%,#34d399,#0ea5a4 45%,#062a2a)','radial-gradient(120% 120% at 80% 0%,#a78bfa,#7c3aed 45%,#1f1240)','linear-gradient(135deg,#f59e0b,#b45309 55%,#2a1705)','linear-gradient(135deg,#6366f1,#312e81 55%,#0d0f26)'];
+const coverFor=(t)=> COVERS[(t.id||0)%COVERS.length];
+const coverStyle=(logo,id)=>{const g=COVERS[(id||0)%COVERS.length];return logo?`linear-gradient(180deg,rgba(7,9,13,.04),rgba(7,9,13,.18)), url('${logo}') center/contain no-repeat, ${g}`:g;};
+function setDetailCover(logo,id){const c=$('#d-cover');if(c)c.style.background=COVERS[(id||0)%COVERS.length]||COVERS[0];const bg=$('#d-cover-bg');if(bg)bg.style.setProperty('--cimg',logo?`url('${logo}')`:'none');}
+const pillHtml=(st)=>{const s=STATUS[st]||STATUS.completed;return `<span class="pill ${s.cls}">${s.dot?'<span class="dot"></span>':''}${s.label}</span>`;};
+/* region monogram (no assets needed; deterministic color) */
+function colorPair(str){let h=0;for(let i=0;i<(str||'').length;i++)h=str.charCodeAt(i)+((h<<5)-h);const hue=Math.abs(h)%360;return [`hsl(${hue} 70% 62%)`,`hsl(${(hue+30)%360} 70% 44%)`];}
+function initials(name){const w=String(name||'').replace(/[«»"'()]/g,'').trim().split(/\s+/).filter(Boolean);if(!w.length)return '—';if(w.length===1)return w[0].slice(0,2).toUpperCase();return (w[0][0]+w[1][0]).toUpperCase();}
+const REGION_SLUGS=[['примор','primorsky_krai'],['хабаров','khabarovsk_krai'],['сахалин','sakhalin_oblast'],['саха','sakha_yakutia'],['якут','sakha_yakutia'],['камчат','kamchatka_krai'],['амурск','amur_oblast'],['магадан','magadan_oblast'],['бурят','buryatia'],['забайкал','zabaykalsky_krai'],['еврейск','jewish_autonomous_oblast'],['чукот','chukotka'],['иркут','irkutsk_oblast'],['московск','moscow_oblast'],['москва','moscow'],['санкт','saint_petersburg'],['петербург','saint_petersburg'],['ленинград','leningrad_oblast'],['нижегород','nizhny_novgorod_oblast'],['орлов','oryol_oblast'],['орёл','oryol_oblast'],['орел','oryol_oblast'],['севастопол','sevastopol'],['ямал','yamal'],['янао','yamal']];
+function regionSlug(name){const s=String(name||'').toLowerCase();for(const [k,slug] of REGION_SLUGS){if(s.includes(k))return slug;}return null;}
+function regionBadge(name){const [a,b]=colorPair(name);const slug=regionSlug(name);const img=slug?`<img src="/uploads/regions/${slug}.png" alt="" loading="lazy" onerror="this.remove()">`:'';return `<div class="reg-badge" style="background:linear-gradient(135deg,${a},${b})"><span class="mono">${esc(initials(name))}</span>${img}</div>`;}
+/* athlete rosters live in heats[].teams[].members, not in standings.teams */
+function buildMembers(data){const m={};(data.heats||[]).forEach(h=>{(h.teams||[]).forEach(t=>{if(t.members&&t.members.length&&!m[t.id])m[t.id]=t.members;});});return m;}
+
+/* ================= state ================= */
+let TOURNAMENTS=[], activeFilter='all', searchQ='', liveId=null;
+const cache={}; // standings by tournament id
+
+/* ================= tournaments ================= */
+async function loadTournaments(){
+  try{
+    try{$('#t-list').innerHTML=skelCards(4);}catch(e){}
+    const res=await API.get('/api/v1/tournaments');
+    TOURNAMENTS=res.data||[];
+    // реальные обложки/логотипы турниров одним запросом
+    try{
+      const portal=await API.get('/api/portal/tournaments');
+      const arr=Array.isArray(portal)?portal:(portal.tournaments||portal.data||[]);
+      const logo={}; arr.forEach(p=>{if(p&&p.id!=null)logo[p.id]=p.card_logo_url||p.logo_url||'';});
+      TOURNAMENTS.forEach(t=>{if(logo[t.id])t.logo_url=logo[t.id];});
+    }catch(e){}
+    const live=TOURNAMENTS.find(t=>t.status==='live');
+    liveId = live ? live.id : (TOURNAMENTS[0]&&TOURNAMENTS[0].id);
+    renderChips(); renderTournaments(); renderHomeLive();
+  }catch(e){
+    $('#t-list').innerHTML=`<div class="center-state">Не удалось загрузить турниры.<br><small>${esc(e.message)}</small><br><span class="retry" onclick="loadTournaments()">Повторить</span></div>`;
+  }
+}
+function renderChips(){
+  const F=[['all','Все'],['live','Идут'],['upcoming','Скоро'],['completed','Завершены']];
+  $('#t-chips').innerHTML=F.map(([id,l])=>{
+    const n=id==='all'?TOURNAMENTS.length:TOURNAMENTS.filter(t=>t.status===id).length;
+    return `<div class="chip ${id===activeFilter?'active':''}" data-f="${id}">${l}<span class="c">${n}</span></div>`;
+  }).join('');
+}
+function renderTournaments(){
+  const q=searchQ.toLowerCase();
+  const list=TOURNAMENTS.filter(t=>(activeFilter==='all'||t.status===activeFilter)&&(!q||(t.name||'').toLowerCase().includes(q)||(t.city||'').toLowerCase().includes(q)));
+  const el=$('#t-list');
+  if(!list.length){el.innerHTML='<div class="center-state">Ничего не найдено</div>';return;}
+  el.innerHTML=list.map(t=>`
+    <div class="t-card" data-open="${t.id}">
+      <div class="t-cover" style="background:${coverFor(t)}"><div class="cover-bg" style="--cimg:${t.logo_url?`url('${esc(t.logo_url)}')`:'none'}"></div><div class="t-cover-tag">${pillHtml(t.status)}</div></div>
+      <div class="t-body">
+        <div class="t-name">${esc(t.name)}</div>
+        <div class="t-meta">
+          <span><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>${esc(t.date||'')}</span>
+          ${t.city?`<span><svg viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>${esc(t.city)}</span>`:''}
+        </div>
+        <div class="t-foot">
+          <div class="t-part"><b>${t.teams_count||0}</b> участников</div>
+          <button class="t-cta" ${t.status==='upcoming'?`data-reg-open="${t.id}"`:''}>${t.status==='live'?'Смотреть табло':t.status==='completed'?'Результаты':'Регистрация'} ›</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+async function renderHomeLive(){
+  const el=$('#home-live'); if(!el)return;
+  let tm=null; try{tm=await API.get('/api/timer');}catch(e){}
+  if(tm&&tm.active){
+    el.innerHTML='<div style="padding:14px 18px 0;">'+timerHtml(tm)+'</div>';
+    const card=el.querySelector('.timer-banner');
+    if(card){card.style.cursor='pointer';card.addEventListener('click',()=>showView('board'));}
+    return;
+  }
+  const live=(TOURNAMENTS||[]).find(t=>t.status==='live');
+  if(live){
+    el.innerHTML=`<div style="padding:14px 18px 0;"><div class="timer-banner" id="home-live-card" style="cursor:pointer;"><span class="pill pill-live"><span class="dot"></span>LIVE</span><div><div class="lbl">Идёт сейчас</div><div class="nm">${esc(live.name)}</div></div><span style="margin-left:auto;color:var(--lb-accent-light);font-size:20px;">›</span></div></div>`;
+    const c=$('#home-live-card'); if(c)c.addEventListener('click',()=>showView('board'));
+  } else el.innerHTML='';
+}
+$('#t-chips').addEventListener('click',e=>{const c=e.target.closest('.chip');if(!c)return;activeFilter=c.dataset.f;renderChips();renderTournaments();});
+$('#t-search').addEventListener('input',e=>{searchQ=e.target.value;renderTournaments();});
+$('#t-list').addEventListener('click',e=>{const r=e.target.closest('[data-reg-open]');if(r){openNativeRegistration(+r.dataset.regOpen);return;}const c=e.target.closest('[data-open]');if(c)openDetail(+c.dataset.open);});
+
+/* ================= standings loader ================= */
+const CACHE_TTL=20000; // ms — any view is at most 20s stale; WS gives instant updates for the live tournament
+async function getStandings(id,force){
+  const c=cache[id];
+  if(!force && c && c.data && (Date.now()-c.t)<CACHE_TTL) return c.data;
+  const s=await API.get('/api/standings?t='+id);
+  try{s.__tid=id;}catch(e){}
+  cache[id]={t:Date.now(),data:s};
+  return s;
+}
+
+/* ================= detail ================= */
+let detailState={id:null,cat:null,data:null};
+async function openDetail(id){
+  const t=TOURNAMENTS.find(x=>x.id===id);
+  setDetailCover(t&&t.logo_url,t?t.id:0);
+  $('#d-pill').innerHTML=t?pillHtml(t.status):'';
+  $('#d-title').textContent=t?t.name:'Турнир';
+  $('#d-timer').innerHTML='';
+  $$('#d-tabs .tab').forEach((tb,i)=>tb.classList.toggle('active',i===0));
+  $$('#v-detail .subview').forEach((sv,i)=>sv.classList.toggle('active',i===0));
+  $('#d-board').innerHTML='<div class="center-state"><div class="spinner"></div>Загружаю…</div>';
+  $('#d-cats').innerHTML=''; $('#dt-cats').innerHTML=''; $('#d-table').innerHTML=''; $('#d-sched').innerHTML=''; $('#ds-cats').innerHTML=''; $('#d-cx').innerHTML=''; $('#d-about').innerHTML=''; $('#d-photos').innerHTML=''; photosLoadedFor=null; try{scheduleState.cat='all';}catch(e){}
+  showView('detail',false);
+  try{
+    const s=await getStandings(id);
+    s._members=buildMembers(s);
+    detailState={id,cat:(s.categories[0]||{}).id,data:s};
+    if(s.settings&&s.settings.event_logo_url) setDetailCover(s.settings.event_logo_url,id);
+    renderDetailCats(); renderDetailBoard(); renderDetailTable(); renderSched(s); renderCx(); renderAbout(s,t);
+    if(t&&t.status==='live') renderDetailTimer();
+  }catch(e){
+    $('#d-board').innerHTML=`<div class="center-state">Не удалось загрузить данные турнира.<br><small>${esc(e.message)}</small></div>`;
+  }
+}
+$('#d-back').addEventListener('click',()=>showView('tournaments'));
+$('#d-share').addEventListener('click',()=>{const id=detailState.id;const t=TOURNAMENTS.find(x=>x.id===id)||{};const nm=t.name||(detailState.data&&detailState.data.settings&&detailState.data.settings.event_name)||'Турнир';shareContent(nm,nm,`${location.origin}/m/?t=${id}`);});
+$$('#d-tabs .tab').forEach(tb=>tb.addEventListener('click',()=>{
+  $$('#d-tabs .tab').forEach(x=>x.classList.remove('active'));tb.classList.add('active');
+  $$('#v-detail .subview').forEach(sv=>sv.classList.remove('active'));
+  $('#sub-'+tb.dataset.sub).classList.add('active');
+  if(tb.dataset.sub==='photos')renderPhotos();
+}));
+let photosLoadedFor=null;
+async function renderPhotos(){
+  if(photosLoadedFor===detailState.id)return;
+  photosLoadedFor=detailState.id;
+  const el=$('#d-photos'); el.innerHTML='<div class="center-state"><div class="spinner"></div>Загружаю фото…</div>';
+  try{
+    const r=await API.get('/api/gallery/report?tournament_id='+detailState.id);
+    const ph=r.photos||[];
+    if(!ph.length){el.innerHTML='<div class="center-state">Фотоотчёт не опубликован.</div>';return;}
+    el.innerHTML=`<div class="ph-grid">${ph.map(p=>`<a class="ph-cell" href="${esc(p.photo_url||p.preview_url)}" target="_blank" rel="noopener"><img loading="lazy" src="${esc(p.preview_url)}" alt=""></a>`).join('')}</div>`+
+      (r.full_report_url?`<a href="${esc(r.full_report_url)}" target="_blank" rel="noopener" style="display:block;text-align:center;margin:14px 18px;padding:13px;border-radius:14px;background:var(--lb-surface-raised);color:var(--lb-accent-light);border:1px solid var(--lb-border-accent);text-decoration:none;font-weight:800;">Все ${r.total||ph.length} фото →</a>`:'');
+  }catch(e){ el.innerHTML='<div class="center-state">Фотоотчёт для этого турнира не опубликован.</div>'; }
+}
+
+function catChipHtml(cats,active,attr){return cats.map(c=>`<div class="chip ${c.id===active?'active':''}" ${attr}="${c.id}">${esc(c.name)}</div>`).join('');}
+function renderDetailCats(){
+  const s=detailState.data;
+  $('#d-cats').innerHTML=catChipHtml(s.categories,detailState.cat,'data-cat');
+  $('#dt-cats').innerHTML=catChipHtml(s.categories,detailState.cat,'data-tcat');
+  $('#dc-cats').innerHTML=catChipHtml(s.categories,detailState.cat,'data-ccat');
+}
+function setDetailCat(cat){detailState.cat=cat;renderDetailCats();renderDetailBoard();renderDetailTable();renderCx();}
+$('#d-cats').addEventListener('click',e=>{const c=e.target.closest('[data-cat]');if(c)setDetailCat(+c.dataset.cat);});
+$('#dt-cats').addEventListener('click',e=>{const c=e.target.closest('[data-tcat]');if(c)setDetailCat(+c.dataset.tcat);});
+$('#dc-cats').addEventListener('click',e=>{const c=e.target.closest('[data-ccat]');if(c)setDetailCat(+c.dataset.ccat);});
+
+/* detailed per-complex table */
+function categoryComplexes(data,catId){return (data.complexes||[]).filter(c=>!c.is_event && (c.category_id==null||c.category_id===catId));}
+function fullTableHtml(data,catId){
+  const cxs=categoryComplexes(data,catId);
+  const rows=(data.standings&&data.standings[catId])||[];
+  if(!rows.length) return '<div class="center-state">Нет результатов в этой категории.</div>';
+  const head=`<th class="sticky">#</th><th class="sticky2 tl">Участник</th>`+cxs.map((c,i)=>`<th data-open-cx="${c.id}" title="${esc(c.name)}">К${i+1}</th>`).join('')+`<th>Σ</th>`;
+  const body=rows.map(r=>{
+    const cells=cxs.map(c=>{const sc=r.scores&&r.scores[c.id];const has=sc&&sc.points!=null;return `<td class="${has?'hascore':'empty'}">${has?sc.points:'·'}</td>`;}).join('');
+    return `<tr data-open-team="${r.team_id}" data-cat="${catId}"><td class="sticky rk">${r.rank!=null?r.rank:'—'}</td><td class="sticky2 tl"><div class="tname">${esc(r.team_name)}</div>${r.region?`<div class="treg">${esc(r.region)}</div>`:''}</td>${cells}<td class="tot">${r.total_points!=null?r.total_points:0}</td></tr>`;
+  }).join('');
+  return `<div class="ftable-wrap"><table class="ftable"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div><div class="tap-hint" style="padding:10px 14px;">«Кn» — комплекс по порядку (нажмите столбец), строка — участник.</div>`;
+}
+function renderDetailTable(){ $('#d-table').innerHTML=fullTableHtml(detailState.data,detailState.cat); }
+$('#d-table').addEventListener('click',e=>{
+  const th=e.target.closest('[data-open-cx]'); if(th){openComplexSheet(detailState.data,+th.dataset.openCx);return;}
+  const tr=e.target.closest('[data-open-team]'); if(tr){openTeamSheet(detailState.data,+tr.dataset.openTeam,+tr.dataset.cat);return;}
+});
+
+function rankCls(r){return r===1?'rank-1':r===2?'rank-2':r===3?'rank-3':'';}
+function boardRowsHtml(rows,onclick){
+  if(!rows||!rows.length) return '<div class="center-state">В этой категории пока нет результатов.</div>';
+  return rows.map(r=>`
+    <div class="lb-row" data-team="${r.team_id}" ${onclick?`data-src="${onclick}"`:''}>
+      <div class="rank ${rankCls(r.rank)}">${r.rank!=null?r.rank:'—'}</div>
+      ${regionBadge(r.region||r.team_name)}
+      <div class="lb-team"><div class="lb-name">${esc(r.team_name)}</div>${r.region?`<div class="lb-reg">${esc(r.region)}</div>`:''}</div>
+      <div class="lb-pts"><div class="p">${r.total_points!=null?r.total_points:0}</div><div class="u">очков</div></div>
+    </div>`).join('');
+}
+function renderDetailBoard(){
+  const s=detailState.data;
+  const rows=(s.standings&&s.standings[detailState.cat])||[];
+  const t=TOURNAMENTS.find(x=>x.id===detailState.id);
+  const isFinal=(t&&(t.status==='completed'||t.status==='finished'))||(s.settings&&s.settings.results_frozen);
+  const top3=rows.filter(r=>r.rank>=1&&r.rank<=3);
+  const pod=(isFinal&&top3.length>=3)?`<div class="board-podium">${podiumBig(top3)}</div>`:'';
+  $('#d-board').innerHTML=pod+boardRowsHtml(rows,'detail');
+}
+$('#d-board').addEventListener('click',e=>{const r=e.target.closest('[data-team]');if(r)openTeamSheet(detailState.data,+r.dataset.team,detailState.cat);});
+
+function fmtDay(d){return d?('День '+d):'';}
+function fmtDate(d){const s=String(d||'').trim();const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s);if(!m)return esc(s);const mo=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];return (+m[3])+' '+mo[(+m[2])-1]+' '+m[1];}
+let scheduleState={cat:'all'};
+function renderSched(s){
+  const cats=s.categories||[]; const catName={}; cats.forEach(c=>catName[c.id]=c.name);
+  if(scheduleState.cat!=='all' && !cats.some(c=>c.id==scheduleState.cat)) scheduleState.cat='all';
+  $('#ds-cats').innerHTML=`<div class="chip ${scheduleState.cat==='all'?'active':''}" data-scat="all">Все</div>`+cats.map(c=>`<div class="chip ${scheduleState.cat==c.id?'active':''}" data-scat="${c.id}">${esc(c.name)}</div>`).join('');
+  const all=(s.heats||[]).filter(h=>h.start_time);
+  if(!all.length){$('#d-sched').innerHTML='<div class="center-state">Расписание появится позже.</div>';return;}
+  const cat=scheduleState.cat;
+  const heats=all.filter(h=>{
+    if(cat==='all')return true;
+    if(h.is_event||h.category_name==='Все')return true;
+    return (h.category_id!=null&&h.category_id==cat)||(h.category_name&&h.category_name===catName[cat]);
+  });
+  const nextId=s.next_heat&&s.next_heat.id;
+  const liveName=(s.timer&&s.timer.active&&(s.timer.complex_name||s.timer.timer_complex_name))||null;
+  let html='', lastDay=null;
+  heats.forEach(h=>{
+    const dayKey=(h.day||'')+' '+(h.date||'');
+    if(dayKey!==lastDay){lastDay=dayKey;html+=`<div class="sched-day">${fmtDay(h.day)}${h.date?' · '+fmtDate(h.date):''}</div>`;}
+    const isNext=h.id===nextId;
+    const isLive=liveName&&!h.is_event&&h.complex_name===liveName;
+    const time=esc(h.start_time)+(h.end_time?('–'+esc(h.end_time)):'');
+    if(h.is_event){
+      html+=`<div class="sched-item event" data-heat="${esc(h.id)}"><div class="sched-time">${time}</div><div style="flex:1;min-width:0;"><div class="sched-t">${esc(h.complex_name)}</div><div class="sched-c"><span class="ev-tag">событие</span>${h.category_name&&h.category_name!=='Все'?' · '+esc(h.category_name):' · для всех'}</div></div><span class="chev">›</span></div>`;
+    } else {
+      const lanes=(h.teams||[]).length;
+      html+=`<div class="sched-item ${isLive?'live':(isNext?'next':'')}" data-heat="${esc(h.id)}"><div class="sched-time">${time}</div><div style="flex:1;min-width:0;"><div class="sched-t">${esc(h.complex_name)}</div><div class="sched-c">Заход ${h.heat_number||''} · ${esc(h.category_name||'')}${lanes?' · '+lanes+' ком.':''}${isLive?' · <b style="color:var(--lb-accent-light)">идёт сейчас</b>':isNext?' · следующий':''}</div></div><span class="chev">›</span></div>`;
+    }
+  });
+  $('#d-sched').innerHTML=html||'<div class="center-state">Нет заходов в этой категории.</div>';
+}
+$('#ds-cats').addEventListener('click',e=>{const c=e.target.closest('[data-scat]');if(!c)return;scheduleState.cat=c.dataset.scat==='all'?'all':+c.dataset.scat;renderSched(detailState.data);});
+$('#d-sched').addEventListener('click',e=>{const it=e.target.closest('[data-heat]');if(it)openHeatSheet(detailState.data,it.dataset.heat);});
+function heatSheetHtml(data,heatId){
+  const h=(data.heats||[]).find(x=>String(x.id)===String(heatId)); if(!h)return '<div class="center-state">Нет данных.</div>';
+  const cx=(data.complexes||[]).find(c=>c.id===h.complex_id);
+  const lanes=(h.teams||[]).slice().sort((a,b)=>(a.lane_index||0)-(b.lane_index||0));
+  const lanesHtml=lanes.length?lanes.map(t=>`
+    <div class="lane">
+      <div class="lane-no">${t.lane_index!=null?t.lane_index:'—'}</div>
+      ${regionBadge(t.name)}
+      <div class="lane-main"><div class="lane-name">${esc(t.name)}</div>${t.judge_name?`<div class="lane-judge">Судья: ${esc(t.judge_name)}</div>`:''}${t.members&&t.members.length?`<div class="members">${t.members.map(n=>`<span class="mchip">${esc(n)}</span>`).join('')}</div>`:''}</div>
+    </div>`).join(''):'<div class="center-state">Состав дорожек ещё не назначен.</div>';
+  const cxLink=cx?`<div class="brk" data-open-cx="${cx.id}"><div class="bn">${esc(cx.name)}<small>Регламент и таблица комплекса</small></div><span class="chev">›</span></div>`:'';
+  const desc=(h.is_event&&cx&&cx.description)?`<div class="sheet-meta" style="margin-top:10px;">${esc(cx.description)}</div>`:'';
+  return `<h3>${esc(h.complex_name||'Заход')}</h3><div class="sub">${h.is_event?'Событие':'Заход '+(h.heat_number||'')} · ${esc(h.category_name||'')} · ${esc(h.start_time||'')}${h.date?' · '+fmtDate(h.date):''}</div>${cxLink}${desc}${h.is_event?'':'<div style="height:8px;"></div>'+lanesHtml}`;
+}
+function openHeatSheet(data,heatId){ openSheet(data,{html:()=>heatSheetHtml(data,heatId)}); }
+const TYPE_RU={time:'на время',weight:'на вес',reps:'на повторы',distance:'на дистанцию',points:'очки',rounds:'раунды'};
+function typeLabel(type){return type?(TYPE_RU[String(type).toLowerCase()]||type):'';}
+function mdLite(t){return esc(String(t||'')).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/\n/g,'<br>');}
+function qrSvg(text,size){size=size||184;try{const q=qrcode(0,'M');q.addData(String(text));q.make();const n=q.getModuleCount(),pad=2,tot=n+pad*2;let d='';for(let r=0;r<n;r++)for(let c=0;c<n;c++){if(q.isDark(r,c))d+=`M${c+pad} ${r+pad}h1v1h-1z`;}return `<svg class="qr" viewBox="0 0 ${tot} ${tot}" width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges"><rect width="${tot}" height="${tot}" fill="#fff"/><path d="${d}" fill="#0a0a0a"/></svg>`;}catch(e){return '<div class="head-sub">QR недоступен</div>';}}
+function partLine(name,type,cap){
+  if(!name) return '';
+  const capTxt=cap?`${Math.floor(cap/60)}:${String(cap%60).padStart(2,'0')}`:'';
+  return `<div class="cx-part"><span class="pn">${esc(name)}</span><span class="pc">${esc(typeLabel(type))}${capTxt?' · '+capTxt:''}</span></div>`;
+}
+function renderCx(){
+  const data=detailState.data; if(!data)return;
+  const cx=categoryComplexes(data,detailState.cat);
+  if(!cx.length){$('#d-cx').innerHTML='<div class="center-state">В этой категории нет комплексов.</div>';return;}
+  $('#d-cx').innerHTML=cx.map(c=>`
+    <div class="cx-card" data-cx="${c.id}">
+      <div class="cx-img" style="background:${c.image_url?`url('${esc(c.image_url)}') center/cover, `:''}${COVERS[(c.id||0)%COVERS.length]}"></div>
+      <div class="cx-b">
+        <div class="cx-num">${esc('День '+(c.day||1))} · ${esc(c.start_time||'')}</div>
+        <div class="cx-name">${esc(c.name)}</div>
+        ${partLine(c.score1_name,c.score1_type,c.score1_time_cap)}
+        ${partLine(c.score2_name,c.score2_type,c.score2_time_cap)}
+        ${partLine(c.score3_name,c.score3_type,c.score3_time_cap)}
+        <div class="cx-more">Таблица комплекса ›</div>
+      </div>
+    </div>`).join('');
+}
+$('#d-cx').addEventListener('click',e=>{const c=e.target.closest('[data-cx]');if(c)openComplexSheet(detailState.data,+c.dataset.cx);});
+
+function renderAbout(s,t){
+  const st=s.settings||{};
+  const rows=[];
+  if(st.event_city||(t&&t.city)) rows.push(['Город',st.event_city||t.city]);
+  if(st.event_date||(t&&t.date)) rows.push(['Даты',st.event_date||t.date]);
+  if(s.teams&&s.teams.length) rows.push(['Участников',s.teams.length]);
+  if(s.categories) rows.push(['Категорий',s.categories.length]);
+  if((s.complexes||[]).filter(c=>!c.is_event).length) rows.push(['Комплексов',(s.complexes||[]).filter(c=>!c.is_event).length]);
+  if(st.reg_fee_info) rows.push(['Взнос',st.reg_fee_info]);
+  let html='';
+  if(st.reg_description){html+=`<h4>Положение</h4><p>${mdLite(st.reg_description)}</p>`;}
+  html+=`<h4>Сведения</h4>${rows.map(([k,v])=>`<div class="kv"><span class="k">${esc(k)}</span><span class="v">${esc(v)}</span></div>`).join('')}`;
+  if(st.judges_list){html+=`<h4>Судейская коллегия</h4><p>${mdLite(st.judges_list)}</p>`;}
+  if(st.reg_rules_link){html+=`<a class="btn" href="${esc(st.reg_rules_link)}" target="_blank" rel="noopener">📄 Положение турнира (PDF)</a>`;}
+  if(t&&t.status==='upcoming'){html+=`<button class="j-btn" data-register-tournament="${t.id}" style="margin-top:16px;">Зарегистрироваться</button>`;}
+  $('#d-about').innerHTML=html;
+}
+
+/* ================= native tournament registration ================= */
+function regMemberCount(name){const n=String(name||'').toLowerCase();return n.includes('корпоратив')?4:(n.includes('пары')||n.includes('партнёр')||n.includes('партнер'))?2:1;}
+function fileAsDataUrl(file){return new Promise((ok,bad)=>{const r=new FileReader();r.onload=()=>ok(r.result);r.onerror=bad;r.readAsDataURL(file);});}
+async function openNativeRegistration(tid){
+  openSheet({}, {html:()=>'<h3>Регистрация</h3><div class="center-state"><div class="spinner"></div>Загружаю условия…</div>'});
+  try{
+    const info=await API.get('/api/register/info?t='+tid);
+    if(!info.is_active)throw new Error(info.registration_status_text||'Регистрация закрыта');
+    const email=(identity.roles&&identity.roles.email)||localStorage.getItem('lb_email')||'';
+    const rules=info.reg_rules_link?`<a href="${esc(info.reg_rules_link)}" target="_blank" rel="noopener" style="color:var(--lb-accent-light)">положением турнира</a>`:'условиями турнира';
+    sheetStack[sheetStack.length-1]={html:()=>`<h3>${esc(info.tournament_name)}</h3><div class="sub">${esc(info.event_date||'')}${info.event_city?' · '+esc(info.event_city):''}</div>
+      ${info.reg_description?`<div class="reg-note">${mdLite(info.reg_description)}</div>`:''}${info.reg_fee_info?`<div class="reg-note"><b style="color:var(--lb-text)">Стартовый взнос</b><br>${mdLite(info.reg_fee_info)}</div>`:''}
+      <form class="reg-form" id="native-reg-form">
+        <label class="reg-label">Категория<select class="j-select" id="reg-cat" required>${(info.categories||[]).map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('')}</select></label>
+        <label class="reg-label" id="reg-team-wrap">Название команды<input class="j-input" id="reg-team" autocomplete="organization" placeholder="Например, Vostok Team"></label>
+        <div class="reg-members" id="reg-members"></div>
+        <label class="reg-label">Email<input class="j-input" id="reg-email" type="email" autocomplete="email" value="${esc(email)}" required></label>
+        <label class="reg-label">Телефон / Telegram<input class="j-input" id="reg-contact" autocomplete="tel" placeholder="+7 900 000-00-00" required></label>
+        <label class="reg-label">Чек об оплате<input class="j-input" id="reg-receipt" type="file" accept="image/jpeg,image/png,image/webp,application/pdf" required></label>
+        <label class="reg-check"><input id="reg-consent" type="checkbox" required><span>Я согласен с ${rules} и обработкой данных.</span></label>
+        <div class="reg-error" id="reg-error" hidden></div><button class="j-btn" id="reg-submit" type="submit">Отправить заявку</button>
+      </form>`,after:()=>bindNativeRegistration(info,tid)};
+    renderSheet();
+  }catch(e){$('#sheet-body').innerHTML=`<div class="grip"></div><h3>Регистрация</h3><div class="center-state">${esc(e.message||'Не удалось загрузить форму.')}</div>`;}
+}
+function bindNativeRegistration(info,tid){
+  const cat=$('#reg-cat'),members=$('#reg-members'),teamWrap=$('#reg-team-wrap');
+  const draw=()=>{const name=cat.options[cat.selectedIndex]?.textContent||'',count=regMemberCount(name);teamWrap.hidden=count===1;members.innerHTML=Array.from({length:count},(_,i)=>`<label class="reg-label">ФИО ${count>1?'участника '+(i+1):'участника'}<input class="j-input reg-member" autocomplete="name" required></label>`).join('');};
+  cat.addEventListener('change',draw);draw();
+  $('#native-reg-form').addEventListener('submit',async e=>{e.preventDefault();const err=$('#reg-error'),btn=$('#reg-submit');err.hidden=true;
+    try{const file=$('#reg-receipt').files[0];if(!file)throw new Error('Прикрепите чек об оплате.');if(file.size>8*1024*1024)throw new Error('Файл чека должен быть не больше 8 МБ.');
+      btn.disabled=true;btn.textContent='Отправляю…';const names=$$('.reg-member').map(x=>x.value.trim());const catName=cat.options[cat.selectedIndex].textContent;const teamName=names.length===1?names[0]:$('#reg-team').value.trim();if(!teamName)throw new Error('Укажите название команды.');
+      const payload={team_name:teamName,category_id:+cat.value,category_name:catName,selected_category_id:cat.value,members:names,contact_info:$('#reg-contact').value.trim(),phone:$('#reg-contact').value.trim(),email:$('#reg-email').value.trim(),full_name:names[0],payment_screenshot_base64:await fileAsDataUrl(file),payment_screenshot_filename:file.name};
+      const r=await fetch('/api/register?t='+tid,{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify(payload)});const d=await r.json();if(!r.ok||d.status!=='success')throw new Error(d.message||'Не удалось отправить заявку.');
+      $('#sheet-body').innerHTML='<div class="grip"></div><h3>Заявка принята</h3><div class="reg-note">Регистрация успешна. Подтверждение и данные для входа будут отправлены на email.</div><button class="j-btn" onclick="closeSheet();showView(\'profile\')" style="margin-top:14px;">Перейти в профиль</button>';
+    }catch(x){err.textContent=x.message;err.hidden=false;btn.disabled=false;btn.textContent='Отправить заявку';}
+  });
+}
+$('#d-about').addEventListener('click',e=>{const b=e.target.closest('[data-register-tournament]');if(b)openNativeRegistration(+b.dataset.registerTournament);});
+
+/* ================= sheet stack (team ⇄ complex, all clickable) ================= */
+let sheetData=null; const sheetStack=[];
+function openSheet(data,entry){ sheetData=data; sheetStack.length=0; sheetStack.push(entry); renderSheet(); $('#sheet-modal').classList.add('open'); }
+function pushSheet(entry){ sheetStack.push(entry); renderSheet(); $('#sheet-body').scrollTop=0; }
+function renderSheet(){
+  const e=sheetStack[sheetStack.length-1]; if(!e)return;
+  $('#sheet-body').innerHTML='<div class="grip"></div><button class="sheet-close" aria-label="Закрыть">×</button>'+(sheetStack.length>1?'<div class="sheet-nav"><button class="sheet-back" aria-label="Назад">‹</button></div>':'')+e.html();
+  if(e.after)e.after();
+}
+function sheetBack(){ sheetStack.pop(); if(!sheetStack.length)closeSheet(); else renderSheet(); }
+function closeSheet(){ $('#sheet-modal').classList.remove('open'); sheetStack.length=0; }
+const cxIndex=(data)=>{const m={};(data.complexes||[]).forEach(c=>m[c.id]=c);return m;};
+function fmtVal(type,v){ if(v==null||v==='')return '—'; if(type==='time')return fromInt('time',v); if(type==='weight')return v+' кг'; if(type==='reps')return v+' повт.'; return String(v); }
+
+function teamSheetHtml(data,teamId,catId){
+  const rows=(data.standings&&data.standings[catId])||[];
+  const row=rows.find(r=>r.team_id===teamId); if(!row)return '<div class="center-state">Нет данных.</div>';
+  let parts='';
+  (data.complexes||[]).forEach(c=>{
+    if(c.is_event)return;
+    const sc=row.scores&&row.scores[c.id]; if(!sc)return;
+    const pl=sc.rank!=null?sc.rank:null;
+    const plCls=pl===1?'p1':pl===2?'p2':pl===3?'p3':'';
+    const partRow=(n)=>{const nm=c['score'+n+'_name'];if(!nm)return '';const v=sc['score'+n+'_value'];const fin=sc['score'+n+'_finished'];if(v==null&&fin==null)return '';const rk=sc['rank'+n];return `<div class="respart"><span class="pn">${esc(nm)}</span><span class="pv">${esc(fmtVal(c['score'+n+'_type'],v))}${rk!=null?`<span class="pm">· ${rk} место</span>`:''}</span></div>`;};
+    const prows=partRow(1)+partRow(2)+partRow(3);
+    parts+=`<div class="rescard" data-open-cx="${c.id}">
+      <div class="rescard-name">${esc(c.name)}<span class="rescard-chev">таблица ›</span></div>
+      <div class="rescard-parts">${prows||`<div class="respart"><span class="pn">Результат</span><span class="pv">${esc(sc.formatted||'—')}</span></div>`}</div>
+      <div class="rescard-f2">
+        <div class="rf-stat ${plCls}"><div class="v">${pl!=null?pl:'—'}</div><div class="l">место</div></div>
+        <div class="rf-stat"><div class="v accent">${sc.points!=null?sc.points:'—'}</div><div class="l">очков</div></div>
+        ${sc.completed_parts!=null?`<div class="rf-stat"><div class="v">${sc.completed_parts}${sc.required_parts?'/'+sc.required_parts:''}</div><div class="l">частей</div></div>`:''}
+      </div>
+    </div>`;
+  });
+  const mem=((data._members||(data._members=buildMembers(data)))[teamId])||[];
+  const memHtml=mem.length?`<div class="tap-hint" style="margin:14px 0 6px;">Состав команды</div><div class="members">${mem.map(n=>`<span class="mchip">${esc(n)}</span>`).join('')}</div>`:'';
+  const tid=data.__tid; const tn=(TOURNAMENTS.find(t=>t.id===tid)||{}).name||(data.settings&&data.settings.event_name)||'турнир';
+  const sUrl=tid?`${location.origin}/m/?t=${tid}&team=${teamId}&cat=${catId}`:location.origin+'/m/';
+  const sText=`${row.team_name} — ${row.rank} место${row.total_points!=null?` (${row.total_points} очк.)`:''} · ${tn}`;
+  const shareBtn=`<button class="j-btn sec" data-share data-stitle="${esc(row.team_name)}" data-stext="${esc(sText)}" data-surl="${esc(sUrl)}" style="margin-top:14px;">📤 Поделиться результатом</button>`;
+  return `<h3>${esc(row.team_name)}</h3><div class="sub">${row.region?esc(row.region)+' · ':''}Общее место: <b style="color:var(--lb-text)">${row.rank}</b> · ${row.total_points} очков · пройдено ${row.completed_parts||0}</div><div class="tap-hint" style="margin:2px 0 10px;">В каждом комплексе: результат по частям, затем <b>место</b> и <b>очки</b>. Нажми карточку — полная таблица комплекса.</div>${parts||'<div class="center-state">Нет зафиксированных результатов.</div>'}${memHtml}${shareBtn}`;
+}
+function partSheet(name,type,cap){ if(!name)return ''; const t=cap?`${Math.floor(cap/60)}:${String(cap%60).padStart(2,'0')}`:''; return `<div class="sheet-part"><span class="pn">${esc(name)}</span><span class="pc">${esc(type||'')}${t?' · '+t:''}</span></div>`; }
+function complexSheetHtml(data,cid){
+  const c=(data.complexes||[]).find(x=>x.id===cid)||{};
+  const rows=[];
+  Object.keys(data.standings||{}).forEach(cat=>{(data.standings[cat]||[]).forEach(r=>{const sc=r.scores&&r.scores[cid];if(sc)rows.push({team_id:r.team_id,name:r.team_name,region:r.region,cat:+cat,formatted:sc.formatted,points:sc.points,rank:sc.rank});});});
+  rows.sort((a,b)=>((a.rank==null?999:a.rank)-(b.rank==null?999:b.rank))||((b.points||0)-(a.points||0)));
+  const parts=[partSheet(c.score1_name,c.score1_type,c.score1_time_cap),partSheet(c.score2_name,c.score2_type,c.score2_time_cap),partSheet(c.score3_name,c.score3_type,c.score3_time_cap)].join('');
+  const list=rows.length?('<div class="lb-rows">'+rows.map((r,i)=>`<div class="lb-row" data-open-team="${r.team_id}" data-cat="${r.cat}"><div class="rank ${rankCls(i+1)}">${i+1}</div><div class="lb-team"><div class="lb-name">${esc(r.name)}</div>${r.formatted?`<div class="lb-reg">${esc(r.formatted)}</div>`:''}</div><div class="lb-pts"><div class="p">${r.points!=null?r.points:'—'}</div><div class="u">очк.</div></div></div>`).join('')+'</div>'):'<div class="center-state">Пока нет результатов по этому комплексу.</div>';
+  return `<h3>${esc(c.name||'Комплекс')}</h3><div class="sub">День ${c.day||1}${c.start_time?' · '+esc(c.start_time):''}${c.date?' · '+fmtDate(c.date):''}</div>${parts}${c.description?`<div class="sheet-meta" style="margin-top:10px;">${esc(c.description)}</div>`:''}${c.standards?`<div class="sheet-meta">${esc(c.standards)}</div>`:''}<div style="height:6px;"></div>${list}${adminState.authed?`<button class="j-btn" data-cxtiming="${cid}" style="margin-top:12px;">⏱ Тайминг и дорожки</button>`:''}`;
+}
+function openTeamSheet(data,teamId,catId){ openSheet(data,{html:()=>teamSheetHtml(data,teamId,catId)}); }
+function openComplexSheet(data,cid){ openSheet(data,{html:()=>complexSheetHtml(data,cid)}); }
+
+$('#sheet-body').addEventListener('click',e=>{
+  if(e.target.closest('.sheet-close')){closeSheet();return;}
+  if(e.target.closest('.sheet-back')){sheetBack();return;}
+  const sh=e.target.closest('[data-share]'); if(sh){shareContent(sh.dataset.stitle,sh.dataset.stext,sh.dataset.surl);return;}
+  const ct=e.target.closest('[data-cxtiming]'); if(ct){openComplexTiming(sheetData,+ct.dataset.cxtiming);return;}
+  const oc=e.target.closest('[data-open-cx]'); if(oc){pushSheet({html:()=>complexSheetHtml(sheetData,+oc.dataset.openCx)});return;}
+  const ot=e.target.closest('[data-open-team]'); if(ot){pushSheet({html:()=>teamSheetHtml(sheetData,+ot.dataset.openTeam,+ot.dataset.cat)});return;}
+});
+$('#sheet-bd').addEventListener('click',closeSheet);
+
+/* timer */
+async function renderDetailTimer(){
+  try{const tm=await API.get('/api/timer');$('#d-timer').innerHTML=timerHtml(tm);}catch(e){}
+}
+let arenaTimerState=null;
+function fmtClock(s){s=Math.max(0,Math.round(s));const m=Math.floor(s/60),x=s%60;return String(m).padStart(2,'0')+':'+String(x).padStart(2,'0');}
+function computeRemaining(){
+  const t=arenaTimerState; if(!t||!t.active)return null;
+  if(t.paused)return Math.max(0,t.pausedRemaining||0);
+  const nowSec=Date.now()/1000+(t.offset||0);
+  return Math.max(0,(t.endAt||0)-nowSec);
+}
+function timerHtml(tm){
+  if(!tm||!tm.active){arenaTimerState=null;return '';}
+  const endStr=tm.timer_end_at||tm.end_at||'';
+  const endAt=endStr?Date.parse(endStr)/1000:0;
+  const paused=!!(tm.timer_is_paused&&tm.timer_is_paused!=='0');
+  arenaTimerState={active:true,endAt,offset:(tm.server_now||Date.now()/1000)-Date.now()/1000,paused,pausedRemaining:parseFloat(tm.timer_paused_remaining||0),name:tm.complex_name||tm.timer_complex_name||'Комплекс'};
+  const rem=computeRemaining();
+  return `<div class="timer-banner"><span class="pill pill-live"><span class="dot"></span>LIVE</span><div><div class="lbl">На помосте сейчас</div><div class="nm">${esc(arenaTimerState.name)}</div></div><div style="margin-left:auto;text-align:right;"><div class="big arena-remaining">${rem!=null?fmtClock(rem):'--:--'}</div></div></div>`;
+}
+setInterval(()=>{const rem=computeRemaining();if(rem==null)return;const t=fmtClock(rem);document.querySelectorAll('.arena-remaining').forEach(el=>el.textContent=t);},1000);
+
+/* ================= live board tab ================= */
+let boardState={cat:null,data:null};
+async function loadBoard(){
+  if(!liveId){$('#b-board').innerHTML='<div class="center-state">Сейчас нет активного турнира.</div>';return;}
+  const t=TOURNAMENTS.find(x=>x.id===liveId);
+  $('#board-sub').textContent=t?t.name:'Турнир';
+  try{
+    const s=await getStandings(liveId);
+    boardState={cat:(s.categories[0]||{}).id,data:s};
+    renderBoardCats(); renderBoardRows();
+    try{const tm=await API.get('/api/timer');$('#board-timer').innerHTML=timerHtml(tm);}catch(e){}
+  }catch(e){
+    $('#b-board').innerHTML=`<div class="center-state">Не удалось загрузить табло.<br><small>${esc(e.message)}</small><br><span class="retry" onclick="loadBoard()">Повторить</span></div>`;
+  }
+}
+function renderBoardCats(){
+  const s=boardState.data;
+  $('#b-cats').innerHTML=s.categories.map(c=>`<div class="chip ${c.id===boardState.cat?'active':''}" data-bcat="${c.id}">${esc(c.name)}</div>`).join('');
+}
+function renderBoardRows(){
+  const s=boardState.data;
+  $('#b-board').innerHTML=boardRowsHtml((s.standings&&s.standings[boardState.cat])||[],'board');
+}
+$('#b-cats').addEventListener('click',e=>{const c=e.target.closest('[data-bcat]');if(!c)return;boardState.cat=+c.dataset.bcat;renderBoardCats();renderBoardRows();});
+$('#b-board').addEventListener('click',e=>{const r=e.target.closest('[data-team]');if(r)openTeamSheet(boardState.data,+r.dataset.team,boardState.cat);});
+
+/* ================= profile: find self across ALL tournaments ================= */
+$('#p-find').addEventListener('click',()=>{
+  openSheet({},{
+    html:()=>`<h3>Найти свои результаты</h3><div class="sub">По фамилии или команде — во всех турнирах</div><div class="search" style="margin-top:0;"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input id="find-input" placeholder="Фамилия или команда…"></div><div id="find-res" style="margin-top:10px;"><div class="center-state"><div class="spinner"></div>Загружаю турниры…</div></div>`,
+    after:async()=>{
+      const inp=$('#find-input'); if(inp)setTimeout(()=>inp.focus(),200);
+      const entries=await Promise.all((TOURNAMENTS||[]).map(async t=>{try{return [t,await getStandings(t.id)];}catch(e){return null;}}));
+      const loaded=entries.filter(Boolean);
+      const res=$('#find-res'); if(!res)return;
+      res.innerHTML='<div class="center-state" style="font-size:13px;">Введите минимум 2 буквы фамилии</div>';
+      let timer=null;
+      const doSearch=()=>{
+        const q=(inp.value||'').toLowerCase().trim();
+        if(q.length<2){res.innerHTML='<div class="center-state" style="font-size:13px;">Введите минимум 2 буквы</div>';return;}
+        const hits=[];
+        loaded.forEach(([t,s])=>{Object.keys(s.standings||{}).forEach(cat=>{(s.standings[cat]||[]).forEach(r=>{if((r.team_name||'').toLowerCase().includes(q))hits.push({t,r,cat:+cat});});});});
+        hits.sort((a,b)=>(a.r.rank||999)-(b.r.rank||999));
+        res.innerHTML=hits.length?('<div class="lb-rows">'+hits.slice(0,40).map(({t,r,cat})=>`<div class="lb-row" data-ft="${t.id}" data-fteam="${r.team_id}" data-fcat="${cat}"><div class="rank ${rankCls(r.rank)}">${r.rank}</div><div class="lb-team"><div class="lb-name">${esc(r.team_name)}</div><div class="lb-reg">${esc(t.name)}</div></div><div class="lb-pts"><div class="p">${r.total_points}</div><div class="u">место ${r.rank}</div></div></div>`).join('')+'</div>'):'<div class="center-state">Не найдено ни в одном турнире</div>';
+        $$('#find-res [data-fteam]').forEach(el=>el.addEventListener('click',()=>{const pair=loaded.find(([tt])=>tt.id==el.dataset.ft);if(pair){const s=pair[1];s._members=buildMembers(s);openTeamSheet(s,+el.dataset.fteam,+el.dataset.fcat);}}));
+      };
+      if(inp)inp.addEventListener('input',()=>{clearTimeout(timer);timer=setTimeout(doSearch,180);});
+    }
+  });
+});
+
+/* ================= JUDGE PANEL (writes to prod; key entered by the judge) ================= */
+let judgeState={key:'',tid:null,data:null,complexId:null,heatId:null};
+function showJudge(){ showView('judge',false); judgeState.data=null; judgeState.fromAdmin=false; renderJudgeLogin(); }
+$('#p-judge').addEventListener('click',showJudge);
+$('#j-back').addEventListener('click',()=>{
+  if(judgeState.fromAdmin){judgeState.fromAdmin=false;showView('admin',false);renderAdminTab();return;}
+  if(judgeState.heatId){judgeState.heatId=null;renderJudgeHeats();}
+  else if(judgeState.complexId){judgeState.complexId=null;renderJudgeComplexes();}
+  else if(judgeState.data){judgeState.data=null;renderJudgeLogin();}
+  else showView('profile');
+});
+function jStatus(m,ok){return `<div class="j-status ${ok?'ok':'err'}">${esc(m)}</div>`;}
+function typeHint(t){return t==='time'?'мм:сс':t==='weight'?'кг':t==='reps'?'повт.':'ед.';}
+function toInt(t,raw){raw=String(raw||'').trim();if(!raw)return null;if(t==='time'){const m=raw.match(/^(\d+):(\d{1,2})$/);if(m)return (+m[1])*60+(+m[2]);}const n=parseInt(raw,10);return isNaN(n)?null:n;}
+function fromInt(t,v){if(v==null)return '';if(t==='time'){const m=Math.floor(v/60),s=v%60;return m+':'+String(s).padStart(2,'0');}return String(v);}
+function parseKey(raw){const m=String(raw||'').match(/[?&]key=([^&\s]+)/);return (m?decodeURIComponent(m[1]):String(raw||'')).trim();}
+
+function renderJudgeLogin(){
+  judgeState.complexId=null;judgeState.heatId=null;
+  $('#j-sub').textContent='Вход в судейскую панель';
+  const opts=TOURNAMENTS.map(t=>`<option value="${t.id}" ${t.id===(judgeState.tid||liveId)?'selected':''}>${esc(t.name)}${t.status==='live'?' · LIVE':''}</option>`).join('');
+  $('#judge-body').innerHTML=`<div class="j-step">
+    <div class="j-note">Введите ключ судьи (или пароль турнира), выданный организатором — можно вставить и целую ссылку с <b>?key=…</b>. Ключ никуда не сохраняется, он лишь подтверждает право вносить результаты.</div>
+    <div><div class="j-label">Турнир</div><select class="j-select" id="j-tourn">${opts}</select></div>
+    <div><div class="j-label">Ключ / пароль судьи</div><input class="j-input" id="j-key" type="text" autocomplete="off" placeholder="A1B2C3 или ссылка ?key=…" value="${esc(judgeState.key)}"></div>
+    <div id="j-msg"></div>
+    <button class="j-btn" id="j-login">Открыть панель</button>
+  </div>`;
+  $('#j-login').addEventListener('click',judgeLogin);
+}
+async function judgeLogin(){
+  const tid=+$('#j-tourn').value, key=parseKey($('#j-key').value);
+  if(!key){$('#j-msg').innerHTML=jStatus('Введите ключ судьи',false);return;}
+  const btn=$('#j-login');btn.disabled=true;btn.textContent='Загружаю…';
+  try{
+    const s=await getStandings(tid); s._members=buildMembers(s);
+    judgeState.key=key;judgeState.tid=tid;judgeState.data=s;
+    renderJudgeComplexes();
+  }catch(e){$('#j-msg').innerHTML=jStatus('Ошибка загрузки турнира: '+e.message,false);btn.disabled=false;btn.textContent='Открыть панель';}
+}
+function renderJudgeComplexes(){
+  judgeState.complexId=null;judgeState.heatId=null;
+  const s=judgeState.data;const catName={};(s.categories||[]).forEach(c=>catName[c.id]=c.name);
+  const cx=(s.complexes||[]).filter(c=>!c.is_event);
+  $('#j-sub').textContent='Выберите комплекс';
+  $('#judge-body').innerHTML=`<div class="j-note" style="margin-bottom:12px;">Турнир: <b>${esc((TOURNAMENTS.find(t=>t.id===judgeState.tid)||{}).name||'')}</b></div>`+
+    (cx.length?cx.map(c=>`<div class="j-pick" data-jcx="${c.id}"><div class="n"><div class="a">${esc(c.name)}</div><div class="b">${esc(catName[c.category_id]||'Общее')} · День ${c.day||1}${c.start_time?' · '+esc(c.start_time):''}</div></div><span class="arr">›</span></div>`).join(''):'<div class="center-state">Нет комплексов.</div>');
+  $$('#judge-body [data-jcx]').forEach(el=>el.addEventListener('click',()=>{judgeState.complexId=+el.dataset.jcx;renderJudgeHeats();}));
+}
+function renderJudgeHeats(){
+  judgeState.heatId=null;
+  const s=judgeState.data,cid=judgeState.complexId;
+  const cx=(s.complexes||[]).find(c=>c.id===cid)||{};
+  const heats=(s.heats||[]).filter(h=>h.complex_id===cid&&!h.is_event);
+  $('#j-sub').textContent='Выберите заход';
+  $('#judge-body').innerHTML=`<div class="j-note" style="margin-bottom:12px;">Комплекс: <b>${esc(cx.name||'')}</b></div>`+
+    (heats.length?heats.map(h=>`<div class="j-pick" data-jheat="${esc(h.id)}"><div class="n"><div class="a">Заход ${h.heat_number||''} · ${esc(h.start_time||'')}</div><div class="b">${esc(h.category_name||'')} · ${(h.teams||[]).length} на дорожках</div></div><span class="arr">›</span></div>`).join(''):'<div class="center-state">Для этого комплекса нет заходов с составами дорожек.</div>');
+  $$('#judge-body [data-jheat]').forEach(el=>el.addEventListener('click',()=>{judgeState.heatId=el.dataset.jheat;renderJudgeScores();}));
+}
+function renderJudgeScores(){
+  const s=judgeState.data,cid=judgeState.complexId;
+  const h=(s.heats||[]).find(x=>String(x.id)===String(judgeState.heatId));if(!h)return;
+  const cx=(s.complexes||[]).find(c=>c.id===cid)||{};
+  const catRows=(s.standings&&s.standings[h.category_id])||[];
+  const rowByTeam={};catRows.forEach(r=>rowByTeam[r.team_id]=r);
+  const parts=[];if(cx.score1_name)parts.push([1,cx.score1_name,cx.score1_type]);if(cx.score2_name)parts.push([2,cx.score2_name,cx.score2_type]);if(cx.score3_name)parts.push([3,cx.score3_name,cx.score3_type]);
+  const lanes=(h.teams||[]).slice().sort((a,b)=>(a.lane_index||0)-(b.lane_index||0));
+  $('#j-sub').textContent='Ввод результатов';
+  const lanesHtml=lanes.map(t=>{
+    const ex=(rowByTeam[t.id]&&rowByTeam[t.id].scores&&rowByTeam[t.id].scores[cid])||{};
+    const pins=parts.map(([n,name,type])=>`<div class="part-in">
+        <label>${esc(name)} <span style="color:var(--lb-dim)">(${typeHint(type)})</span></label>
+        <input type="text" inputmode="${type==='time'?'text':'numeric'}" data-team="${t.id}" data-part="${n}" data-type="${esc(type||'')}" value="${esc(fromInt(type,ex['score'+n+'_value']))}" placeholder="${typeHint(type)}">
+        <label class="dns"><input type="checkbox" data-team="${t.id}" data-dns="${n}"> DNS</label>
+      </div>`).join('');
+    return `<div class="lane-score" data-lane="${t.id}" data-rev="${ex.revision!=null?ex.revision:''}">
+      <div class="lane-score-h"><div class="ln">${t.lane_index!=null?t.lane_index:'—'}</div>${regionBadge(t.name)}<div class="nm">${esc(t.name)}</div></div>${pins}</div>`;
+  }).join('');
+  $('#judge-body').innerHTML=`<div class="j-note" style="margin-bottom:10px;"><b>${esc(cx.name||'')}</b> · Заход ${h.heat_number||''} · ${esc(h.category_name||'')}</div>
+    ${lanes.length?lanesHtml:'<div class="center-state">В заходе нет назначенных дорожек.</div>'}
+    <div id="j-save-msg" style="margin:8px 0;"></div>
+    ${lanes.length?'<button class="j-btn" id="j-save">Сохранить результаты захода</button>':''}
+    <button class="j-btn sec" id="j-cancel" style="margin-top:10px;">Назад к заходам</button>`;
+  const cancel=$('#j-cancel');if(cancel)cancel.addEventListener('click',renderJudgeHeats);
+  const save=$('#j-save');if(save)save.addEventListener('click',()=>judgeSave(h,parts,lanes));
+}
+async function judgeSave(h,parts,lanes){
+  const scores=lanes.map(t=>{
+    const o={team_id:t.id};
+    const laneEl=document.querySelector(`.lane-score[data-lane="${t.id}"]`);
+    if(laneEl&&laneEl.dataset.rev!==''){const rv=+laneEl.dataset.rev;if(!isNaN(rv))o.expected_revision=rv;}
+    parts.forEach(([n,name,type])=>{
+      const dns=document.querySelector(`input[data-team="${t.id}"][data-dns="${n}"]`);
+      const inp=document.querySelector(`input[data-team="${t.id}"][data-part="${n}"]`);
+      if(dns&&dns.checked){o['dns'+n]=true;o['score'+n+'_value']=0;o['score'+n+'_finished']=false;}
+      else{const v=toInt(type,inp?inp.value:'');if(v!=null){o['score'+n+'_value']=v;o['score'+n+'_finished']=true;}}
+    });
+    return o;
+  }).filter(o=>o.score1_value!=null||o.dns1);
+  if(!scores.length){$('#j-save-msg').innerHTML=jStatus('Заполните результат хотя бы одной дорожки',false);return;}
+  if(!confirm('Записать результаты захода в турнир? Это изменит боевое табло и разошлётся всем зрителям.'))return;
+  const btn=$('#j-save');btn.disabled=true;btn.textContent='Сохраняю…';
+  try{
+    const r=await fetch('/api/judge/save-heat-results',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({key:judgeState.key,tournament_id:judgeState.tid,complex_id:judgeState.complexId,heat_id:+judgeState.heatId,scores})});
+    const j=await r.json().catch(()=>({}));
+    if(r.ok&&(j.status==='ok'||j.status==='success')){$('#j-save-msg').innerHTML=jStatus('Результаты сохранены ✓ Табло обновится автоматически.',true);btn.textContent='Сохранено ✓';delete cache[judgeState.tid];}
+    else{$('#j-save-msg').innerHTML=jStatus(j.message||('Ошибка '+r.status),false);btn.disabled=false;btn.textContent='Сохранить результаты захода';}
+  }catch(e){$('#j-save-msg').innerHTML=jStatus('Сеть: '+e.message,false);btn.disabled=false;btn.textContent='Сохранить результаты захода';}
+}
+
+/* ================= ADMIN CENTER (organizer; session cookie, same-origin) ================= */
+const adminState={authed:false,role:null,tid:null,tab:'overview',dc:null,tournaments:null};
+function showAdmin(){ showView('admin',false); adminInit(); }
+$('#p-admin').addEventListener('click',showAdmin);
+$('#a-back').addEventListener('click',()=>showView('profile'));
+$('#a-logout').addEventListener('click',adminLogout);
+$('#a-tourn').addEventListener('click',renderAdminPicker);
+$('#a-tabs').addEventListener('click',e=>{const b=e.target.closest('[data-atab]');if(!b)return;adminState.tab=b.dataset.atab;$('#a-nav-select').value=adminState.tab;$$('#a-tabs [data-atab]').forEach(x=>x.classList.toggle('active',x===b));renderAdminTab();});
+$('#a-nav-select').addEventListener('change',e=>{adminState.tab=e.target.value;$$('#a-tabs [data-atab]').forEach(x=>x.classList.toggle('active',x.dataset.atab===adminState.tab));renderAdminTab();$('#screen').scrollTop=0;});
+// все admin-запросы скоупим по выбранному турниру (?t= / body.t) — так супер-админ работает с любым турниром
+function adminGet(p){const t=adminState.tid; if(t==null)return API.get(p); return API.get(p+(p.includes('?')?'&':'?')+'t='+t);}
+function adminPost(p,obj){let body=obj||{}; if(adminState.tid!=null && body.t==null && body.tournament_id==null) body={...body,t:adminState.tid}; return fetch(p,{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify(body)}).then(async r=>({ok:r.ok,status:r.status,j:await r.json().catch(()=>({}))}));}
+async function adminInit(){
+  $('#a-tabs').hidden=true;$('#a-nav-wrap').hidden=true;$('#a-logout').hidden=true;$('#a-tourn').hidden=true;
+  $('#admin-body').innerHTML='<div class="center-state"><div class="spinner"></div>Проверяю сессию…</div>';
+  try{const s=await API.get('/api/admin/check-session');if(s.authenticated){adminState.authed=true;adminState.role=s.role;adminState.tid=s.t_id;$('#a-logout').hidden=false;afterAuth();return;}}catch(e){}
+  renderAdminLogin();
+}
+async function afterAuth(){
+  // Супер-админ или несколько доступных турниров → сначала выбор турнира
+  $('#a-sub').textContent='Загружаю турниры…';
+  $('#admin-body').innerHTML='<div class="center-state"><div class="spinner"></div>Загружаю доступные турниры…</div>';
+  try{const r=await API.get('/api/admin/tournaments/control-center');adminState.tournaments=r.tournaments||[];}
+  catch(e){adminState.tournaments=null;}
+  const list=adminState.tournaments;
+  if(list && list.length){
+    // прыжок сразу в выбранный из профиля турнир, если он доступен
+    const pend=adminState._pendingTid; adminState._pendingTid=null;
+    if(pend && list.some(t=>t.id===pend)){ adminState.tid=pend; enterAdminDash(); return; }
+    // дефолт — сессионный турнир, если он в списке
+    if(!list.some(t=>t.id===adminState.tid)) adminState.tid=list[0].id;
+    if(adminState.role==='super' || list.length>1){ renderAdminPicker(); return; }
+    adminState.tid=list[0].id; enterAdminDash(); return;
+  }
+  // не удалось получить список — работаем с текущим турниром сессии
+  enterAdminDash();
+}
+function tournName(id){const l=adminState.tournaments||[];const t=l.find(x=>x.id===id);return t?t.name:('Турнир #'+id);}
+function renderAdminPicker(){
+  const list=adminState.tournaments||[];
+  $('#a-tabs').hidden=true;$('#a-nav-wrap').hidden=true;$('#a-tourn').hidden=true;
+  $('#a-sub').textContent=adminState.role==='super'?'Выберите турнир для управления':'Ваш турнир';
+  const pill=t=>{const st=t.control_status||'active';const nm={ready:'готов',attention:'внимание',blocked:'блокеры',error:'ошибка',finalized:'завершён',active:'идёт'}[st]||st;return `<span class="pk-dot ${st}"></span>${nm}`;};
+  const createBtn=adminState.role==='super'?`<button class="j-btn" id="a-create" style="margin-bottom:12px;">＋ Создать турнир</button>`:'';
+  $('#admin-body').innerHTML=`<div class="j-note" style="margin-bottom:12px;">Все действия админки применяются к выбранному турниру. ${adminState.role==='super'?'Вы супер-админ — доступны все турниры.':''}</div>`+createBtn+
+    (list.length?list.map(t=>`<button class="a-pick ${t.id===adminState.tid?'cur':''}" data-pick="${t.id}">
+      <div class="pk-main"><div class="pk-nm">${esc(t.name)}</div>
+      <div class="pk-sub">${t.is_active?'<span class="pk-live">актив</span>':''}${pill(t)}${t.date?' · '+esc(t.date):''}${t.progress_percent!=null?' · ввод '+t.progress_percent+'%':''}</div></div>
+      <span class="arr">›</span></button>`).join(''):'<div class="center-state">Нет доступных турниров.</div>');
+  const cb=$('#a-create'); if(cb)cb.addEventListener('click',openCreateTournament);
+  $$('#admin-body [data-pick]').forEach(b=>b.addEventListener('click',()=>{const id=+b.dataset.pick;if(id!==adminState.tid){adminState.tid=id;adminCats=null;delete cache[id];}enterAdminDash();}));
+}
+function openCreateTournament(){
+  openSheet({},{html:()=>`<h3>Новый турнир</h3><div class="sub">Создаётся с автопаролем администратора</div>
+    <div class="j-note" style="margin:10px 0;">⚠️ Новый турнир станет <b>активным</b> на всём сайте (он будет показан как текущий). Пароль администратора показывается один раз — сохрани его.</div>
+    <div class="j-label">Название *</div><input class="j-input" id="nt-name" placeholder="Напр. Кубок города 2026">
+    <div class="j-label" style="margin-top:8px;">Дата (текстом)</div><input class="j-input" id="nt-date" placeholder="Напр. 15 марта 2026">
+    <div class="j-label" style="margin-top:8px;">Email организатора (необязательно)</div><input class="j-input" id="nt-owner" type="email" placeholder="owner@mail.ru">
+    <div id="nt-msg" style="margin-top:10px;"></div>
+    <button class="j-btn" id="nt-go" style="margin-top:12px;">Создать турнир</button>`,
+    after:()=>{setTimeout(()=>{const e=$('#nt-name');if(e)e.focus();},150);
+      $('#nt-go').addEventListener('click',async()=>{
+        const name=($('#nt-name').value||'').trim();if(!name){$('#nt-msg').innerHTML=jStatus('Введите название',false);return;}
+        const date=($('#nt-date').value||'').trim();const owner=($('#nt-owner').value||'').trim();
+        const b=$('#nt-go');b.disabled=true;b.textContent='Создаю…';
+        const r=await adminPost('/api/admin/tournaments',{name,date,owner_email:owner});
+        if(r.ok&&r.j.status==='success'){
+          const pwd=r.j.admin_password||'',id=r.j.id;
+          $('#sheet-body').innerHTML=`<div class="grip"></div><h3>Турнир создан ✓</h3><div class="sub">${esc(name)}</div>
+            <div class="j-note" style="margin:12px 0;">Пароль администратора (сохрани сейчас — больше не покажется):<div style="margin-top:8px;font-family:var(--lb-mono);font-size:18px;font-weight:800;color:var(--lb-accent-light);letter-spacing:.04em;user-select:all;">${esc(pwd)}</div></div>
+            <button class="j-btn" id="nt-manage" style="margin-top:6px;">Управлять турниром</button>`;
+          const m=$('#nt-manage');if(m)m.addEventListener('click',async()=>{closeSheet();try{const rr=await API.get('/api/admin/tournaments/control-center');adminState.tournaments=rr.tournaments||adminState.tournaments;}catch(e){}adminState.tid=id;adminCats=null;delete cache[id];enterAdminDash();});
+        } else $('#nt-msg').innerHTML=jStatus(r.j.message||('Ошибка '+r.status),false);
+        b.disabled=false;b.textContent='Создать турнир';
+      });
+    }});
+}
+function enterAdminDash(){
+  $('#a-tabs').hidden=false;$('#a-nav-wrap').hidden=false;$('#a-logout').hidden=false;
+  const multi=(adminState.tournaments||[]).length>1||adminState.role==='super';
+  const tn=$('#a-tourn'); tn.hidden=!multi; if(multi)$('#a-tourn-nm').textContent=tournName(adminState.tid);
+  adminState.tab='overview';$('#a-nav-select').value='overview';$$('#a-tabs [data-atab]').forEach(x=>x.classList.toggle('active',x.dataset.atab==='overview'));renderAdminTab();
+}
+function renderAdminLogin(){
+  $('#a-sub').textContent='Вход для организатора';
+  $('#admin-body').innerHTML=`<div class="j-step">
+    <div class="j-note">Вход по паролю турнира (или супер-паролю). Пароль не сохраняется — создаётся защищённая сессия.</div>
+    <div><div class="j-label">Пароль администратора</div><input class="j-input" id="a-pass" type="password" autocomplete="off" placeholder="пароль турнира"></div>
+    <div id="a-msg"></div>
+    <button class="j-btn" id="a-login">Войти</button>
+  </div>`;
+  $('#a-login').addEventListener('click',adminLogin);
+  $('#a-pass').addEventListener('keydown',e=>{if(e.key==='Enter')adminLogin();});
+}
+async function adminLogin(){
+  const pw=$('#a-pass').value;if(!pw){$('#a-msg').innerHTML=jStatus('Введите пароль',false);return;}
+  const b=$('#a-login');b.disabled=true;b.textContent='Проверяю…';
+  const r=await adminPost('/api/admin/login',{password:pw});
+  if(r.ok&&r.j.status==='success'){try{const s=await API.get('/api/admin/check-session');adminState.authed=true;adminState.role=s.role;adminState.tid=s.t_id;}catch(e){}afterAuth();}
+  else{$('#a-msg').innerHTML=jStatus(r.j.message||'Неверный пароль',false);b.disabled=false;b.textContent='Войти';}
+}
+async function adminLogout(){try{await adminPost('/api/admin/logout',{});}catch(e){}adminState.authed=false;adminState.tid=null;adminState.tournaments=null;adminCats=null;$('#a-tabs').hidden=true;$('#a-nav-wrap').hidden=true;$('#a-logout').hidden=true;$('#a-tourn').hidden=true;renderAdminLogin();}
+function renderAdminTab(){const t=adminState.tab;if(t==='overview'||t==='heats')return renderAdminDay(t);if(t==='judging')return renderAdminJudging();if(t==='checkin')return renderAdminCheckin();if(t==='teams')return renderAdminTeams();if(t==='judges')return renderAdminJudges();if(t==='appeals')return renderAdminAppeals();if(t==='awards')return renderAdminAwards();if(t==='broadcast')return renderAdminBroadcast();if(t==='final')return renderAdminFinal();}
+let adminCats=null;
+async function ensureAdminCats(){ if(adminCats)return adminCats; try{const s=await getStandings(adminState.tid);adminCats={};(s.categories||[]).forEach(c=>adminCats[c.id]=c.name);}catch(e){adminCats={};} return adminCats; }
+async function loadDC(){adminState.dc=await adminGet('/api/admin/day-control');return adminState.dc;}
+function heatCard(h,label){
+  const rc=h.readiness==='ready'?'readi-ready':h.readiness==='attention'?'readi-attention':'readi-not_ready';
+  const rt=h.readiness==='ready'?'готов':h.readiness==='attention'?'внимание':'не готов';
+  return `<div class="a-card">
+    <div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start;"><div style="min-width:0;"><div style="font-weight:800;">${esc(h.complex_name||'')}</div><div class="head-sub">Заход ${h.heat_number||''} · ${esc(h.category_name||'')} · ${esc(h.scheduled_start||'')}</div></div>${label||''}</div>
+    <div class="head-sub" style="margin-top:8px;">Готовность: <b class="${rc}">${rt}</b> · чек-ин −${h.missing_checkin||0} · судей −${h.missing_judges||0} · результаты ${h.results?h.results.done:0}/${h.results?h.results.total:0}</div>
+  </div>`;
+}
+async function renderAdminDay(tab){
+  $('#a-sub').textContent=tab==='overview'?'Обзор дня':'Управление заходами';
+  $('#admin-body').innerHTML='<div class="center-state"><div class="spinner"></div>Загружаю…</div>';
+  let dc;try{dc=await loadDC();}catch(e){$('#admin-body').innerHTML=jStatus('Ошибка: '+e.message,false);return;}
+  if(dc.status!=='ok'){$('#admin-body').innerHTML=jStatus(dc.message||'Нет доступа',false);return;}
+  if(tab==='overview')renderAdminOverview(dc);else renderAdminHeats(dc);
+}
+function renderAdminOverview(dc){
+  const m=dc.metrics||{};
+  const tile=(v,l)=>`<div class="ps"><div class="v">${v}</div><div class="l">${l}</div></div>`;
+  const issues=(dc.issues||[]).map(i=>`<div class="a-issue"><span class="sev sev-${esc(i.severity)}"></span><span>${esc(i.title)}${i.count?' ('+i.count+')':''}</span></div>`).join('');
+  $('#admin-body').innerHTML=`
+    <div class="a-card"><div style="font-weight:800;">${esc(dc.tournament.name)}</div><div class="head-sub">Жизненный цикл: ${esc(dc.tournament.lifecycle_status||'—')}</div></div>
+    <div class="a-quick">
+      <button data-quicktab="heats"><span>⏱</span>Заходы и таймер</button><button data-quicktab="checkin"><span>✓</span>Чек-ин команд</button>
+      <button data-quicktab="judging"><span>✍</span>Ввод результатов</button><button data-quicktab="teams"><span>☷</span>Команды и составы</button>
+    </div>
+    <div class="a-grid">
+      ${tile((m.checked_in||0)+'/'+(m.teams_total||0),'чек-ин')}
+      ${tile((m.heats_done||0)+'/'+(m.heats_total||0),'заходы')}
+      ${tile((m.results_done||0)+'/'+(m.results_expected||0),'результаты')}
+      ${tile(m.judges_assigned||0,'судьи')}
+      ${tile(m.pending_appeals||0,'апелляции')}
+      ${tile((dc.operation&&dc.operation.critical_count)||0,'проблемы')}
+    </div>
+    ${dc.current_heat?('<div class="j-label">На помосте сейчас</div>'+heatCard(dc.current_heat,'<span class="pill pill-live"><span class="dot"></span>Текущий</span>')):'<div class="a-card head-sub">Текущий заход не выбран.</div>'}
+    ${issues?('<div class="a-card"><h4>Требует внимания</h4>'+issues+'</div>'):''}`;
+  $$('#admin-body [data-quicktab]').forEach(b=>b.addEventListener('click',()=>{$('#a-nav-select').value=b.dataset.quicktab;$('#a-nav-select').dispatchEvent(new Event('change'));}));
+}
+function renderAdminHeats(dc){
+  const cur=dc.current_heat, sel=dc.selectable_heats||[];
+  const cn=cur?cur.complex_name:'';
+  $('#admin-body').innerHTML=`
+    ${cur?('<div class="j-label">Текущий заход</div>'+heatCard(cur,'<span class="pill pill-live"><span class="dot"></span>LIVE</span>')+`<button class="j-btn sec" data-lanes="${cur.id}" style="width:100%;margin:-4px 0 12px;">✏️ Заход: время и дорожки</button>`):'<div class="a-card head-sub">Заход не выбран.</div>'}
+    <div class="a-card"><h4>Таймер арены</h4>
+      <div class="part-in"><label>Длительность (мм:сс)</label><input type="text" id="a-tdur" value="10:00"></div>
+      <div class="part-in"><label>Подготовка (сек)</label><input type="text" id="a-tprep" value="10"></div>
+      <div style="display:flex;gap:8px;margin-top:6px;"><button class="j-btn" id="a-tstart" style="flex:1;">▶ Старт</button><button class="j-btn sec" id="a-tstop" style="flex:1;">■ Стоп</button></div>
+      <div style="display:flex;gap:8px;margin-top:8px;"><button class="j-btn sec" id="a-tminus" style="flex:1;">−30с</button><button class="j-btn sec" id="a-tplus" style="flex:1;">+30с</button></div>
+      <div id="a-tmsg" style="margin-top:8px;"></div>
+    </div>
+    <div class="j-label">Заходы турнира</div>
+    ${sel.length?sel.map(h=>`<div class="a-card"><div style="font-weight:700;">${esc(h.complex_name||'')}</div><div class="head-sub">Заход ${h.heat_number||''} · ${esc(h.category_name||'')} · ${esc(h.scheduled_start||'')}</div><div style="display:flex;gap:8px;margin-top:10px;"><button class="j-btn sec" data-lanes="${h.id}" style="flex:1;">✏️ Заход</button><button class="j-btn" data-seth="${h.id}" style="flex:1;">Сделать текущим</button></div></div>`).join(''):'<div class="a-card head-sub">Нет доступных заходов.</div>'}`;
+  $('#a-tstart').addEventListener('click',async()=>{const d=toInt('time',$('#a-tdur').value)||600;const p=parseInt($('#a-tprep').value,10)||10;if(!confirm('Запустить таймер арены на боевом табло?'))return;const r=await adminPost('/api/admin/timer/control',{action:'start',duration:d,direction:'down',complex_name:cn,prep_duration:p});$('#a-tmsg').innerHTML=jStatus(r.ok?'Таймер запущен ✓':(r.j.message||'Ошибка'),r.ok);});
+  $('#a-tstop').addEventListener('click',async()=>{if(!confirm('Остановить таймер арены?'))return;const r=await adminPost('/api/admin/timer/control',{action:'stop'});$('#a-tmsg').innerHTML=jStatus(r.ok?'Таймер остановлен':(r.j.message||'Ошибка'),r.ok);});
+  $('#a-tminus').addEventListener('click',async()=>{const r=await adminPost('/api/admin/timer/control',{action:'adjust',delta:-30});$('#a-tmsg').innerHTML=jStatus(r.ok?'−30 сек':(r.j.message||'Ошибка'),r.ok);});
+  $('#a-tplus').addEventListener('click',async()=>{const r=await adminPost('/api/admin/timer/control',{action:'adjust',delta:30});$('#a-tmsg').innerHTML=jStatus(r.ok?'+30 сек':(r.j.message||'Ошибка'),r.ok);});
+  $$('#admin-body [data-seth]').forEach(el=>el.addEventListener('click',async()=>{if(!confirm('Сделать этот заход текущим на табло?'))return;const r=await adminPost('/api/admin/set-current-heat',{heat_id:+el.dataset.seth});if(r.ok)renderAdminDay('heats');else alert(r.j.message||'Ошибка');}));
+  $$('#admin-body [data-lanes]').forEach(el=>el.addEventListener('click',()=>openLaneEditor(el.dataset.lanes)));
+}
+async function renderAdminJudging(){
+  $('#a-sub').textContent='Прогресс судейства';
+  $('#admin-body').innerHTML='<div class="center-state"><div class="spinner"></div>Загружаю…</div>';
+  let jp;try{jp=await adminGet('/api/admin/judging-progress');}catch(e){$('#admin-body').innerHTML=jStatus('Ошибка: '+e.message,false);return;}
+  const cx=jp.complexes||[];
+  $('#admin-body').innerHTML=(cx.length?cx.map(c=>`<div class="a-card">
+    <div style="display:flex;justify-content:space-between;"><div style="font-weight:800;min-width:0;">${esc(c.name)}</div><div class="head-sub" style="flex:none;">${c.done}/${c.total}</div></div>
+    <div class="head-sub" style="margin-bottom:6px;">${esc(c.category_name||'')} · День ${c.day||1}</div>
+    ${(c.heats||[]).map(h=>`<div class="brk" data-jah-cx="${c.complex_id}" data-jah-hn="${h.heat_number}"><div class="bn">Заход ${h.heat_number}</div><div class="bp">${h.done}/${h.total}</div><span class="chev">›</span></div>`).join('')}
+    </div>`).join(''):'<div class="center-state">Нет данных судейства.</div>')+'<div class="tap-hint" style="padding:6px 4px;">Нажмите заход, чтобы внести или исправить результаты.</div>';
+  $$('#admin-body [data-jah-cx]').forEach(el=>el.addEventListener('click',()=>openScorerAdmin(+el.dataset.jahCx,+el.dataset.jahHn)));
+}
+async function openScorerAdmin(cxId,heatNumber){
+  showView('judge',false);$('#j-sub').textContent='Загружаю…';$('#judge-body').innerHTML='<div class="center-state"><div class="spinner"></div></div>';
+  try{
+    delete cache[adminState.tid];
+    const s=await getStandings(adminState.tid);s._members=buildMembers(s);
+    const h=(s.heats||[]).find(x=>x.complex_id===cxId&&x.heat_number===heatNumber&&!x.is_event);
+    if(!h){$('#judge-body').innerHTML=jStatus('Заход не найден в данных турнира',false);return;}
+    judgeState={key:'',tid:adminState.tid,data:s,complexId:cxId,heatId:h.id,fromAdmin:true};
+    renderJudgeScores();
+  }catch(e){$('#judge-body').innerHTML=jStatus('Ошибка: '+e.message,false);}
+}
+async function renderAdminCheckin(){
+  $('#a-sub').textContent='Чек-ин команд';
+  $('#admin-body').innerHTML='<div class="center-state"><div class="spinner"></div>Загружаю…</div>';
+  let d;try{d=await adminGet('/api/checkin/teams');}catch(e){$('#admin-body').innerHTML=jStatus('Ошибка: '+e.message,false);return;}
+  const teams=d.teams||[];const ci=teams.filter(t=>t.is_checked_in).length;
+  $('#admin-body').innerHTML=`<div class="a-card head-sub">${esc(d.tournament_name||'')} · отмечено ${ci}/${teams.length}</div><div class="search admin-search"><input id="ci-search" placeholder="Найти команду…"></div>`+
+    teams.map(t=>`<div class="j-pick" data-filter="${esc((t.name+' '+(t.category_name||'')).toLowerCase())}"><div class="n"><div class="a">${esc(t.name)}</div><div class="b">${esc(t.category_name||'')}</div></div>${t.is_checked_in?'<span class="pill pill-live">✓ на месте</span>':`<button class="chip" data-ci="${t.id}" style="background:var(--lb-accent-soft);border-color:var(--lb-border-accent);color:var(--lb-accent-light);">Отметить</button>`}</div>`).join('');
+  $('#ci-search').addEventListener('input',e=>{const q=e.target.value.trim().toLowerCase();$$('#admin-body [data-filter]').forEach(x=>x.hidden=q&&!x.dataset.filter.includes(q));});
+  $$('#admin-body [data-ci]').forEach(b=>b.addEventListener('click',async()=>{b.disabled=true;b.textContent='…';haptic(8);const r=await adminPost('/api/checkin/mark',{team_id:+b.dataset.ci});if(r.ok){toast('Отмечена ✓');renderAdminCheckin();}else{b.disabled=false;b.textContent='Отметить';toast(r.j.message||'Ошибка');}}));
+}
+
+async function renderAdminAppeals(){
+  $('#a-sub').textContent='Апелляции';
+  $('#admin-body').innerHTML='<div class="center-state"><div class="spinner"></div>Загружаю…</div>';
+  let d;try{d=await adminGet('/api/admin/appeals');}catch(e){$('#admin-body').innerHTML=jStatus('Ошибка: '+e.message,false);return;}
+  const ap=d.appeals||[];
+  if(!ap.length){$('#admin-body').innerHTML='<div class="center-state">Открытых апелляций нет.</div>';return;}
+  $('#admin-body').innerHTML=ap.map(a=>`<div class="a-card" data-ap="${a.id}">
+    <div style="font-weight:800;">${esc(a.team_name||('Команда #'+(a.team_id||'')))}</div>
+    <div class="head-sub">${esc(a.complex_name||'')}${a.status?' · '+esc(a.status):''}</div>
+    <div style="font-size:13px;color:var(--lb-muted);margin:8px 0;white-space:pre-line;">${esc(a.text||a.reason||a.message||'')}</div>
+    <input class="j-input" placeholder="Комментарий (необязательно)" data-apc="${a.id}" style="margin-bottom:8px;">
+    <div style="display:flex;gap:8px;"><button class="j-btn" data-apok="${a.id}" style="flex:1;">Принять</button><button class="j-btn sec" data-aprej="${a.id}" style="flex:1;">Отклонить</button></div>
+    <div id="apmsg-${a.id}" style="margin-top:8px;"></div>
+  </div>`).join('');
+  const resolve=async(id,status)=>{
+    const c=document.querySelector(`[data-apc="${id}"]`);const comment=c?c.value:'';
+    if(!confirm(status==='ok'?'Принять апелляцию? Команда получит уведомление.':'Отклонить апелляцию?'))return;
+    const r=await adminPost('/api/admin/appeals/'+id+'/resolve',{status,comment});
+    $('#apmsg-'+id).innerHTML=jStatus(r.ok?'Готово ✓':(r.j.message||'Ошибка'),r.ok);
+    if(r.ok)setTimeout(renderAdminAppeals,700);
+  };
+  $$('#admin-body [data-apok]').forEach(b=>b.addEventListener('click',()=>resolve(b.dataset.apok,'ok')));
+  $$('#admin-body [data-aprej]').forEach(b=>b.addEventListener('click',()=>resolve(b.dataset.aprej,'rejected')));
+}
+/* ---- Награждение / Подиум (топ-3 по категориям, режим церемонии) ---- */
+let awardsState={cat:'all'};
+function medalRow(r,place){
+  const cls=place===1?'rank-1':place===2?'rank-2':'rank-3';
+  const em=place===1?'🥇':place===2?'🥈':'🥉';
+  return `<div class="aw-row"><div class="rank ${cls}">${em}</div>${regionBadge(r.team_name)}
+    <div class="aw-nm"><div class="a">${esc(r.team_name)}</div>${r.region?`<div class="b">${esc(r.region)}</div>`:''}</div>
+    <div class="aw-pts"><div class="p">${r.total_points}</div><div class="u">очк.</div></div></div>`;
+}
+function podiumBig(rows){
+  const by=n=>rows.find(r=>r.rank===n);
+  const col=(r,place,h)=>{const em=place===1?'🥇':place===2?'🥈':'🥉';const cls=place===1?'rank-1':place===2?'rank-2':'rank-3';
+    return `<div class="pod-col"><div class="pod-card">${regionBadge(r.team_name)}<div class="pod-nm">${esc(r.team_name)}</div>${r.region?`<div class="pod-reg">${esc(r.region)}</div>`:''}<div class="pod-p">${r.total_points} очк.</div></div><div class="pod-base ${cls}" style="height:${h}px"><span>${em}</span><b>${place}</b></div></div>`;};
+  const p1=by(1),p2=by(2),p3=by(3);
+  return `<div class="podium">${p2?col(p2,2,70):''}${p1?col(p1,1,96):''}${p3?col(p3,3,52):''}</div>`;
+}
+async function renderAdminAwards(){
+  $('#a-sub').textContent='Награждение';
+  $('#admin-body').innerHTML='<div class="center-state"><div class="spinner"></div>Загружаю…</div>';
+  let s;try{delete cache[adminState.tid];s=await getStandings(adminState.tid,true);}catch(e){$('#admin-body').innerHTML=jStatus('Ошибка: '+e.message,false);return;}
+  const cats=(s.categories||[]).filter(c=>((s.standings&&s.standings[c.id])||[]).length);
+  awardsState.data=s; awardsState.tname=tournName(adminState.tid);
+  if(!cats.length){$('#admin-body').innerHTML='<div class="center-state">Нет данных для награждения.<br><small>Итоговая таблица ещё не сформирована.</small></div>';return;}
+  if(awardsState.cat!=='all'&&!cats.some(c=>c.id==awardsState.cat))awardsState.cat='all';
+  const top3=cid=>((s.standings&&s.standings[cid])||[]).filter(r=>r.rank>=1&&r.rank<=3).sort((a,b)=>a.rank-b.rank);
+  const chips=`<div class="chips" style="margin-bottom:12px;"><div class="chip ${awardsState.cat==='all'?'active':''}" data-acat="all">Все категории</div>`+
+    cats.map(c=>`<div class="chip ${awardsState.cat==c.id?'active':''}" data-acat="${c.id}">${esc(c.name)}</div>`).join('')+`</div>`;
+  let body;
+  if(awardsState.cat==='all'){
+    body=cats.map(c=>{const t=top3(c.id);return `<div class="a-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><div style="font-weight:800;min-width:0;">${esc(c.name)}</div><button class="chip" data-acat="${c.id}" style="flex:none;">Церемония ›</button></div>
+      <div class="aw-list">${t.length?t.map(r=>medalRow(r,r.rank)).join(''):'<div class="head-sub" style="padding:6px 0;">Мест не присвоено</div>'}</div></div>`;}).join('');
+  }else{
+    const c=cats.find(x=>x.id==awardsState.cat);const t=top3(c.id);
+    const order=[...t].sort((a,b)=>b.rank-a.rank); // 3 → 2 → 1 для объявления
+    body=`<div class="a-card pod-wrap"><div style="font-weight:800;text-align:center;margin-bottom:4px;">${esc(c.name)}</div>${t.length?podiumBig(t):'<div class="head-sub" style="text-align:center;padding:10px;">Мест не присвоено</div>'}</div>`+
+      (t.length?`<button class="j-btn" data-present="${c.id}" style="margin-bottom:12px;">📺 Показать на экране</button>`:'')+
+      `<div class="a-card"><h4>Порядок объявления</h4>${order.map(r=>`<div class="aw-ann"><span class="aw-ann-p">${r.rank} место</span><span class="aw-ann-n">${esc(r.team_name)}</span><span class="aw-ann-pt">${r.total_points} очк.</span></div>`).join('')||'<div class="head-sub">—</div>'}</div>`;
+  }
+  $('#admin-body').innerHTML=chips+body;
+  $$('#admin-body [data-acat]').forEach(el=>el.addEventListener('click',()=>{awardsState.cat=el.dataset.acat==='all'?'all':+el.dataset.acat;renderAdminAwards();}));
+  const pb=$('#admin-body [data-present]'); if(pb)pb.addEventListener('click',()=>openPodiumPresentation(+pb.dataset.present));
+}
+/* ---- Полноэкранный подиум для церемонии (проекция) ---- */
+function openPodiumPresentation(catId){
+  const s=awardsState.data; if(!s)return;
+  const cats=(s.categories||[]).filter(c=>((s.standings&&s.standings[c.id])||[]).length);
+  let idx=Math.max(0,cats.findIndex(c=>c.id===catId));
+  let el=document.getElementById('podium-present');
+  if(!el){el=document.createElement('div');el.id='podium-present';el.className='pp-overlay';document.body.appendChild(el);}
+  const medal=p=>p===1?'🥇':p===2?'🥈':p===3?'🥉':'';
+  const col=(r,place,h)=>{const cls=place===1?'rank-1':place===2?'rank-2':'rank-3';
+    return `<div class="pp-col"><div class="pp-card">${regionBadge(r.team_name)}<div class="pp-nm">${esc(r.team_name)}</div>${r.region?`<div class="pp-reg">${esc(r.region)}</div>`:''}<div class="pp-pts">${r.total_points} очк.</div></div><div class="pp-base ${cls}" style="height:${h}">${medal(place)}<b>${place}</b></div></div>`;};
+  const draw=()=>{
+    const c=cats[idx]; const rows=((s.standings&&s.standings[c.id])||[]).filter(r=>r.rank>=1&&r.rank<=3).sort((a,b)=>a.rank-b.rank);
+    const by=n=>rows.find(r=>r.rank===n); const p1=by(1),p2=by(2),p3=by(3);
+    el.innerHTML=`<button class="pp-close" aria-label="Закрыть">✕</button>
+      <div class="pp-head"><div class="pp-cat">${esc(c.name)}</div><div class="pp-tname">${esc(awardsState.tname||'')}</div></div>
+      <div class="pp-podium">${p2?col(p2,2,'34%'):''}${p1?col(p1,1,'48%'):''}${p3?col(p3,3,'24%'):''}</div>
+      <div class="pp-nav"><button class="pp-prev" ${idx===0?'disabled':''}>‹ Пред.</button><div class="pp-count">${idx+1} / ${cats.length}</div><button class="pp-next" ${idx===cats.length-1?'disabled':''}>След. ›</button></div>`;
+    el.querySelector('.pp-close').onclick=close;
+    el.querySelector('.pp-prev').onclick=()=>{if(idx>0){idx--;draw();}};
+    el.querySelector('.pp-next').onclick=()=>{if(idx<cats.length-1){idx++;draw();}};
+  };
+  const onKey=(e)=>{if(e.key==='Escape')close();else if(e.key==='ArrowRight'&&idx<cats.length-1){idx++;draw();}else if(e.key==='ArrowLeft'&&idx>0){idx--;draw();}};
+  function close(){document.removeEventListener('keydown',onKey);el.classList.remove('open');try{if(document.fullscreenElement)document.exitFullscreen();}catch(_){}setTimeout(()=>{el&&el.remove();},200);}
+  // swipe to change category
+  let sx=0; el.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;},{passive:true});
+  el.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>60){if(dx<0&&idx<cats.length-1){idx++;draw();}else if(dx>0&&idx>0){idx--;draw();}}});
+  document.addEventListener('keydown',onKey);
+  draw(); el.classList.add('open');
+  try{(el.requestFullscreen||el.webkitRequestFullscreen||function(){}).call(el);}catch(_){}
+}
+function renderAdminBroadcast(){
+  $('#a-sub').textContent='Рассылка сообщения';
+  $('#admin-body').innerHTML=`<div class="a-card">
+    <div class="j-note" style="margin-bottom:10px;">Сообщение участникам турнира. Каналы Telegram/Email по умолчанию выключены — включай осознанно.</div>
+    <div class="j-label">Текст</div><textarea class="j-input" id="bc-msg" rows="4" style="resize:vertical;"></textarea>
+    <div class="j-label" style="margin-top:10px;">Кому</div>
+    <select class="j-select" id="bc-target"><option value="all">Все</option><option value="athletes">Атлеты</option><option value="judges">Судьи</option><option value="checked_in">Отметившиеся</option></select>
+    <div style="margin-top:12px;display:flex;flex-direction:column;gap:8px;">
+      <label class="dns"><input type="checkbox" id="bc-banner" checked> Баннер на сайте</label>
+      <label class="dns"><input type="checkbox" id="bc-feed" checked> В ленту турнира</label>
+      <label class="dns"><input type="checkbox" id="bc-tg"> Telegram-пуш всем</label>
+      <label class="dns"><input type="checkbox" id="bc-email"> Email всем</label>
+    </div>
+    <button class="j-btn" id="bc-send" style="margin-top:14px;">Отправить</button>
+    <div id="bc-status" style="margin-top:8px;"></div>
+  </div>`;
+  $('#bc-send').addEventListener('click',async()=>{
+    const message=$('#bc-msg').value.trim();if(!message){$('#bc-status').innerHTML=jStatus('Введите текст',false);return;}
+    const tg=$('#bc-tg').checked,em=$('#bc-email').checked;
+    const chans=[$('#bc-banner').checked&&'баннер',$('#bc-feed').checked&&'лента',tg&&'Telegram',em&&'Email'].filter(Boolean).join(', ')||'нет каналов';
+    if(!confirm('Отправить сообщение ('+$('#bc-target').value+') по каналам: '+chans+'?'))return;
+    const b=$('#bc-send');b.disabled=true;b.textContent='Отправляю…';
+    const r=await adminPost('/api/admin/broadcast',{message,target:$('#bc-target').value,send_telegram:tg,send_email:em,publish_banner:$('#bc-banner').checked,publish_feed:$('#bc-feed').checked});
+    $('#bc-status').innerHTML=jStatus(r.ok?'Отправлено ✓':(r.j.message||'Ошибка '+r.status),r.ok);b.disabled=false;b.textContent='Отправить';
+  });
+}
+async function renderAdminFinal(){
+  $('#a-sub').textContent='Финализация турнира';
+  $('#admin-body').innerHTML='<div class="center-state"><div class="spinner"></div>Загружаю…</div>';
+  let s;try{s=await adminGet('/api/admin/tournament/finalization');}catch(e){$('#admin-body').innerHTML=jStatus('Ошибка: '+e.message,false);return;}
+  const frozen=s.results_frozen,life=s.lifecycle_status||'active';
+  const issues=(s.readiness&&s.readiness.issues)||[];
+  const blockers=issues.filter(i=>i.severity==='blocker');
+  $('#admin-body').innerHTML=`
+    <div class="a-card"><div style="font-weight:800;">Статус: ${esc(life)}</div>
+      <div class="head-sub">Результаты: ${frozen?'<b class="readi-not_ready">заморожены</b>':'<b class="readi-ready">открыты</b>'}${s.finalized_at?' · финализирован '+esc(s.finalized_at):''}</div></div>
+    ${issues.length?('<div class="a-card"><h4>Проверка готовности</h4>'+issues.map(i=>`<div class="a-issue"><span class="sev sev-${i.severity==='blocker'?'critical':(i.severity||'info')}"></span><span>${esc(i.title||i.message||i.code||'')}</span></div>`).join('')+'</div>'):'<div class="a-card head-sub">Замечаний финальной проверки нет.</div>'}
+    <div class="a-card"><h4>Действия</h4>
+      ${frozen?'<button class="j-btn sec" id="fin-unfreeze" style="width:100%;">Разморозить результаты</button>':`<button class="j-btn" id="fin-freeze" style="width:100%;" ${blockers.length?'disabled':''}>Заморозить результаты${blockers.length?' · есть блокеры':''}</button>`}
+      <div id="fin-msg" style="margin-top:8px;"></div>
+    </div>`;
+  const act=async(action)=>{
+    const reason=prompt((action==='freeze'?'Заморозка':'Разморозка')+' — причина для протокола:');
+    if(reason===null)return;
+    if(!confirm((action==='freeze'?'Заморозить':'Разморозить')+' результаты турнира?'))return;
+    const r=await adminPost('/api/admin/tournament/finalization',{action,reason});
+    $('#fin-msg').innerHTML=jStatus(r.ok?'Готово ✓':(r.j.message||'Ошибка'),r.ok);
+    if(r.ok)setTimeout(renderAdminFinal,700);
+  };
+  const fz=$('#fin-freeze'),uz=$('#fin-unfreeze');
+  if(fz)fz.addEventListener('click',()=>act('freeze'));
+  if(uz)uz.addEventListener('click',()=>act('unfreeze'));
+}
+
+/* ---- Команды (список/чек-ин/добавить/ростер) ---- */
+async function renderAdminTeams(){
+  $('#a-sub').textContent='Команды';
+  $('#admin-body').innerHTML='<div class="center-state"><div class="spinner"></div>Загружаю…</div>';
+  await ensureAdminCats();
+  let d;try{d=await adminGet('/api/admin/teams');}catch(e){$('#admin-body').innerHTML=jStatus('Ошибка: '+e.message,false);return;}
+  const teams=d.teams||[];
+  const ci=teams.filter(t=>t.is_checked_in).length;
+  $('#admin-body').innerHTML=`<button class="j-btn" id="team-add" style="margin-bottom:12px;">＋ Добавить команду</button>
+    <div class="a-card head-sub">Всего ${teams.length} · отмечено ${ci}</div><div class="search admin-search"><input id="team-search" placeholder="Найти команду или категорию…"></div>`+
+    teams.map(t=>`<div class="a-card" data-filter="${esc((t.name+' '+(adminCats[t.category_id]||'')).toLowerCase())}">
+      <div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start;">
+        <div style="min-width:0;"><div style="font-weight:800;">${esc(t.name)}</div><div class="head-sub">${esc(adminCats[t.category_id]||'—')} · ${(t.members||[]).length} чел.</div></div>
+        <button class="chip" data-ci="${t.id}" data-val="${t.is_checked_in?0:1}" style="flex:none;${t.is_checked_in?'background:rgba(37,211,102,.12);border-color:rgba(37,211,102,.3);color:var(--lb-success);':'background:var(--lb-accent-soft);border-color:var(--lb-border-accent);color:var(--lb-accent-light);'}">${t.is_checked_in?'✓ на месте':'Отметить'}</button>
+      </div>
+      <button class="j-btn sec" data-editteam="${t.id}" style="width:100%;margin-top:10px;">Состав / ростер</button>
+    </div>`).join('');
+  $('#team-add').addEventListener('click',openAddTeam);
+  $('#team-search').addEventListener('input',e=>{const q=e.target.value.trim().toLowerCase();$$('#admin-body [data-filter]').forEach(x=>x.hidden=q&&!x.dataset.filter.includes(q));});
+  $$('#admin-body [data-ci]').forEach(b=>b.addEventListener('click',async()=>{
+    const val=+b.dataset.val; b.disabled=true; b.textContent='…'; haptic(8);
+    // отметка присутствия — через быстрый additive-эндпоинт; снятие — через toggle (пересчёт расписания, дольше)
+    let r;
+    if(val===1){ r=await adminPost('/api/checkin/mark',{team_id:+b.dataset.ci}); }
+    else{ toast('Снимаю отметку и пересчитываю расписание…'); r=await adminPost('/api/admin/teams/'+b.dataset.ci+'/toggle-checkin',{val:0}); }
+    if(r.ok){ toast(val===1?'Отмечена ✓':'Отметка снята ✓'); renderAdminTeams(); }
+    else{ b.disabled=false; b.textContent=val===1?'Отметить':'✓ на месте'; toast(r.j.message||'Ошибка'); }
+  }));
+  $$('#admin-body [data-editteam]').forEach(b=>b.addEventListener('click',()=>{const t=teams.find(x=>x.id==b.dataset.editteam);if(t)openRosterSheet(t);}));
+}
+function openAddTeam(){
+  const cats=Object.entries(adminCats||{});
+  openSheet({},{html:()=>`<h3>Новая команда</h3><div class="j-label">Название</div><input class="j-input" id="nt-name" placeholder="Название команды / ФИО">
+    <div class="j-label" style="margin-top:10px;">Категория</div><select class="j-select" id="nt-cat">${cats.map(([id,n])=>`<option value="${id}">${esc(n)}</option>`).join('')}</select>
+    <div id="nt-msg" style="margin-top:10px;"></div><button class="j-btn" id="nt-go" style="margin-top:12px;">Создать</button>`,
+    after:()=>{$('#nt-go').addEventListener('click',async()=>{const name=($('#nt-name').value||'').trim();const cat=$('#nt-cat').value;if(!name){$('#nt-msg').innerHTML=jStatus('Введите название',false);return;}const r=await adminPost('/api/admin/teams',{name,category_id:+cat});if(r.ok){closeSheet();renderAdminTeams();}else $('#nt-msg').innerHTML=jStatus(r.j.message||'Ошибка',false);});}});
+}
+function openRosterSheet(team){
+  let members=[...(team.members||[])];
+  const draw=()=>{const el=$('#ros-list');if(!el)return;el.innerHTML=members.length?members.map((m,i)=>`<div class="brk"><div class="bn">${esc(m)}</div><button class="chip" data-rm="${i}" style="flex:none;">✕</button></div>`).join(''):'<div class="head-sub" style="padding:8px 0;">Состав пуст</div>';$$('#ros-list [data-rm]').forEach(b=>b.addEventListener('click',()=>{members.splice(+b.dataset.rm,1);draw();}));};
+  openSheet({},{html:()=>`<h3>${esc(team.name)}</h3><div class="sub">${esc(adminCats[team.category_id]||'')} · состав</div>
+    <div id="ros-list"></div>
+    <div style="display:flex;gap:8px;margin-top:10px;"><input class="j-input" id="ros-add" placeholder="Добавить участника (ФИО)"><button class="chip" id="ros-add-btn" style="flex:none;background:var(--lb-accent-soft);border-color:var(--lb-border-accent);color:var(--lb-accent-light);">＋</button></div>
+    <div id="ros-msg" style="margin-top:10px;"></div>
+    <button class="j-btn" id="ros-save" style="margin-top:12px;">Сохранить состав</button>`,
+    after:()=>{draw();
+      $('#ros-add-btn').addEventListener('click',()=>{const v=($('#ros-add').value||'').trim();if(v){members.push(v);$('#ros-add').value='';draw();}});
+      $('#ros-add').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('#ros-add-btn').click();}});
+      $('#ros-save').addEventListener('click',async()=>{const r=await adminPost('/api/admin/teams/'+team.id+'/members',{members});$('#ros-msg').innerHTML=jStatus(r.ok?'Сохранено ✓':(r.j.message||'Ошибка'),r.ok);if(r.ok)setTimeout(()=>{closeSheet();renderAdminTeams();},600);});
+    }});
+}
+
+/* ---- Судьи (список + авто-распределение) ---- */
+async function renderAdminJudges(){
+  $('#a-sub').textContent='Судьи';
+  $('#admin-body').innerHTML='<div class="center-state"><div class="spinner"></div>Загружаю…</div>';
+  let d;try{d=await adminGet('/api/admin/judges/list');}catch(e){$('#admin-body').innerHTML=jStatus('Ошибка: '+e.message,false);return;}
+  let judges=[...(d.judges||[])];
+  const draw=()=>{const el=$('#jl-list');if(!el)return;el.innerHTML=judges.length?judges.map((j,i)=>`<div class="brk"><div class="bn">${esc(j)}</div><button class="chip" data-jrm="${i}" style="flex:none;">✕</button></div>`).join(''):'<div class="head-sub" style="padding:8px 0;">Список судей пуст</div>';$$('#jl-list [data-jrm]').forEach(b=>b.addEventListener('click',()=>{judges.splice(+b.dataset.jrm,1);draw();}));};
+  $('#admin-body').innerHTML=`<div class="a-card"><h4>Судейская коллегия</h4><div id="jl-list"></div>
+    <div style="display:flex;gap:8px;margin-top:10px;"><input class="j-input" id="jl-add" placeholder="ФИО судьи"><button class="chip" id="jl-add-btn" style="flex:none;background:var(--lb-accent-soft);border-color:var(--lb-border-accent);color:var(--lb-accent-light);">＋</button></div>
+    <div id="jl-msg" style="margin-top:10px;"></div>
+    <button class="j-btn" id="jl-save" style="margin-top:12px;">Сохранить и распределить</button>
+    <button class="j-btn sec" id="jl-auto" style="margin-top:10px;">Авто-распределение по дорожкам</button>
+    <div id="jl-report" style="margin-top:8px;"></div></div>`;
+  draw();
+  $('#jl-add-btn').addEventListener('click',()=>{const v=($('#jl-add').value||'').trim();if(v){judges.push(v);$('#jl-add').value='';draw();}});
+  $('#jl-add').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('#jl-add-btn').click();}});
+  $('#jl-save').addEventListener('click',async()=>{const r=await adminPost('/api/admin/judges/list',{judges});$('#jl-msg').innerHTML=jStatus(r.ok?'Сохранено и распределено ✓':(r.j.message||'Ошибка'),r.ok);});
+  $('#jl-auto').addEventListener('click',async()=>{const r=await adminPost('/api/admin/judges/auto-assign',{});const rep=r.j&&r.j.report;$('#jl-report').innerHTML=jStatus(r.ok?('Готово ✓'+(rep?` · судей ${rep.judges_count||0}, дорожек ${rep.total_lanes||0}`:'')):(r.j.message||'Ошибка'),r.ok);});
+}
+
+/* ---- Заходы/дорожки: назначение команд и судей на дорожки ---- */
+async function openLaneEditor(heatId){
+  openSheet({},{html:()=>`<h3>Заход · время и дорожки</h3><div class="sub" id="le-sub">Загрузка…</div><div id="le-body"><div class="center-state"><div class="spinner"></div></div></div>`,after:()=>fillLaneEditor(heatId)});
+}
+async function fillLaneEditor(heatId){
+  let s,judges;
+  try{ delete cache[adminState.tid]; s=await getStandings(adminState.tid,true); judges=((await adminGet('/api/admin/judges/list')).judges)||[]; }
+  catch(e){ const b=$('#le-body'); if(b)b.innerHTML=jStatus('Ошибка: '+e.message,false); return; }
+  const h=(s.heats||[]).find(x=>String(x.id)===String(heatId));
+  const b=$('#le-body'); if(!b)return;
+  if(!h){b.innerHTML=jStatus('Заход не найден',false);return;}
+  const sub=$('#le-sub'); if(sub)sub.textContent=(h.complex_name||'')+' · Заход '+(h.heat_number||'')+' · '+(h.category_name||'');
+  const lanes=(h.teams||[]).slice().sort((a,b)=>(a.lane_index||0)-(b.lane_index||0));
+  const assigned=new Set(lanes.map(t=>t.id));
+  const catTeams=((s.standings&&s.standings[h.category_id])||[]).map(r=>({id:r.team_id,name:r.team_name}));
+  const free=catTeams.filter(t=>!assigned.has(t.id));
+  const jOpts=(sel)=>'<option value="">— судья —</option>'+judges.map(j=>`<option ${j===sel?'selected':''}>${esc(j)}</option>`).join('');
+  const lanesHtml=lanes.length?lanes.map(t=>`<div class="lane-score">
+      <div class="lane-score-h"><div class="ln">${t.lane_index!=null?t.lane_index:'—'}</div>${regionBadge(t.name)}<div class="nm">${esc(t.name)}</div><button class="chip" data-rmteam="${t.id}" style="flex:none;">Убрать</button></div>
+      <div class="part-in"><label>Судья</label><select class="j-select le-judge" data-team="${t.id}" style="flex:1;">${jOpts(t.judge_name)}</select></div>
+    </div>`).join(''):'<div class="head-sub" style="padding:6px 0;">На дорожках пока нет команд</div>';
+  const addHtml=free.length?`<div class="a-card"><h4>Добавить команду на дорожку</h4>
+      <select class="j-select" id="le-team">${free.map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join('')}</select>
+      <div class="part-in" style="margin-top:8px;"><label>Дорожка № (пусто = авто)</label><input class="j-input" id="le-lane" inputmode="numeric" style="width:120px;flex:none;" placeholder="авто"></div>
+      <button class="j-btn" id="le-add" style="margin-top:8px;">Добавить</button></div>`:'<div class="a-card head-sub">Все команды категории уже на дорожках.</div>';
+  const curTime=h.start_time||h.scheduled_start||'';
+  const timeCard=`<div class="a-card"><h4>Время старта захода</h4>
+    <div class="part-in"><label>Старт (чч:мм)</label><input class="j-input" id="le-time" value="${esc(curTime)}" placeholder="напр. 11:30" inputmode="numeric" style="width:150px;flex:none;"></div>
+    <button class="j-btn sec" id="le-time-save" style="margin-top:8px;">Сохранить время</button></div>`;
+  b.innerHTML=timeCard+lanesHtml+addHtml+'<div id="le-msg" style="margin-top:8px;"></div>';
+  const tsave=$('#le-time-save'); if(tsave)tsave.addEventListener('click',async()=>{
+    const val=($('#le-time').value||'').trim();
+    if(val && !/^\d{1,2}:\d{2}$/.test(val)){$('#le-msg').innerHTML=jStatus('Формат времени чч:мм (напр. 11:30)',false);return;}
+    const r=await adminPost('/api/admin/heats/update-time',{heat_id:+heatId,start_time:val||null});
+    $('#le-msg').innerHTML=jStatus(r.ok?'Время сохранено ✓ (обновится на табло/сайте)':((r.j&&r.j.message)||'Ошибка'),r.ok);
+    if(r.ok)delete cache[adminState.tid];
+  });
+  $$('#le-body [data-rmteam]').forEach(x=>x.addEventListener('click',async()=>{if(!confirm('Убрать команду с дорожки?'))return;const r=await adminPost('/api/admin/heats/remove-team',{heat_id:+heatId,team_id:+x.dataset.rmteam});if(r.ok)fillLaneEditor(heatId);else $('#le-msg').innerHTML=jStatus(r.j.message||'Ошибка',false);}));
+  $$('#le-body .le-judge').forEach(sel=>sel.addEventListener('change',async()=>{const r=await adminPost('/api/admin/heats/assign-judge',{heat_id:+heatId,team_id:+sel.dataset.team,judge_name:sel.value||null});$('#le-msg').innerHTML=jStatus(r.ok?'Судья назначен ✓':(r.j.message||'Ошибка'),r.ok);}));
+  const add=$('#le-add'); if(add)add.addEventListener('click',async()=>{const body={heat_id:+heatId,team_id:+$('#le-team').value};const ln=$('#le-lane').value;if(ln)body.lane_index=+ln;const r=await adminPost('/api/admin/heats/assign-team',body);if(r.ok)fillLaneEditor(heatId);else $('#le-msg').innerHTML=jStatus(r.j.message||'Ошибка',false);});
+}
+
+/* ---- Комплекс: быстрый тайминг/дорожки (admin) ---- */
+function openComplexTiming(data,cid){
+  const c=(data.complexes||[]).find(x=>x.id===cid)||{};
+  openSheet({},{html:()=>`<h3>Тайминг комплекса</h3><div class="sub">${esc(c.name||'')}</div>
+    <div class="j-label">Старт (чч:мм, пусто = авто)</div><input class="j-input" id="ct-start" value="${esc(c.start_time||'')}" placeholder="напр. 11:12">
+    <div class="j-label" style="margin-top:8px;">Тайм-кап (мм:сс)</div><input class="j-input" id="ct-cap" value="${c.time_cap?fromInt('time',c.time_cap):''}" placeholder="напр. 12:00">
+    <div class="j-label" style="margin-top:8px;">Дорожек</div><input class="j-input" id="ct-lanes" inputmode="numeric" value="${c.lanes_count||''}">
+    <div class="j-label" style="margin-top:8px;">Лимит команд (пусто = без лимита)</div><input class="j-input" id="ct-limit" inputmode="numeric" value="${c.teams_limit||''}">
+    <div id="ct-msg" style="margin-top:10px;"></div>
+    <button class="j-btn" id="ct-save" style="margin-top:12px;">Сохранить</button>`,
+    after:()=>{$('#ct-save').addEventListener('click',async()=>{
+      const patch={id:cid};
+      patch.start_time=($('#ct-start').value||'').trim();
+      const cap=toInt('time',$('#ct-cap').value); if(cap!=null)patch.time_cap=cap;
+      if($('#ct-limit').value!=='')patch.teams_limit=+$('#ct-limit').value;
+      const r=await adminPost('/api/admin/complexes/patch',patch);
+      let ok=r.ok;
+      const lanes=$('#ct-lanes').value;
+      if(ok&&lanes){const r2=await adminPost('/api/admin/complexes/update-lanes',{complex_id:cid,lanes_count:+lanes});ok=r2.ok;}
+      $('#ct-msg').innerHTML=jStatus(ok?'Сохранено ✓ (обновится на сайте)':((r.j&&r.j.message)||'Ошибка'),ok);
+    });}});
+}
+
+
+/* ================= nav ================= */
+const VIEWS=['tournaments','board','profile','detail','judge','admin'];
+let boardLoaded=false;
+function showView(name,syncNav=true){
+  VIEWS.forEach(v=>$('#v-'+v).classList.toggle('active',v===name));
+  if(syncNav)$$('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.nav===name));
+  $('#screen').scrollTop=0;
+  if(name==='board'&&!boardLoaded){boardLoaded=true;loadBoard();}
+  if(name==='profile')refreshIdentity();
+  if(name==='tournaments')renderHomeLive();
+}
+$('#botnav').addEventListener('click',e=>{const b=e.target.closest('.nav-item');if(b)showView(b.dataset.nav);});
+$$('.head-ava,[data-nav="profile"]').forEach(el=>{}); // handled by botnav + explicit
+$('.head-ava').addEventListener('click',()=>showView('profile'));
+
+/* ================= live sync — same mechanism as the site (/api/ws) ================= */
+let ws=null, wsRetry=0, pollId=null;
+function currentTournamentId(){
+  if($('#v-detail').classList.contains('active')) return detailState.id;
+  if($('#v-board').classList.contains('active')) return liveId;
+  return null;
+}
+function visibleTournament(){ const id=currentTournamentId(); return id?TOURNAMENTS.find(t=>t.id===id):null; }
+async function refreshVisible(){
+  const id=currentTournamentId(); if(!id) return;
+  try{
+    delete cache[id];
+    const s=await getStandings(id);
+    if($('#v-detail').classList.contains('active') && detailState.id===id){
+      s._members=buildMembers(s);
+      detailState.data=s;
+      if(!s.categories.some(c=>c.id===detailState.cat)) detailState.cat=(s.categories[0]||{}).id;
+      renderDetailCats(); renderDetailBoard(); renderDetailTable(); renderSched(s); renderCx();
+      renderAbout(s, TOURNAMENTS.find(x=>x.id===id));
+    }
+    if($('#v-board').classList.contains('active') && liveId===id){
+      boardState.data=s;
+      if(!s.categories.some(c=>c.id===boardState.cat)) boardState.cat=(s.categories[0]||{}).id;
+      renderBoardCats(); renderBoardRows();
+    }
+  }catch(e){}
+  refreshTimers();
+}
+async function refreshTimers(){
+  try{ const tm=await API.get('/api/timer');
+    if($('#v-detail').classList.contains('active')){const t=TOURNAMENTS.find(x=>x.id===detailState.id); if(t&&t.status==='live')$('#d-timer').innerHTML=timerHtml(tm);}
+    if($('#v-board').classList.contains('active')) $('#board-timer').innerHTML=timerHtml(tm);
+  }catch(e){}
+}
+function connectWS(){
+  try{
+    const proto=location.protocol==='https:'?'wss':'ws';
+    ws=new WebSocket(proto+'://'+location.host+'/api/ws');
+    ws.onopen=()=>{wsRetry=0;};
+    ws.onmessage=(ev)=>{ const m=String(ev.data||''); if(m==='update'||m.startsWith('timer')||m.startsWith('podium')) refreshVisible(); };
+    ws.onclose=()=>{ ws=null; wsRetry=Math.min(wsRetry+1,6); setTimeout(connectWS, Math.round(1000*Math.pow(1.6,wsRetry))); };
+    ws.onerror=()=>{ try{ws.close();}catch(e){} };
+  }catch(e){ setTimeout(connectWS,5000); }
+}
+function startPolling(){
+  if(pollId) clearInterval(pollId);
+  pollId=setInterval(()=>{
+    const t=visibleTournament(); if(!t||t.status!=='live') return;      // only auto-refresh a live tournament
+    if(ws && ws.readyState===1) refreshTimers(); else refreshVisible();  // WS open → keep timer fresh; else full fallback
+  }, 30000);
+}
+
+/* ================= athlete identity (email login → one profile) ================= */
+let identity={authed:false,roles:null};
+async function refreshIdentity(){
+  try{const r=await API.get('/api/identity/roles');identity.authed=!!r.authed;identity.roles=r;}catch(e){identity.authed=false;}
+  const name=$('#p-name'),tag=$('#p-tag'),ava=$('#p-ava'),stats=$('#p-stats'),cab=$('#prof-cabinet'),login=$('#p-login'),find=$('#p-find'),note=document.querySelector('.prof-note');
+  const email=(identity.roles&&identity.roles.email)||localStorage.getItem('lb_email')||'';
+  if(identity.authed&&email)localStorage.setItem('lb_email',email);
+  if(identity.authed){
+    const uname=email?email.split('@')[0]:'Атлет';
+    if(name)name.textContent=uname;
+    if(tag)tag.textContent=email||'Вы вошли';
+    if(ava)ava.innerHTML='<span class="ini">'+esc((uname[0]||'A').toUpperCase())+'</span>';
+    if(login)login.hidden=true; if(find)find.hidden=true; if(note)note.hidden=true;
+    if(stats)stats.hidden=false;
+    if(cab){cab.hidden=false;cab.innerHTML='<div class="center-state"><div class="spinner"></div>Собираю мои турниры…</div>';}
+    renderProfileCabinet();
+  }else{
+    if(name)name.textContent='Гость';
+    if(tag)tag.textContent='Войдите, чтобы видеть свои турниры, результаты и бейдж в одном профиле.';
+    if(ava)ava.innerHTML='<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>';
+    if(login){login.hidden=false;const a=$('#p-login-a'),b=$('#p-login-b');if(a)a.textContent='Войти по email';if(b)b.textContent='Мои турниры и результаты — один профиль';}
+    if(find)find.hidden=false; if(note)note.hidden=false;
+    if(stats){stats.hidden=true;stats.innerHTML='';} if(cab){cab.hidden=true;cab.innerHTML='';}
+  }
+}
+(function initLoginBtn(){ const btn=$('#p-login'); if(btn) btn.addEventListener('click',()=>{ if(!identity.authed)openLoginSheet(); }); })();
+function openLoginSheet(){
+  openSheet({},{
+    html:()=>`<h3>Вход по email</h3><div class="sub">Код придёт на почту</div>
+      <div class="j-label">Email</div><input class="j-input" id="li-email" type="email" autocomplete="email" placeholder="you@mail.ru">
+      <div id="li-code-wrap" hidden><div class="j-label" style="margin-top:10px;">Код из письма</div><input class="j-input" id="li-code" inputmode="numeric" autocomplete="one-time-code" placeholder="6 цифр"></div>
+      <div id="li-msg" style="margin-top:10px;"></div>
+      <button class="j-btn" id="li-go" style="margin-top:12px;">Получить код</button>`,
+    after:()=>{
+      let stage='request';
+      setTimeout(()=>{const e=$('#li-email');if(e)e.focus();},150);
+      $('#li-go').addEventListener('click',async()=>{
+        const email=($('#li-email').value||'').trim().toLowerCase(); const btn=$('#li-go');
+        if(stage==='request'){
+          if(!email){$('#li-msg').innerHTML=jStatus('Введите email',false);return;}
+          btn.disabled=true;btn.textContent='Отправляю…';
+          const r=await adminPost('/api/athlete/auth/request-code',{email});
+          btn.disabled=false;
+          if(r.ok){stage='verify';$('#li-code-wrap').hidden=false;btn.textContent='Войти';$('#li-msg').innerHTML=jStatus('Код отправлен на '+email,true);setTimeout(()=>{const c=$('#li-code');if(c)c.focus();},100);}
+          else{btn.textContent='Получить код';$('#li-msg').innerHTML=jStatus(r.j.message||'Ошибка',false);}
+        }else{
+          const code=($('#li-code').value||'').trim();
+          if(!code){$('#li-msg').innerHTML=jStatus('Введите код',false);return;}
+          btn.disabled=true;btn.textContent='Проверяю…';
+          const r=await adminPost('/api/athlete/auth/verify-code',{email,code});
+          btn.disabled=false;btn.textContent='Войти';
+          if(r.ok){identity.authed=true;localStorage.setItem('lb_email',email);closeSheet();showView('profile');await refreshIdentity();}
+          else{$('#li-msg').innerHTML=jStatus(r.j.message||'Неверный код',false);}
+        }
+      });
+    }
+  });
+}
+function findTeamInStandings(s,teamName){
+  if(!teamName||!s||!s.standings)return null;
+  for(const cat of Object.keys(s.standings)){
+    const row=(s.standings[cat]||[]).find(r=>r.team_name===teamName);
+    if(row)return {rank:row.rank,total_points:row.total_points,cat:+cat,team_id:row.team_id};
+  }
+  return null;
+}
+async function renderProfileCabinet(){
+  const r=identity.roles||{};
+  const part=r.participant_in||[], org=r.organizer_of||[];
+  const rows=await Promise.all(part.map(async t=>{
+    try{const s=await getStandings(t.tournament_id);return {...t,hit:findTeamInStandings(s,t.team_name)};}
+    catch(e){return {...t,hit:null};}
+  }));
+  if(!identity.authed)return; // мог разлогиниться пока грузили
+  const podiums=rows.filter(t=>t.hit&&t.hit.rank<=3).length;
+  const stats=$('#p-stats'); if(stats)stats.innerHTML=`<div class="ps"><div class="v">${part.length}</div><div class="l">турниров</div></div><div class="ps"><div class="v gold">${podiums}</div><div class="l">подиумов</div></div><div class="ps"><div class="v">${org.length}</div><div class="l">организую</div></div>`;
+  const medal=(rk)=>rk===1?'🥇':rk===2?'🥈':rk===3?'🥉':'';
+  const uname=((r.email||localStorage.getItem('lb_email')||'Атлет').split('@')[0]);
+  let html='';
+  const badgeRow=rows.find(t=>t.hit&&t.hit.team_id);
+  if(badgeRow){
+    const link=`${location.origin}/m/?t=${badgeRow.tournament_id}&team=${badgeRow.hit.team_id}&cat=${badgeRow.hit.cat}`;
+    html+=`<div class="badge-card"><div class="badge-title">Бейдж атлета</div><div class="badge-qr">${qrSvg(link)}</div><div class="badge-nm">${esc(badgeRow.team_name||uname)}</div><div class="badge-sub">${esc(badgeRow.name)}</div><div class="badge-hint">Покажите QR на регистрации / чек-ине — судья откроет вашу команду.</div></div>`;
+  }
+  if(rows.length){
+    html+='<div class="cab-h">Мои турниры</div>';
+    html+=rows.map(t=>{
+      const place=t.hit?`<div class="cab-place"><div class="p">${medal(t.hit.rank)} ${t.hit.rank}</div><div class="u">место · ${t.hit.total_points} очк.</div></div>`:'<span class="arr">›</span>';
+      return `<div class="cab-card" data-cabt="${t.tournament_id}" ${t.hit?`data-cabteam="${t.hit.team_id}" data-cabcat="${t.hit.cat}"`:''}><div class="cab-t"><div class="nm">${esc(t.name)}</div>${place}</div>${t.team_name?`<div class="cab-sub">${esc(t.team_name)}</div>`:''}</div>`;
+    }).join('');
+  }
+  if(org.length){
+    html+='<div class="cab-h">Я организую</div>';
+    html+=org.map(t=>`<div class="cab-card"><div class="cab-t"><div class="nm">${esc(t.name)}</div></div><div class="cab-sub">${esc(t.role==='super'?'супер-админ':(t.role||'организатор'))}</div><div style="display:flex;gap:8px;margin-top:10px;"><button class="j-btn sec" data-cabt="${t.tournament_id}" style="flex:1;">Табло</button><button class="j-btn" data-cabmanage="${t.tournament_id}" style="flex:1;">🛠 Управлять</button></div></div>`).join('');
+  }
+  if(!rows.length && !org.length){
+    html+=`<div class="cab-card"><div class="cab-sub" style="line-height:1.6;">Для <b>${esc(localStorage.getItem('lb_email')||'этой почты')}</b> турниры не найдены.<br>• Атлету — попроси организатора привязать этот email к твоей команде.<br>• Организатору — войди рабочей почтой из настроек турнира.</div></div>`;
+  }
+  html+='<button class="j-btn sec" id="cab-logout" style="margin-top:6px;">Выйти из профиля</button>';
+  const cab=$('#prof-cabinet'); if(!cab)return; cab.innerHTML=html;
+  cab.querySelectorAll('[data-cabt]').forEach(el=>el.addEventListener('click',(e)=>{
+    e.stopPropagation();
+    const team=el.dataset.cabteam;
+    if(team){ getStandings(+el.dataset.cabt).then(s=>{s._members=buildMembers(s);openTeamSheet(s,+team,+el.dataset.cabcat);}); }
+    else openDetail(+el.dataset.cabt);
+  }));
+  cab.querySelectorAll('[data-cabmanage]').forEach(el=>el.addEventListener('click',(e)=>{e.stopPropagation();adminState._pendingTid=+el.dataset.cabmanage;showAdmin();}));
+  const lo=$('#cab-logout'); if(lo)lo.addEventListener('click',async()=>{await adminPost('/api/athlete/auth/logout',{});identity.authed=false;localStorage.removeItem('lb_email');refreshIdentity();});
+}
+
+/* ================= news feed ================= */
+(function initFeedBtn(){const b=$('#p-feed');if(b)b.addEventListener('click',openFeedSheet);})();
+function openFeedSheet(){
+  openSheet({},{
+    html:()=>`<h3>Новости</h3><div class="sub" id="feed-sub">Лента активного турнира</div><div id="feed-body"><div class="center-state"><div class="spinner"></div>Загружаю…</div></div>`,
+    after:async()=>{
+      try{
+        const [st,fd]=await Promise.all([API.get('/api/settings').catch(()=>({})),API.get('/api/feed')]);
+        if(st&&st.event_name){const s=$('#feed-sub');if(s)s.textContent=st.event_name;}
+        const posts=fd.feed||[];
+        const body=$('#feed-body');if(!body)return;
+        body.innerHTML=posts.length?posts.map(p=>`<div class="a-card"><div style="display:flex;justify-content:space-between;gap:8px;"><div style="font-weight:700;">${esc(p.author_name||'Организаторы')}</div><div class="head-sub" style="flex:none;">${esc((p.created_at||'').slice(0,16))}</div></div>${p.team_name?`<div class="head-sub">${esc(p.team_name)}</div>`:''}<div style="font-size:13.5px;color:var(--lb-muted);margin-top:6px;white-space:pre-line;line-height:1.55;">${esc(p.content||'')}</div></div>`).join(''):'<div class="center-state">Пока нет новостей.</div>';
+      }catch(e){const body=$('#feed-body');if(body)body.innerHTML=jStatus('Ошибка: '+e.message,false);}
+    }
+  });
+}
+
+/* ================= PUSH notifications ================= */
+function urlB64ToU8(s){const pad='='.repeat((4-s.length%4)%4);const b=(s+pad).replace(/-/g,'+').replace(/_/g,'/');const raw=atob(b);const a=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)a[i]=raw.charCodeAt(i);return a;}
+async function enablePush(){
+  if(!('serviceWorker'in navigator)||!('PushManager'in window)) return {ok:false,msg:'Устройство не поддерживает push-уведомления'};
+  let perm; try{perm=await Notification.requestPermission();}catch(e){return {ok:false,msg:'Не удалось запросить разрешение'};}
+  if(perm!=='granted') return {ok:false,msg:'Разрешение на уведомления не выдано'};
+  let reg; try{reg=await navigator.serviceWorker.ready;}catch(e){return {ok:false,msg:'Service worker недоступен'};}
+  let kr; try{kr=await API.get('/api/push/vapid-key');}catch(e){return {ok:false,msg:'Не удалось получить VAPID-ключ'};}
+  const key=kr.vapid_public_key||kr.publicKey||kr.vapidPublicKey||kr.public_key||kr.key;
+  if(!key) return {ok:false,msg:'Сервер не вернул VAPID-ключ'};
+  let sub;
+  try{ sub=await reg.pushManager.getSubscription()||await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:urlB64ToU8(key)}); }
+  catch(e){ return {ok:false,msg:'Подписка не создана: '+e.message}; }
+  const r=await fetch('/api/push/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({subscription:sub})});
+  if(r.ok) return {ok:true,msg:'Уведомления включены ✓'};
+  if(r.status===401) return {ok:false,msg:'Сначала войдите по email (Профиль → «Войти по email») — уведомления придут по вашим заходам и результатам. Если почта не привязана к профилю, уведомления пока доступны через Telegram-бот платформы.'};
+  let m=''; try{m=(await r.json()).message||'';}catch(e){}
+  return {ok:false,msg:m||('Не удалось подписаться ('+r.status+')')};
+}
+(function initPushBtn(){
+  const btn=$('#p-push'), sub=$('#p-push-b'); if(!btn)return;
+  if(!('Notification'in window)){ sub.textContent='Не поддерживается на этом устройстве'; return; }
+  if(Notification.permission==='granted') sub.textContent='Включены · нажмите для повторной подписки';
+  btn.addEventListener('click',async()=>{
+    sub.textContent='Подключаю…';
+    const res=await enablePush();
+    sub.textContent=res.msg;
+  });
+})();
+
+/* ================= PWA (installable app + offline shell) ================= */
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/gto2026/sw.js',{scope:'/gto2026/'}).catch(()=>{}));}
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault(); deferredPrompt=e;
+  const cta=document.querySelector('.prof-cta');
+  if(cta&&!document.getElementById('p-install')){
+    const b=document.createElement('div'); b.className='pbtn accent'; b.id='p-install';
+    b.innerHTML='<div class="ic">⬇️</div><div class="tt"><div class="a">Установить приложение</div><div class="b">Добавить на домашний экран</div></div><span class="arr">›</span>';
+    b.addEventListener('click',async()=>{ if(!deferredPrompt)return; deferredPrompt.prompt(); try{await deferredPrompt.userChoice;}catch(_){} deferredPrompt=null; b.remove(); });
+    cta.insertBefore(b,cta.firstChild);
+  }
+});
+
+/* ================= native polish: haptics, pull-to-refresh, skeletons ================= */
+function haptic(ms){try{if(navigator.vibrate)navigator.vibrate(ms||8);}catch(e){}}
+let _toastTimer=null;
+function toast(msg){let el=document.getElementById('lb-toast');if(!el){el=document.createElement('div');el.id='lb-toast';el.className='lb-toast';document.body.appendChild(el);}el.textContent=msg;el.classList.add('show');clearTimeout(_toastTimer);_toastTimer=setTimeout(()=>el.classList.remove('show'),2200);}
+async function shareContent(title,text,url){
+  haptic(10);
+  const data={title,text,url};
+  try{ if(navigator.share){ await navigator.share(data); return; } }catch(e){ if(e&&e.name==='AbortError')return; }
+  try{ await navigator.clipboard.writeText((text?text+' ':'')+url); toast('Ссылка скопирована'); return; }catch(e){}
+  try{ const t=document.createElement('textarea');t.value=(text?text+' ':'')+url;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();toast('Ссылка скопирована'); }catch(e){ toast('Не удалось поделиться'); }
+}
+document.addEventListener('click',e=>{if(e.target.closest('.nav-item,.j-btn,.tbtn,.tab,.chip,.pbtn,.mode-btn,.site-item,.t-card,.rescard'))haptic(6);},true);
+const skelCards=(n)=>Array.from({length:n||3}).map(()=>'<div class="skel skel-card"></div>').join('');
+async function refreshCurrentView(){
+  if($('#v-detail').classList.contains('active')&&detailState.id){delete cache[detailState.id];return openDetail(detailState.id);}
+  if($('#v-board').classList.contains('active')){boardLoaded=false;return loadBoard();}
+  if($('#v-tournaments').classList.contains('active'))return loadTournaments();
+  if($('#v-profile').classList.contains('active'))return refreshIdentity();
+}
+(function initPTR(){
+  const sc=$('#screen'), app=document.querySelector('.app'); if(!sc||!app)return;
+  const ind=document.createElement('div'); ind.className='ptr-ind'; app.appendChild(ind);
+  let startY=0, pulling=false, dist=0;
+  sc.addEventListener('touchstart',e=>{ pulling=sc.scrollTop<=0; startY=e.touches[0].clientY; dist=0; },{passive:true});
+  sc.addEventListener('touchmove',e=>{ if(!pulling)return; dist=e.touches[0].clientY-startY; if(dist>0){ const d=Math.min(dist,80); ind.style.opacity=Math.min(d/70,1); ind.style.transform='translateY('+(d*0.4)+'px)'; if(d>=70){ind.classList.add('ready');ind.textContent='↑ Отпустите для обновления';}else{ind.classList.remove('ready');ind.textContent='↓ Потяните для обновления';} } },{passive:true});
+  sc.addEventListener('touchend',async()=>{ if(!pulling)return; pulling=false; const ready=ind.classList.contains('ready'); if(ready){ ind.classList.remove('ready'); ind.classList.add('spin'); ind.textContent='Обновляю…'; ind.style.opacity='1'; haptic(15); try{await refreshCurrentView();}catch(e){} } ind.classList.remove('spin'); ind.style.opacity=''; ind.style.transform=''; ind.textContent=''; });
+})();
+/* swipe-down to close bottom sheet */
+(function sheetSwipe(){
+  const sheet=$('#sheet-body'), bd=$('#sheet-bd'); if(!sheet)return;
+  let startY=0, dragging=false, dy=0;
+  sheet.addEventListener('touchstart',e=>{ dragging=sheet.scrollTop<=0; startY=e.touches[0].clientY; dy=0; if(dragging)sheet.style.transition='none'; },{passive:true});
+  sheet.addEventListener('touchmove',e=>{ if(!dragging)return; dy=e.touches[0].clientY-startY; if(dy>0){ e.preventDefault(); sheet.style.transform='translateY('+dy+'px)'; if(bd)bd.style.opacity=String(Math.max(0.12,1-dy/500)); } else { sheet.style.transform=''; if(bd)bd.style.opacity=''; } },{passive:false});
+  sheet.addEventListener('touchend',()=>{ if(!dragging)return; dragging=false; sheet.style.transition='transform .24s ease'; if(dy>110){ sheet.style.transform='translateY(110%)'; haptic(12); setTimeout(()=>{closeSheet();sheet.style.transition='';sheet.style.transform='';if(bd)bd.style.opacity='';},210);} else { sheet.style.transform='translateY(0)'; if(bd)bd.style.opacity=''; setTimeout(()=>{sheet.style.transition='';sheet.style.transform='';},240);} });
+})();
+
+/* ================= init ================= */
+loadTournaments();
+connectWS();
+startPolling();
+refreshIdentity();
+/* deep link from athlete QR badge: /m/?t=<id>&team=<team_id>[&cat=<cat>] -> open team card */
+(function handleDeepLink(){
+  try{
+    const p=new URLSearchParams(location.search);
+    const t=+p.get('t'), team=+p.get('team');
+    if(t&&team){
+      const cat=p.get('cat')?+p.get('cat'):null;
+      getStandings(t).then(s=>{ s._members=buildMembers(s); let c=cat;
+        if(!c){for(const k of Object.keys(s.standings||{})){if((s.standings[k]||[]).some(r=>r.team_id===team)){c=+k;break;}}}
+        openTeamSheet(s,team,c);
+      }).catch(()=>{});
+      history.replaceState(null,'',location.pathname);
+    } else if(t){
+      // shared tournament link -> open its card
+      const go=()=>openDetail(t);
+      if(TOURNAMENTS&&TOURNAMENTS.length)go(); else setTimeout(go,900);
+      history.replaceState(null,'',location.pathname);
+    }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

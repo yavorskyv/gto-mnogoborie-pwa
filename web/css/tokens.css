@@ -1,0 +1,1962 @@
+/**
+ * GTO Design System Tokens — v84
+ * Centralized Design Tokens, Responsive Layout Normalization & CLS Protection
+ */
+
+:root {
+  /* Spacing Scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+
+  /* Typography */
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: 'Unbounded', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-xs: 11px;
+  --font-sm: 13px;
+  --font-base: 15px;
+  --font-md: 16px;
+  --font-lg: 18px;
+  --font-xl: 20px;
+  --font-2xl: 24px;
+  --font-3xl: 32px;
+  --font-4xl: 40px;
+
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-extrabold: 800;
+
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* Heights & Sizes */
+  --button-height-sm: 36px;
+  --button-height-md: 44px;
+  --button-height-lg: 50px;
+  --button-height-xl: 54px;
+  --avatar-sm: 36px;
+  --avatar-md: 48px;
+  --avatar-lg: 54px;
+  --avatar-xl: 72px;
+  --thumb-width: 105px;
+  --thumb-aspect: 16 / 10;
+
+  /* Tournament Media Geometry Tokens — v84.2 */
+  --tournament-thumb-mobile: 76px;
+  --tournament-thumb-desktop: 120px;
+  --tournament-hero-max-height-mobile: 260px;
+  --tournament-hero-max-height-desktop: 520px;
+
+  /* Surfaces & Backgrounds */
+  --bg-canvas: #07111f;
+  --bg-surface: #0d1b2b;
+  --bg-card: #102136;
+  --bg-elevated: #152942;
+  --bg-active: #1a3352;
+
+  /* Text Colors */
+  --text-main: #f4f7fb;
+  --text-muted: #a3b4c7;
+  --text-dim: #71849a;
+
+  /* Accents */
+  --accent-red: #ff4a4f;
+  --accent-blue: #38bdf8;
+  --accent-blue-deep: #2563eb;
+  --accent-green: #31c987;
+  --accent-gold: #f59e0b;
+
+  /* Borders */
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-default: rgba(255, 255, 255, 0.14);
+  --border-accent: rgba(56, 189, 248, 0.4);
+
+  /* Shadows */
+  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.25);
+  --shadow-elevated: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --shadow-glow-cyan: 0 0 16px rgba(56, 189, 248, 0.35);
+
+  /* Transition timings */
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: 0.15s var(--ease-spring);
+  --transition-normal: 0.22s var(--ease-spring);
+
+  /* Compact Mobile Design Tokens (v94) */
+  --m-page-x: 14px;
+  --m-card-pad: 12px;
+  --m-card-gap: 8px;
+  --m-section-gap: 18px;
+  --m-title-xl: 24px;
+  --m-title-lg: 20px;
+  --m-title-md: 18px;
+  --m-title-sm: 16px;
+  --m-meta-text: 13px;
+  --m-caption: 12px;
+  --m-avatar-lg: 64px;
+  --m-avatar-md: 48px;
+  --m-avatar-sm: 36px;
+  --m-bottom-nav-h: 58px;
+  --m-scroll-top-size: 44px;
+
+  /* Mobile XS Density Tokens (v95) */
+  --mobile-page-x: 12px;
+  --mobile-card-pad: 10px;
+  --mobile-gap: 7px;
+  --mobile-section-gap: 14px;
+}
+
+/* Global Reset & Viewport Normalization */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg-canvas);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  min-height: 100%;
+  width: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100svh;
+  overflow-x: hidden;
+  background: radial-gradient(circle at 85% -10%, #12335b 0, transparent 35%), var(--bg-canvas);
+}
+
+/* Safari iOS Auto-Zoom Fix: All inputs at least 16px */
+input, select, textarea {
+  font-size: 16px !important;
+}
+
+/* CLS Protection for Media */
+img, video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Shimmer skeleton for async loading */
+.skeleton-shimmer {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.03) 25%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.03) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ==========================================================
+   ATHLETE MONOGRAM AVATARS (Deterministic Palette)
+   ========================================================== */
+.athlete-avatar-wrap {
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--bg-elevated);
+  border: 1.5px solid var(--border-subtle);
+  flex-shrink: 0;
+  display: inline-block;
+  aspect-ratio: 1;
+}
+
+.athlete-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+
+.athlete-avatar-monogram {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-family: var(--font-display);
+  font-weight: var(--weight-extrabold);
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  flex-shrink: 0;
+  user-select: none;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  aspect-ratio: 1;
+}
+
+/* Monogram Palette Classes */
+.athlete-avatar-monogram.color-0 { background: linear-gradient(135deg, #1d4ed8, #2563eb); }
+.athlete-avatar-monogram.color-1 { background: linear-gradient(135deg, #0284c7, #0ea5e9); }
+.athlete-avatar-monogram.color-2 { background: linear-gradient(135deg, #0f766e, #14b8a6); }
+.athlete-avatar-monogram.color-3 { background: linear-gradient(135deg, #7c3aed, #8b5cf6); }
+.athlete-avatar-monogram.color-4 { background: linear-gradient(135deg, #b91c1c, #dc2626); }
+.athlete-avatar-monogram.color-5 { background: linear-gradient(135deg, #d97706, #f59e0b); }
+.athlete-avatar-monogram.color-6 { background: linear-gradient(135deg, #047857, #10b981); }
+.athlete-avatar-monogram.color-7 { background: linear-gradient(135deg, #4338ca, #6366f1); }
+
+/* ==========================================================
+   TOURNAMENT FALLBACK BADGES
+   ========================================================== */
+.tournament-badge-wrap {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+  display: inline-block;
+  aspect-ratio: 1;
+}
+
+.tournament-badge-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  display: block;
+}
+
+.tournament-badge-fallback {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  padding: 4px 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  flex-shrink: 0;
+  user-select: none;
+  aspect-ratio: 1;
+  line-height: 1;
+}
+
+.tournament-badge-fallback .tbf-tag {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: var(--weight-extrabold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #ffffff;
+  opacity: 0.95;
+}
+
+.tournament-badge-fallback .tbf-year {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: var(--weight-extrabold);
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  margin-top: 3px;
+}
+
+.tournament-badge-fallback.color-0 { background: linear-gradient(145deg, #1e3a8a, #1d4ed8); }
+.tournament-badge-fallback.color-1 { background: linear-gradient(145deg, #075985, #0284c7); }
+.tournament-badge-fallback.color-2 { background: linear-gradient(145deg, #115e59, #0d9488); }
+.tournament-badge-fallback.color-3 { background: linear-gradient(145deg, #581c87, #7c3aed); }
+.tournament-badge-fallback.color-4 { background: linear-gradient(145deg, #991b1b, #dc2626); }
+.tournament-badge-fallback.color-5 { background: linear-gradient(145deg, #92400e, #d97706); }
+.tournament-badge-fallback.color-6 { background: linear-gradient(145deg, #065f46, #059669); }
+.tournament-badge-fallback.color-7 { background: linear-gradient(145deg, #3730a3, #4f46e5); }
+
+/* ==========================================================
+   v84.2 — TOURNAMENT MEDIA PRESENTATION VARIANTS
+   ========================================================== */
+
+/* 1. Tournament Detail Hero */
+.tournament-detail,
+.event-detail {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.tournament-media--hero,
+.event-detail > .detail-hero {
+  position: relative;
+  width: 100%;
+  max-height: var(--tournament-hero-max-height-desktop, 520px);
+  aspect-ratio: 16 / 6;
+  min-height: 220px;
+  overflow: hidden;
+  border-radius: var(--radius-2xl, 24px);
+  background: #0b1727;
+}
+
+.detail-hero-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.tournament-media--hero img,
+.event-detail > .detail-hero img,
+.detail-hero-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Portrait posters and logos: contain with clean backdrop */
+.tournament-media--hero img.media-portrait,
+.tournament-media--hero.is-portrait img,
+.event-detail > .detail-hero img.media-portrait,
+.event-detail > .detail-hero.is-portrait img,
+.detail-hero-media img.media-portrait,
+.detail-hero.is-portrait .detail-hero-media img {
+  object-fit: contain;
+  background: radial-gradient(circle at 50% 50%, #13243a 0%, #07111f 100%);
+}
+
+.tournament-media--hero.is-logo img,
+.event-detail > .detail-hero.is-logo img {
+  object-fit: contain;
+  padding: 24px;
+  background: radial-gradient(circle at 50% 50%, #13243a 0%, #07111f 100%);
+}
+
+/* Bottom gradient on desktop to ensure legibility */
+.tournament-media--hero::after,
+.event-detail > .detail-hero::after {
+  content: "";
+  position: absolute;
+  inset: 35% 0 0 0;
+  background: linear-gradient(to bottom, transparent 0%, rgba(4, 10, 20, 0.85) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Desktop Hero copy and safe zone */
+.detail-hero-copy {
+  position: absolute;
+  z-index: 2;
+  left: 24px;
+  right: 24px;
+  bottom: 22px;
+  max-width: 80%;
+  text-align: left;
+}
+
+.detail-hero-copy time {
+  display: inline-block;
+  color: #38bdf8;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.tournament-hero-title {
+  font-family: var(--font-display, "Unbounded", sans-serif);
+  line-height: 1.05;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 6px 0 8px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  word-break: normal;
+  overflow-wrap: break-word;
+  hyphens: none;
+}
+
+/* Responsive hero title sizes on desktop */
+.tournament-hero-title.title-normal {
+  font-size: clamp(36px, 4.2vw, 48px);
+}
+.tournament-hero-title.title-long,
+.tournament-hero-title.is-long-title {
+  font-size: clamp(28px, 3.2vw, 38px);
+}
+.tournament-hero-title.title-extra-long {
+  font-size: clamp(24px, 2.6vw, 32px);
+}
+
+.detail-hero-copy p {
+  font-size: 13px;
+  color: #c2ceda;
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* Mobile: below-mode layout — poster stays completely clean, title & dates are below */
+@media (max-width: 599px) {
+  .tournament-media--hero,
+  .event-detail > .detail-hero {
+    aspect-ratio: auto !important;
+    max-height: none !important;
+    min-height: auto !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    overflow: visible !important;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .tournament-media--hero::after,
+  .event-detail > .detail-hero::after {
+    display: none !important;
+  }
+  .detail-hero-media {
+    position: relative !important;
+    width: 100% !important;
+    max-height: var(--tournament-hero-max-height-mobile, 260px) !important;
+    aspect-ratio: 16 / 9 !important;
+    min-height: 180px !important;
+    border-radius: var(--radius-lg, 18px) !important;
+    overflow: hidden !important;
+    background: #0b1727 !important;
+  }
+  .detail-hero-copy {
+    position: static !important;
+    inset: auto !important;
+    max-width: 100% !important;
+    padding: 2px 4px 0 !important;
+    z-index: auto !important;
+  }
+  .detail-hero-copy time {
+    font-size: 11px;
+    color: #38bdf8;
+    margin-bottom: 2px;
+  }
+  .tournament-hero-title {
+    margin: 4px 0 6px;
+    line-height: 1.08;
+    -webkit-line-clamp: 3;
+  }
+  .tournament-hero-title.title-normal {
+    font-size: clamp(24px, 6.2vw, 30px);
+  }
+  .tournament-hero-title.title-long,
+  .tournament-hero-title.is-long-title {
+    font-size: clamp(21px, 5.4vw, 26px);
+  }
+  .tournament-hero-title.title-extra-long {
+    font-size: clamp(18px, 4.8vw, 22px);
+  }
+  .detail-hero-copy p {
+    font-size: 12px;
+    color: #94a3b8;
+  }
+}
+
+/* 2. Tournament Card Thumbnail in Region */
+.region-tournaments-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 16px;
+  max-width: 960px;
+}
+
+/* Single tournament in region: bounded width, no huge empty stretch */
+.region-tournaments-grid:has(> :only-child),
+.region-tournaments-grid > :only-child {
+  max-width: 760px;
+}
+
+.region-tournament-card {
+  display: grid;
+  grid-template-columns: var(--tournament-thumb-desktop, 120px) minmax(0, 1fr);
+  gap: 20px;
+  align-items: center;
+  min-height: 150px;
+  height: auto;
+  padding: 18px 20px;
+  border-radius: 20px;
+  background: rgba(14, 25, 41, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  cursor: pointer;
+  transition: all .2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: left;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.region-tournament-card:hover {
+  background: rgba(24, 44, 72, 0.9);
+  border-color: rgba(56, 189, 248, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.region-tournament-thumb,
+.tournament-media--thumb {
+  width: var(--tournament-thumb-desktop, 120px);
+  height: var(--tournament-thumb-desktop, 120px);
+  border-radius: 18px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #0d1b2d;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.region-tournament-thumb img,
+.tournament-media--thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.region-tournament-thumb img.media-portrait,
+.region-tournament-thumb.is-portrait img {
+  object-fit: contain;
+  background: #08111e;
+}
+
+.region-tournament-thumb.is-logo img {
+  object-fit: contain;
+  padding: 8px;
+  background: #08111e;
+}
+
+.region-tournament-thumb .tournament-badge-fallback {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 18px;
+}
+
+.region-tournament-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.rtc-city {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #38bdf8;
+  word-break: normal;
+  overflow-wrap: break-word;
+  hyphens: none;
+}
+
+.rtc-title {
+  font-family: var(--font-display, "Unbounded", sans-serif);
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.35;
+  margin: 2px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: normal;
+  overflow-wrap: break-word;
+  hyphens: none;
+}
+
+.rtc-date {
+  font-size: 12px;
+  color: #94a3b8;
+  font-weight: 600;
+  word-break: normal;
+  overflow-wrap: break-word;
+  hyphens: none;
+}
+
+.rtc-link {
+  font-size: 12px;
+  font-weight: 700;
+  color: #60a5fa;
+  margin-top: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+@media (max-width: 768px) {
+  .region-tournaments-grid {
+    grid-template-columns: 1fr;
+  }
+  .region-tournament-card {
+    grid-template-columns: var(--tournament-thumb-mobile, 76px) minmax(0, 1fr);
+    gap: 14px;
+    padding: 14px;
+    min-height: auto;
+    border-radius: 16px;
+  }
+  .region-tournament-thumb,
+  .tournament-media--thumb {
+    width: var(--tournament-thumb-mobile, 76px);
+    height: var(--tournament-thumb-mobile, 76px);
+    border-radius: 14px;
+  }
+  .region-tournament-thumb .tournament-badge-fallback {
+    border-radius: 14px;
+  }
+  .rtc-title {
+    font-size: 13.5px;
+  }
+}
+
+/* ==========================================================
+   v84.2 — REGION RECORDS GRID & CARDS NORMALIZATION
+   ========================================================== */
+.region-records-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 1199px) {
+  .region-records-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .region-records-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.unified-record-card,
+.region-record-card,
+.record-card {
+  position: relative;
+  min-height: 125px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: rgba(16, 31, 49, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  cursor: pointer;
+  transition: all .2s cubic-bezier(0.16, 1, 0.3, 1);
+  word-break: normal;
+  overflow-wrap: break-word;
+  hyphens: none;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  text-align: left;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.unified-record-card:hover,
+.region-record-card:hover,
+.record-card:hover {
+  background: rgba(24, 46, 76, 0.95);
+  border-color: rgba(245, 158, 11, 0.45);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 0 16px rgba(245, 158, 11, 0.15);
+}
+
+.unified-record-card:active,
+.region-record-card:active,
+.record-card:active {
+  transform: scale(0.985);
+}
+
+.rrc-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.rrc-discipline-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.rrc-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rrc-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.rrc-discipline {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: normal;
+  overflow-wrap: break-word;
+  hyphens: none;
+}
+
+.rrc-val-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.rrc-val {
+  color: #f59e0b;
+  font-family: var(--font-display, "Unbounded", sans-serif);
+  font-weight: 800;
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+.rrc-top-arrow {
+  color: #64748b;
+  font-size: 14px;
+  transition: transform .18s ease, color .18s ease;
+}
+
+.unified-record-card:hover .rrc-top-arrow,
+.region-record-card:hover .rrc-top-arrow,
+.record-card:hover .rrc-top-arrow {
+  color: #f59e0b;
+  transform: translateX(3px);
+}
+
+.rrc-middle {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.rrc-holder-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.rrc-link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 4px;
+  transition: opacity .15s ease;
+}
+
+.rrc-link-btn:hover {
+  opacity: 0.85;
+}
+
+.rrc-holder {
+  font-size: 13px;
+  color: #e2e8f0;
+  font-weight: 600;
+  word-break: normal;
+  overflow-wrap: break-word;
+  hyphens: none;
+}
+
+.rrc-athlete-btn .rrc-holder {
+  color: #93c5fd;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: rgba(147, 197, 253, 0.4);
+}
+
+.rrc-athlete-btn:hover .rrc-holder {
+  text-decoration-color: #93c5fd;
+}
+
+.athlete-link-icon,
+.urc-link-arrow {
+  font-size: 11px;
+  color: #60a5fa;
+  font-weight: 700;
+}
+
+.rrc-city {
+  font-size: 11px;
+  color: #94a3b8;
+  word-break: normal;
+  overflow-wrap: break-word;
+  hyphens: none;
+}
+
+.rrc-event-row {
+  display: flex;
+  align-items: center;
+}
+
+.rrc-event-btn small,
+.rrc-event {
+  font-size: 11px;
+  color: #64748b;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: normal;
+  overflow-wrap: break-word;
+  hyphens: none;
+}
+
+.rrc-event-btn:hover small {
+  color: #94a3b8;
+}
+
+.rrc-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  margin-top: 2px;
+}
+
+.rrc-badge {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.12);
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.rrc-more {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #60a5fa;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.unified-record-card:hover .rrc-more,
+.region-record-card:hover .rrc-more,
+.record-card:hover .rrc-more {
+  color: #93c5fd;
+}
+
+/* Global anti-word-break protection for record titles & cities */
+.record-card b,
+.record-card small,
+.record-card div {
+  word-break: normal;
+  overflow-wrap: break-word;
+  hyphens: none;
+}
+
+/* ==========================================================
+   v87 — RECORD DETAIL PAGE
+   ========================================================== */
+.record-detail-page {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding-bottom: 40px;
+}
+
+.record-detail-hero-card {
+  position: relative;
+  background: linear-gradient(145deg, #102136 0%, #0d1b2d 100%);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 24px;
+  padding: 28px 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  text-align: center;
+  align-items: center;
+}
+
+.rd-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: #f59e0b;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.rd-val {
+  font-family: var(--font-display, "Unbounded", sans-serif);
+  font-size: clamp(36px, 8vw, 56px);
+  font-weight: 800;
+  color: #f59e0b;
+  line-height: 1;
+  text-shadow: 0 0 24px rgba(245, 158, 11, 0.35);
+}
+
+.rd-disc {
+  font-family: var(--font-display, "Unbounded", sans-serif);
+  font-size: clamp(18px, 4vw, 24px);
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.25;
+  max-width: 680px;
+}
+
+.record-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  width: 100%;
+}
+
+@media (max-width: 599px) {
+  .record-detail-grid {
+    grid-template-columns: 1fr;
+  }
+  .record-detail-hero-card {
+    padding: 22px 18px;
+    border-radius: 20px;
+  }
+}
+
+.rd-card-item {
+  background: rgba(14, 25, 41, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+}
+
+.rd-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.rd-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: #f1f5f9;
+  line-height: 1.35;
+}
+
+.rd-actions-row {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.rd-action-btn {
+  flex: 1 1 240px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-radius: 14px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  background: rgba(15, 34, 58, 0.9);
+  color: #38bdf8;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .18s ease;
+}
+
+.rd-action-btn:hover {
+  background: rgba(22, 48, 82, 0.95);
+  border-color: #38bdf8;
+  transform: translateY(-1px);
+}
+
+.rd-action-btn.secondary {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(14, 25, 41, 0.85);
+  color: #e2e8f0;
+}
+
+.rd-action-btn.secondary:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(20, 36, 58, 0.9);
+}
+
+/* ==========================================================
+   v85 — MOBILE MAP FIT & OVERFLOW PREVENTION
+   ========================================================== */
+.region-page,
+.russia-map-section,
+.russia-map-wrapper,
+.russia-map-container,
+.map-selected-card,
+.selected-region-card,
+.region-hero-card {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.russia-map-container {
+  overflow: hidden !important;
+}
+
+/* Safe area bottom padding for screens */
+.app-content,
+.screen {
+  padding-bottom: calc(var(--bottom-nav-height, 64px) + env(safe-area-inset-bottom, 0px) + 24px) !important;
+}
+
+/* ==========================================================
+   v85 — UNIFIED RESULT PLACE BADGE COMPONENT
+   ========================================================== */
+.place-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 72px;
+  min-height: 40px;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-family: var(--font-display, "Unbounded", sans-serif);
+  font-weight: 800;
+  font-size: 12.5px;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
+}
+
+.place-badge.place-gold {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(217, 119, 6, 0.18));
+  border: 1px solid rgba(245, 158, 11, 0.55);
+  color: #fbbf24;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.place-badge.place-silver {
+  background: linear-gradient(135deg, rgba(148, 163, 184, 0.22), rgba(100, 116, 139, 0.16));
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  color: #f1f5f9;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.place-badge.place-bronze {
+  background: linear-gradient(135deg, rgba(217, 119, 6, 0.24), rgba(180, 83, 9, 0.18));
+  border: 1px solid rgba(217, 119, 6, 0.55);
+  color: #fb923c;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.place-badge.place-rank {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #94a3b8;
+}
+
+.place-badge.place-participant {
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: #64748b;
+  font-family: var(--font-body, "Inter", sans-serif);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+/* ==========================================================
+   v85 — UNIFIED RESULT META CHIPS
+   ========================================================== */
+.result-chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin: 6px 0;
+}
+
+.result-chip {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: #cbd5e1;
+  word-break: normal;
+  overflow-wrap: break-word;
+  hyphens: none;
+}
+
+/* ==========================================================
+   v85 — HORIZONTALLY SCROLLABLE TABS ON MOBILE
+   ========================================================== */
+.detail-tabs {
+  overflow-x: auto !important;
+  flex-wrap: nowrap !important;
+  scrollbar-width: none !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+.detail-tabs::-webkit-scrollbar {
+  display: none !important;
+}
+
+.detail-tabs button {
+  flex-shrink: 0 !important;
+}
+
+/* Compact filter row in tournament results */
+.result-filter-bar {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 4px 0;
+}
+
+.result-filter-bar select {
+  height: 44px !important;
+  min-height: 44px !important;
+  font-size: 13px !important;
+  border-radius: 12px !important;
+}
+
+/* ==========================================================
+   v88 — FIXED BOTTOM NAVIGATION & CONTENT CLEARANCE
+   ========================================================== */
+.bottom-nav {
+  position: fixed !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  transform: none !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: calc(64px + env(safe-area-inset-bottom, 0px)) !important;
+  padding: 6px 12px env(safe-area-inset-bottom, 0px) !important;
+  margin: 0 auto !important;
+  z-index: 1000 !important;
+  background: rgba(7, 17, 31, 0.96) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.5) !important;
+  box-sizing: border-box !important;
+}
+
+@media (min-width: 768px) {
+  .bottom-nav {
+    max-width: 760px !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    border-radius: 20px 20px 0 0 !important;
+  }
+}
+
+main,
+.screen,
+.app-content {
+  padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px) + 28px) !important;
+}
+
+/* Eliminate duplicate back button under sticky header on mobile/tablet */
+@media (max-width: 1023px) {
+  .screen > .detail-back {
+    display: none !important;
+  }
+}
+
+/* ==========================================================
+   v90 — RESPONSIVE TEXT & SAFE WRAP (No Horizontal Overflow)
+   ========================================================== */
+.text-wrap-safe {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+  word-break: normal !important;
+  hyphens: none !important;
+}
+
+.region-page-container {
+  display: grid !important;
+  gap: 14px !important;
+  margin-top: 6px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  min-width: 0 !important;
+}
+
+/* 1. Региональный hero — название региона */
+.region-hero,
+.region-hero-card {
+  display: grid !important;
+  grid-template-columns: 72px minmax(0, 1fr) !important;
+  gap: 14px !important;
+  align-items: center !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 16px !important;
+  min-height: 0 !important;
+  border-radius: 20px !important;
+  background: linear-gradient(145deg, rgba(20, 38, 64, 0.85), rgba(11, 22, 38, 0.95)) !important;
+  border: 1px solid rgba(96, 165, 250, 0.25) !important;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35) !important;
+}
+
+.region-hero-logo,
+.region-hero-emblem {
+  width: 72px !important;
+  height: 72px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+.region-hero-logo img,
+.region-hero-emblem img,
+.region-hero-logo .region-emblem,
+.region-hero-emblem .region-emblem {
+  max-width: 72px !important;
+  max-height: 72px !important;
+  object-fit: contain !important;
+}
+
+.region-hero-content,
+.region-hero-info {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* 2. Название региона должно переноситься (2–3 строки) */
+.region-title,
+.region-hero-name,
+.region-hero-info h1 {
+  font-family: var(--font-display, "Unbounded", sans-serif) !important;
+  font-size: clamp(26px, 7vw, 38px) !important;
+  font-weight: 800 !important;
+  line-height: 1.05 !important;
+  margin: 0 0 6px !important;
+  color: #fff !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+  word-break: normal !important;
+  hyphens: none !important;
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 3 !important;
+  overflow: hidden !important;
+}
+
+.region-meta,
+.region-district-tag {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+  color: #60a5fa !important;
+  text-transform: uppercase !important;
+  letter-spacing: .05em !important;
+  margin: 0 !important;
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+  max-width: 100% !important;
+}
+
+.region-center,
+.region-hero-capital,
+.region-hero-info p {
+  font-size: 14px !important;
+  line-height: 1.3 !important;
+  color: #94a3b8 !important;
+  margin: 0 !important;
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+  max-width: 100% !important;
+}
+
+.region-center b,
+.region-hero-capital b,
+.region-hero-info p b {
+  color: #e2e8f0 !important;
+}
+
+/* 4. Hero региона на очень узких экранах (<=390px) */
+@media (max-width: 390px) {
+  .region-title,
+  .region-hero-name,
+  .region-hero-info h1 {
+    font-size: 25px !important;
+  }
+  .region-hero,
+  .region-hero-card {
+    grid-template-columns: 64px minmax(0, 1fr) !important;
+    gap: 12px !important;
+    padding: 14px !important;
+  }
+  .region-hero-logo,
+  .region-hero-emblem {
+    width: 64px !important;
+    height: 64px !important;
+  }
+  .region-hero-logo img,
+  .region-hero-emblem img,
+  .region-hero-logo .region-emblem,
+  .region-hero-emblem .region-emblem {
+    max-width: 64px !important;
+    max-height: 64px !important;
+  }
+}
+
+/* 2x2 Region Stats Grid */
+.region-stats-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.region-stat-card {
+  padding: 12px 14px !important;
+  border-radius: 14px !important;
+  background: var(--bg-card, #101d2d) !important;
+  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.09)) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  gap: 2px !important;
+  min-height: auto !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.region-stat-card b {
+  font-family: var(--font-display, "Unbounded", sans-serif) !important;
+  font-size: 19px !important;
+  font-weight: 800 !important;
+  line-height: 1.15 !important;
+  color: #fff !important;
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+}
+
+.region-stat-card span {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: #cbd5e1 !important;
+  line-height: 1.25 !important;
+  text-transform: capitalize;
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+}
+
+.region-stat-card.blue { border-left: 3px solid #3b82f6 !important; }
+.region-stat-card.red { border-left: 3px solid #ef4444 !important; }
+.region-stat-card.amber { border-left: 3px solid #f59e0b !important; }
+.region-stat-card.emerald { border-left: 3px solid #10b981 !important; }
+
+/* 5-9. Названия турниров в списке региона (v96 Desktop specs) */
+.region-tournament-card,
+.tournament-card {
+  display: grid !important;
+  grid-template-columns: 96px minmax(0, 1fr) !important;
+  gap: 14px !important;
+  align-items: center !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 18px !important;
+  border-radius: 24px !important;
+  background: rgba(14, 25, 41, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.09) !important;
+}
+
+.region-tournament-thumb,
+.tournament-thumb,
+.tournament-media--thumb {
+  width: 96px !important;
+  height: 96px !important;
+  border-radius: 18px !important;
+  flex-shrink: 0 !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #0d1b2d !important;
+}
+
+.region-tournament-thumb img,
+.tournament-thumb img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+.region-tournament-content,
+.region-tournament-body,
+.tournament-card-content,
+.event-card-content {
+  min-width: 0 !important;
+  width: 100% !important;
+  flex: 1 1 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 3px !important;
+  box-sizing: border-box !important;
+}
+
+.region-tournament-title,
+.rtc-title,
+.tournament-card-title,
+.tournament-title {
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+  word-break: normal !important;
+  text-wrap: balance !important;
+  hyphens: none !important;
+  font-family: var(--font-display, "Unbounded", sans-serif) !important;
+  font-size: clamp(14px, 1.15vw, 17px) !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
+  color: #fff !important;
+  margin: 2px 0 4px !important;
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 3 !important;
+  overflow: hidden !important;
+}
+
+.region-tournament-title.is-extra-long,
+.rtc-title.is-extra-long {
+  font-size: clamp(13px, 1.05vw, 15px) !important;
+}
+
+
+/* 10-12. ФИО лидеров региона */
+.region-leader-card,
+.region-athlete-card {
+  display: grid !important;
+  grid-template-columns: 56px minmax(0, 1fr) auto !important;
+  gap: 12px !important;
+  align-items: center !important;
+  padding: 12px 14px !important;
+  border-radius: 16px !important;
+  background: rgba(14, 25, 41, 0.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.region-leader-avatar,
+.region-athlete-card .athlete-avatar-wrap,
+.region-athlete-card .athlete-avatar-monogram {
+  width: 48px !important;
+  height: 48px !important;
+  flex-shrink: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.region-leader-info,
+.region-athlete-info {
+  min-width: 0 !important;
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+  box-sizing: border-box !important;
+}
+
+.region-leader-name,
+.region-athlete-name,
+.region-athlete-info b {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+  word-break: normal !important;
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+  overflow: hidden !important;
+  line-height: 1.25 !important;
+}
+
+.region-leader-info span,
+.region-athlete-info span {
+  font-size: 11px !important;
+  color: #94a3b8 !important;
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+  line-height: 1.3 !important;
+}
+
+.region-leader-badges,
+.region-athlete-badges {
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  flex-shrink: 0 !important;
+}
+
+@media (max-width: 390px) {
+  .region-leader-card,
+  .region-athlete-card {
+    grid-template-columns: 56px minmax(0, 1fr) !important;
+  }
+  .region-leader-badges,
+  .region-athlete-badges {
+    grid-column: 2 !important;
+    justify-self: start !important;
+    margin-top: 6px !important;
+  }
+}
+
+/* 13. Название федерации */
+.region-federation-title,
+.region-federation-details h3 {
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+  word-break: normal !important;
+  font-family: var(--font-display, "Unbounded", sans-serif) !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  color: #fff !important;
+  margin: 4px 0 6px !important;
+  max-width: 100% !important;
+}
+
+/* 14. Контакты (chips / кнопки) */
+.region-federation-contacts {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  margin-top: 6px !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.contact-chip,
+.region-contact-btn {
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 8px 14px !important;
+  border-radius: 999px !important;
+}
+
+/* ==========================================================
+   v88 — CLEAN & COMPACT RECORD CARD
+   ========================================================== */
+.unified-record-card {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  padding: 16px 18px !important;
+  border-radius: 18px !important;
+  background: var(--bg-card, #101d2d) !important;
+  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.09)) !important;
+  cursor: pointer !important;
+  text-align: left !important;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  user-select: none;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 125px;
+}
+
+.unified-record-card:hover {
+  border-color: rgba(56, 189, 248, 0.35) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+.unified-record-card:active {
+  transform: scale(0.99) !important;
+}
+
+.urc-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+}
+
+.urc-disc-wrap {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  min-width: 0 !important;
+}
+
+.urc-icon {
+  font-size: 18px !important;
+  line-height: 1 !important;
+  flex-shrink: 0 !important;
+}
+
+.urc-discipline,
+.record-title {
+  font-family: var(--font-display, "Unbounded", sans-serif) !important;
+  font-size: clamp(13px, 1.05vw, 16px) !important;
+  line-height: 1.25 !important;
+  font-weight: 700 !important;
+  color: #93c5fd !important;
+  white-space: normal !important;
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+  text-wrap: balance !important;
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 3 !important;
+  overflow: hidden !important;
+}
+
+.urc-head-arrow {
+  color: #64748b !important;
+  font-size: 16px !important;
+  flex-shrink: 0 !important;
+  transition: transform 0.18s ease !important;
+}
+
+.unified-record-card:hover .urc-head-arrow {
+  transform: translateX(3px) !important;
+  color: #38bdf8 !important;
+}
+
+.urc-result-row {
+  display: flex !important;
+  align-items: baseline !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  flex-wrap: wrap !important;
+}
+
+.urc-value {
+  font-family: var(--font-display, "Unbounded", sans-serif) !important;
+  font-size: 28px !important;
+  font-weight: 800 !important;
+  color: #fff !important;
+  letter-spacing: -0.03em !important;
+  line-height: 1 !important;
+}
+
+.urc-status-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  padding: 4px 10px !important;
+  border-radius: 999px !important;
+  background: rgba(245, 158, 11, 0.15) !important;
+  border: 1px solid rgba(245, 158, 11, 0.35) !important;
+  color: #fbbf24 !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em !important;
+  white-space: nowrap !important;
+}
+
+.urc-athlete-section {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+}
+
+.urc-athlete-btn {
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  color: inherit !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  text-align: left !important;
+  width: fit-content !important;
+  max-width: 100% !important;
+}
+
+.urc-athlete-name {
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  color: #f8fafc !important;
+  text-decoration: underline !important;
+  text-decoration-color: rgba(255, 255, 255, 0.25) !important;
+  text-underline-offset: 3px !important;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease !important;
+}
+
+.urc-athlete-btn:hover .urc-athlete-name {
+  color: #38bdf8 !important;
+  text-decoration-color: #38bdf8 !important;
+}
+
+.urc-link-arrow {
+  font-size: 12px !important;
+  color: #38bdf8 !important;
+}
+
+.urc-meta-line {
+  font-size: 12.5px !important;
+  line-height: 1.35 !important;
+  color: #94a3b8 !important;
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+}
+
+.urc-chips-row {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+  align-items: center !important;
+}
+
+.urc-chip {
+  display: inline-flex !important;
+  align-items: center !important;
+  font-size: 11.5px !important;
+  font-weight: 600 !important;
+  padding: 3px 9px !important;
+  border-radius: 8px !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #94a3b8 !important;
+}
+
+.urc-chip-city {
+  color: #cbd5e1 !important;
+  background: rgba(59, 130, 246, 0.1) !important;
+  border-color: rgba(59, 130, 246, 0.2) !important;
+}
+
+.urc-event-row {
+  margin-top: 2px !important;
+}
+
+.urc-event-btn {
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 8px 12px !important;
+  border-radius: 12px !important;
+  background: rgba(255, 255, 255, 0.035) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #cbd5e1 !important;
+  cursor: pointer !important;
+  text-align: left !important;
+  box-sizing: border-box !important;
+  transition: background 0.15s ease, border-color 0.15s ease !important;
+}
+
+.urc-event-btn:hover {
+  background: rgba(59, 130, 246, 0.08) !important;
+  border-color: rgba(59, 130, 246, 0.25) !important;
+}
+
+.urc-event-icon {
+  font-size: 14px !important;
+  flex-shrink: 0 !important;
+}
+
+.urc-event-name {
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+  flex: 1 !important;
+  min-width: 0 !important;
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+  overflow: hidden !important;
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+}
+
+.urc-footer {
+  display: flex !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
+  padding-top: 8px !important;
+  margin-top: 2px !important;
+}
+
+.urc-more-link {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #38bdf8 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+.urc-more-link .urc-arrow {
+  transition: transform 0.18s ease !important;
+}
+
+.unified-record-card:hover .urc-more-link .urc-arrow {
+  transform: translateX(3px) !important;
+}
+
+/* Athlete Tournament Events Accordion (v94) */
+.athlete-tourn-events-accordion {
+  margin-top: 10px;
+  border-radius: var(--radius-md, 10px);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+  transition: background var(--transition-fast);
+}
+.athlete-tourn-events-accordion[open] {
+  background: rgba(255, 255, 255, 0.05);
+}
+.athlete-tourn-events-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-blue, #38bdf8);
+  list-style: none;
+}
+.athlete-tourn-events-head::-webkit-details-marker {
+  display: none;
+}
+.athlete-tourn-events-head .accordion-arrow {
+  font-size: 12px;
+  transition: transform 0.2s ease;
+}
+.athlete-tourn-events-accordion[open] .athlete-tourn-events-head .accordion-arrow {
+  transform: rotate(180deg);
+}
+.athlete-tourn-events-body {
+  padding: 4px 12px 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ==========================================================
+   v96.1 — INTERACTION INTEGRITY & OVERLAY SAFETY
+   ========================================================== */
+.page-bg,
+.screen-bg,
+.app-overlay,
+.decorative-layer,
+.ambient,
+.hero-shade,
+.page::before,
+.page::after,
+.hero::before,
+.region-map:after,
+.desktop-hero-panel:after,
+.action-card:after,
+.region-bottom-sheet-backdrop:not(.active):not(.is-open),
+.region-bottom-sheet:not(.active):not(.is-open),
+.share-modal[hidden],
+.region-bottom-sheet[hidden],
+.region-bottom-sheet-backdrop[hidden] {
+  pointer-events: none !important;
+}
+
+/* Ensure interactive controls retain pointer responsiveness */
+button,
+a,
+input,
+select,
+textarea,
+[tabindex],
+[data-go],
+.link-action,
+.region-card,
+.event-card,
+.record-card,
+.unified-record-card,
+.tournament-card,
+.region-tournament-card,
+.leader-card,
+.athlete-card,
+.bottom-nav button,
+.action-card,
+.primary-action,
+.scroll-top-btn.visible {
+  pointer-events: auto;
+}
+

@@ -1,0 +1,3170 @@
+/* Mobile-only finish shared with the desktop visual language. */
+@media (max-width: 1023px) {
+  :root {
+    --m-red: #f42d36;
+    --m-blue: #397fff;
+    --m-gold: #f2b84b;
+    --m-teal: #35c6a4;
+  }
+  html,
+  body { max-width: 100%; overflow-x: clip; }
+
+  body {
+    background:
+      radial-gradient(circle at 92% 4%, rgba(57, 127, 255, .16), transparent 28%),
+      radial-gradient(circle at 4% 38%, rgba(244, 45, 54, .07), transparent 24%),
+      var(--bg);
+  }
+
+  .screen { --screen-accent: var(--m-blue); --screen-glow: rgba(57, 127, 255, .16); }
+  .screen[data-screen="events"],
+  .screen[data-screen="event"],
+  .screen[data-screen="news"],
+  .screen[data-screen="article"] { --screen-accent: var(--m-red); --screen-glow: rgba(244, 45, 54, .15); }
+  .screen[data-screen="records"] { --screen-accent: var(--m-gold); --screen-glow: rgba(242, 184, 75, .14); }
+  .screen[data-screen="regions"],
+  .screen[data-screen="region"] { --screen-accent: var(--m-teal); --screen-glow: rgba(53, 198, 164, .14); }
+
+  main#app:focus { outline: none; }
+
+  .brand,
+  .source-pill { min-height: 44px; }
+  .brand { min-width: 0; }
+  .brand span { min-width: 0; }
+  .source-pill { flex: none; white-space: nowrap; }
+  .source-pill { display: inline-flex; align-items: center; }
+
+  .pwa-banner {
+    position: relative;
+    min-width: 0;
+    margin: 8px 12px 0;
+    padding: 10px 42px 10px 10px;
+    gap: 8px;
+  }
+  .pwa-banner-content { min-width: 0; flex: 1 1 auto; }
+  .pwa-banner-content > div { min-width: 0; }
+  .pwa-banner-content b,
+  .pwa-banner-content small {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .pwa-btn { flex: none; min-height: 40px; padding-inline: 13px; }
+  .pwa-close {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+  }
+  .offline-badge { margin-inline: 12px; }
+  .offline-badge svg { width: 17px; height: 17px; flex: none; }
+  body.lightbox-open,
+  body.modal-open { overflow: hidden; }
+  .lightbox { padding: max(56px, env(safe-area-inset-top)) 16px max(56px, env(safe-area-inset-bottom)); }
+  .lightbox button svg { width: 24px; height: 24px; pointer-events: none; }
+  .lightbox [data-lightbox-close] {
+    top: max(16px, env(safe-area-inset-top));
+    right: max(16px, env(safe-area-inset-right));
+  }
+  .lightbox [data-lightbox-prev] { left: max(12px, env(safe-area-inset-left)); }
+  .lightbox [data-lightbox-next] { right: max(12px, env(safe-area-inset-right)); }
+  .lightbox small { bottom: max(20px, env(safe-area-inset-bottom)); }
+  .share-modal {
+    padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+    overflow-y: auto;
+  }
+  .share-dialog { max-height: calc(100dvh - 32px); overflow-y: auto; overscroll-behavior: contain; }
+  .share-close { width: 44px; height: 44px; top: 10px; right: 10px; }
+
+  .hero {
+    border: 1px solid rgba(255, 255, 255, .1);
+    box-shadow: 0 22px 55px rgba(0, 0, 0, .42);
+  }
+  .hero-shade {
+    background: linear-gradient(180deg, rgba(4, 10, 18, .04), rgba(4, 10, 18, .34) 32%, #07111f 94%);
+  }
+  .hero-copy .primary-action { max-width: 100%; margin-top: 22px; }
+  .primary-action { transition: transform .18s ease, box-shadow .22s ease; }
+  .primary-action:active {
+    transform: scale(.985);
+    box-shadow: 0 8px 22px rgba(255, 74, 79, .2);
+  }
+
+  .section-head {
+    position: relative;
+    padding-bottom: 11px;
+    border-bottom: 1px solid var(--line);
+  }
+  .section-head::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 48px;
+    height: 2px;
+    background: #ff4a4f;
+  }
+  .section-head button { min-height: 44px; padding: 0 10px; border-radius: 10px; }
+
+  .story-rail,
+  .chips { scrollbar-width: none; }
+  .story-rail::-webkit-scrollbar,
+  .chips::-webkit-scrollbar { display: none; }
+
+  .chips button,
+  .segmented-control button { min-height: 44px; }
+  .screen:not([data-screen="home"]) .page-title {
+    position: relative;
+    padding: 30px 0 18px 16px;
+  }
+  .screen:not([data-screen="home"]) .page-title::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 32px;
+    width: 3px;
+    height: 58px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, var(--screen-accent), var(--m-blue));
+    box-shadow: 0 0 22px var(--screen-glow);
+  }
+  .screen:not([data-screen="home"]) .page-title > span { color: var(--screen-accent); }
+  .page-title h1 {
+    font-size: clamp(28px, 8.4vw, 44px);
+    line-height: 1.08;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+  }
+  .page-title p { max-width: 42rem; font-size: 13px; line-height: 1.62; }
+
+  .filter-pill-wrap {
+    min-width: 0;
+    min-height: 58px;
+    justify-content: center;
+  }
+  .filter-pill-wrap select { min-height: 24px; }
+  .result-line { min-height: 44px; align-items: center; gap: 12px; }
+  .result-line > * { min-width: 0; }
+  .result-line .link-action {
+    min-height: 44px;
+    padding: 7px 0 7px 10px;
+    text-align: right;
+  }
+  .search { box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04); }
+  .search span { display: grid; place-items: center; width: 24px; height: 24px; flex: none; }
+  .search span svg { width: 20px; height: 20px; }
+  .search:focus-within {
+    border-color: var(--screen-accent);
+    box-shadow: 0 0 0 3px var(--screen-glow);
+  }
+
+  .event-card,
+  .news-card,
+  .story,
+  .action-card {
+    box-shadow: 0 12px 30px rgba(0, 0, 0, .2);
+    transition: transform .18s ease, border-color .2s ease, background-color .2s ease;
+  }
+  .event-card,
+  .news-card,
+  .media-card,
+  .album-card,
+  .region-card { position: relative; isolation: isolate; overflow: hidden; }
+  .event-card::before,
+  .news-card::before,
+  .media-card::before,
+  .album-card::before,
+  .region-card::before {
+    content: "";
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    width: 76px;
+    height: 2px;
+    pointer-events: none;
+    background: linear-gradient(90deg, var(--screen-accent), transparent);
+  }
+  .event-card:active,
+  .news-card:active,
+  .story:active,
+  .action-card:active { transform: scale(.985); }
+  .action-card {
+    --card-accent: var(--m-blue);
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: linear-gradient(145deg, #122238, #0d1928);
+  }
+  .action-card.red { --card-accent: var(--m-red); }
+  .action-card.green { --card-accent: var(--m-teal); }
+  .action-card.amber { --card-accent: var(--m-gold); }
+  .action-card.purple { --card-accent: #9a78ff; }
+  .action-card::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    width: 110px;
+    height: 110px;
+    top: -64px;
+    right: -52px;
+    border-radius: 50%;
+    background: var(--card-accent);
+    opacity: .13;
+    filter: blur(2px);
+  }
+  .action-card::before {
+    content: "";
+    position: absolute;
+    left: 14px;
+    top: 0;
+    width: 42px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--card-accent), transparent);
+  }
+  .event-card b,
+  .news-card b { text-wrap: pretty; }
+  .event-card time,
+  .news-card time { font-variant-numeric: tabular-nums; }
+  .action-card strong {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgba(255, 255, 255, .12);
+    border-radius: 50%;
+  }
+
+  .screen .record-card {
+    min-height: 76px;
+    padding: 13px 14px;
+    background: linear-gradient(145deg, rgba(18, 34, 56, .92), rgba(11, 24, 40, .94));
+    box-shadow: 0 10px 26px rgba(0, 0, 0, .2);
+  }
+  .record-group-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 28px 0 12px;
+    font-size: 20px;
+    line-height: 1.25;
+  }
+  [data-screen="records"] .record-group-title { color: #fff4d7; }
+  [data-screen="records"] .record-card { border-color: rgba(242, 184, 75, .15); }
+  [data-screen="records"] .record-card strong { text-shadow: none; }
+  .record-group-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 25px;
+    padding: 0 8px;
+    border: 1px solid rgba(86, 142, 224, .35);
+    border-radius: 999px;
+    background: rgba(57, 127, 255, .09);
+    color: #94baff;
+    font: 800 10px var(--body);
+  }
+
+  .screen .media-card,
+  .screen .album-card,
+  .screen .region-card {
+    background: linear-gradient(145deg, rgba(18, 34, 56, .92), rgba(11, 24, 40, .94));
+    box-shadow: 0 10px 28px rgba(0, 0, 0, .2);
+  }
+  .screen .media-card:active,
+  .screen .album-card:active,
+  .screen .region-card:active { transform: scale(.985); }
+
+  .media-card b,
+  .album-card b,
+  .region-card b { text-wrap: pretty; }
+
+  button,
+  a { touch-action: manipulation; }
+
+  .bottom-nav {
+    background: linear-gradient(180deg, rgba(13, 27, 46, .96), rgba(7, 16, 28, .98));
+    box-shadow: 0 -14px 38px rgba(0, 0, 0, .34), inset 0 1px 0 rgba(57, 127, 255, .08);
+  }
+  .bottom-nav button {
+    position: relative;
+    min-height: 52px;
+    transition: color .18s ease, background-color .18s ease;
+  }
+  .bottom-nav button:active { background: rgba(255, 255, 255, .04); }
+  .bottom-nav span {
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+  }
+  .bottom-nav span svg {
+    display: block;
+    width: 22px;
+    height: 22px;
+  }
+  .bottom-nav button.active span { color: #ff6166; }
+  .bottom-nav button.active::before {
+    content: "";
+    position: absolute;
+    top: -7px;
+    width: 26px;
+    height: 3px;
+    border-radius: 0 0 4px 4px;
+    background: #ff4a4f;
+    box-shadow: 0 4px 12px rgba(255, 74, 79, .45);
+  }
+
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  select:focus-visible { outline: 2px solid #79adff; outline-offset: 2px; }
+}
+
+@media (max-width: 380px) {
+  .app-header { padding-inline: 12px; }
+  .brand { gap: 8px; }
+  .brand img { width: 34px; height: 34px; }
+  .source-pill { padding-inline: 10px; }
+  .pwa-banner-content small { display: none; }
+  .hero-copy { inset: auto 18px 20px; }
+  .hero-copy .primary-action { height: 52px; }
+  .record-group-title { font-size: 18px; }
+  .action-card { min-height: 136px; padding: 13px; }
+}
+
+@media (max-width: 430px) {
+  .filter-pills-row { grid-template-columns: 1fr 1fr; }
+  [data-screen="events"] .event-year-filter,
+  [data-screen="records"] .filter-pills-row .filter-pill-wrap:last-child,
+  [data-screen="media"] .filter-pill-wrap.single-filter {
+    grid-column: 1 / -1;
+  }
+  .event-card { grid-template-columns: 96px minmax(0, 1fr); }
+  .event-card > div { min-width: 0; padding: 13px; }
+  .news-card { grid-template-columns: minmax(0, 1fr) 82px; gap: 11px; padding: 12px; }
+  .news-card img { width: 82px; height: 82px; }
+  .media-card { grid-template-columns: 104px minmax(0, 1fr); gap: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .primary-action,
+  .event-card,
+  .news-card,
+  .story,
+  .action-card { transition: none !important; }
+}
+
+/* ==========================================================
+   v90 — RESPONSIVE TEXT & SAFE WRAP (No Horizontal Overflow)
+   ========================================================== */
+.text-wrap-safe {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+  word-break: normal !important;
+  hyphens: none !important;
+}
+
+.region-page-container {
+  display: grid !important;
+  gap: 14px !important;
+  margin-top: 6px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  min-width: 0 !important;
+}
+
+/* 1. Региональный hero — название региона */
+.region-hero,
+.region-hero-card {
+  display: grid !important;
+  grid-template-columns: 72px minmax(0, 1fr) !important;
+  gap: 14px !important;
+  align-items: center !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 16px !important;
+  min-height: 0 !important;
+  border-radius: 20px !important;
+  background: linear-gradient(145deg, rgba(20, 38, 64, 0.85), rgba(11, 22, 38, 0.95)) !important;
+  border: 1px solid rgba(96, 165, 250, 0.25) !important;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35) !important;
+}
+
+.region-hero-logo,
+.region-hero-emblem {
+  width: 72px !important;
+  height: 72px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+.region-hero-logo img,
+.region-hero-emblem img,
+.region-hero-logo .region-emblem,
+.region-hero-emblem .region-emblem {
+  max-width: 72px !important;
+  max-height: 72px !important;
+  object-fit: contain !important;
+}
+
+.region-hero-content,
+.region-hero-info {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* 2. Название региона должно переноситься (2–3 строки) */
+.region-title,
+.region-hero-name,
+.region-hero-info h1 {
+  font-family: var(--font-display, "Unbounded", sans-serif) !important;
+  font-size: clamp(26px, 7vw, 38px) !important;
+  font-weight: 800 !important;
+  line-height: 1.05 !important;
+  margin: 0 0 6px !important;
+  color: #fff !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+  word-break: normal !important;
+  hyphens: none !important;
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 3 !important;
+  overflow: hidden !important;
+}
+
+.region-meta,
+.region-district-tag {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+  color: #60a5fa !important;
+  text-transform: uppercase !important;
+  letter-spacing: .05em !important;
+  margin: 0 !important;
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+  max-width: 100% !important;
+}
+
+.region-center,
+.region-hero-capital,
+.region-hero-info p {
+  font-size: 14px !important;
+  line-height: 1.3 !important;
+  color: #94a3b8 !important;
+  margin: 0 !important;
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+  max-width: 100% !important;
+}
+
+.region-center b,
+.region-hero-capital b,
+.region-hero-info p b {
+  color: #e2e8f0 !important;
+}
+
+/* 4. Hero региона на очень узких экранах (<=390px) */
+@media (max-width: 390px) {
+  .region-title,
+  .region-hero-name,
+  .region-hero-info h1 {
+    font-size: 25px !important;
+  }
+  .region-hero,
+  .region-hero-card {
+    grid-template-columns: 64px minmax(0, 1fr) !important;
+    gap: 12px !important;
+    padding: 14px !important;
+  }
+  .region-hero-logo,
+  .region-hero-emblem {
+    width: 64px !important;
+    height: 64px !important;
+  }
+  .region-hero-logo img,
+  .region-hero-emblem img,
+  .region-hero-logo .region-emblem,
+  .region-hero-emblem .region-emblem {
+    max-width: 64px !important;
+    max-height: 64px !important;
+  }
+}
+
+/* 2x2 Region Stats Grid */
+.region-stats-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.region-stat-card {
+  padding: 12px 14px !important;
+  border-radius: 14px !important;
+  background: var(--bg-card, #101d2d) !important;
+  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.09)) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  gap: 2px !important;
+  min-height: auto !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.region-stat-card b {
+  font-family: var(--font-display, "Unbounded", sans-serif) !important;
+  font-size: 19px !important;
+  font-weight: 800 !important;
+  line-height: 1.15 !important;
+  color: #fff !important;
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+}
+
+.region-stat-card span {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: #cbd5e1 !important;
+  line-height: 1.25 !important;
+  text-transform: capitalize;
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+}
+
+.region-stat-card.blue { border-left: 3px solid #3b82f6 !important; }
+.region-stat-card.red { border-left: 3px solid #ef4444 !important; }
+.region-stat-card.amber { border-left: 3px solid #f59e0b !important; }
+.region-stat-card.emerald { border-left: 3px solid #10b981 !important; }
+
+/* 5-9. Названия турниров в списке региона */
+.region-tournament-card {
+  display: grid !important;
+  grid-template-columns: 88px minmax(0, 1fr) !important;
+  gap: 14px !important;
+  align-items: center !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 14px 16px !important;
+  border-radius: 18px !important;
+  background: rgba(14, 25, 41, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.09) !important;
+}
+
+.region-tournament-thumb {
+  width: 88px !important;
+  height: 88px !important;
+  border-radius: 14px !important;
+  flex-shrink: 0 !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #0d1b2d !important;
+}
+
+.region-tournament-thumb img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+.region-tournament-content,
+.region-tournament-body {
+  min-width: 0 !important;
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 3px !important;
+  box-sizing: border-box !important;
+}
+
+.region-tournament-title,
+.rtc-title {
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+  word-break: normal !important;
+  hyphens: none !important;
+  font-family: var(--font-display, "Unbounded", sans-serif) !important;
+  font-size: clamp(20px, 5.5vw, 28px) !important;
+  font-weight: 700 !important;
+  line-height: 1.1 !important;
+  color: #fff !important;
+  margin: 2px 0 4px !important;
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 3 !important;
+  overflow: hidden !important;
+}
+
+.region-tournament-title.is-extra-long,
+.rtc-title.is-extra-long {
+  font-size: 20px !important;
+}
+
+@media (max-width: 390px) {
+  .region-tournament-card {
+    grid-template-columns: 76px minmax(0, 1fr) !important;
+    gap: 12px !important;
+    padding: 12px !important;
+  }
+  .region-tournament-thumb {
+    width: 76px !important;
+    height: 76px !important;
+  }
+  .region-tournament-title,
+  .rtc-title {
+    font-size: clamp(18px, 5vw, 22px) !important;
+  }
+  .region-tournament-title.is-extra-long,
+  .rtc-title.is-extra-long {
+    font-size: 17px !important;
+  }
+}
+
+/* 10-12. ФИО лидеров региона */
+.region-leader-card,
+.region-athlete-card {
+  display: grid !important;
+  grid-template-columns: 56px minmax(0, 1fr) auto !important;
+  gap: 12px !important;
+  align-items: center !important;
+  padding: 12px 14px !important;
+  border-radius: 16px !important;
+  background: rgba(14, 25, 41, 0.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.region-leader-avatar,
+.region-athlete-card .athlete-avatar-wrap,
+.region-athlete-card .athlete-avatar-monogram {
+  width: 48px !important;
+  height: 48px !important;
+  flex-shrink: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.region-leader-info,
+.region-athlete-info {
+  min-width: 0 !important;
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+  box-sizing: border-box !important;
+}
+
+.region-leader-name,
+.region-athlete-name,
+.region-athlete-info b {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+  word-break: normal !important;
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+  overflow: hidden !important;
+  line-height: 1.25 !important;
+}
+
+.region-leader-info span,
+.region-athlete-info span {
+  font-size: 11px !important;
+  color: #94a3b8 !important;
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+  line-height: 1.3 !important;
+}
+
+.region-leader-badges,
+.region-athlete-badges {
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  flex-shrink: 0 !important;
+}
+
+@media (max-width: 390px) {
+  .region-leader-card,
+  .region-athlete-card {
+    grid-template-columns: 56px minmax(0, 1fr) !important;
+  }
+  .region-leader-badges,
+  .region-athlete-badges {
+    grid-column: 2 !important;
+    justify-self: start !important;
+    margin-top: 6px !important;
+  }
+}
+
+/* 13. Название федерации */
+.region-federation-title,
+.region-federation-details h3 {
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+  word-break: normal !important;
+  font-family: var(--font-display, "Unbounded", sans-serif) !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  color: #fff !important;
+  margin: 4px 0 6px !important;
+  max-width: 100% !important;
+}
+
+/* 14. Контакты (chips / кнопки) */
+.region-federation-contacts {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  margin-top: 6px !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.contact-chip,
+.region-contact-btn {
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 8px 14px !important;
+  border-radius: 999px !important;
+}
+
+/* Fixed Bottom Navigation */
+.bottom-nav {
+  position: fixed !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  transform: none !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: calc(64px + env(safe-area-inset-bottom, 0px)) !important;
+  padding: 6px 12px env(safe-area-inset-bottom, 0px) !important;
+  margin: 0 auto !important;
+  z-index: 1000 !important;
+  box-sizing: border-box !important;
+}
+
+@media (min-width: 768px) {
+  .bottom-nav {
+    max-width: 760px !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    border-radius: 20px 20px 0 0 !important;
+  }
+}
+
+main,
+.screen,
+.app-content {
+  padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px) + 28px) !important;
+}
+
+/* =========================================================
+   v91.1 — MOBILE SINGLE COLUMN CSS PATCH (APP LAYOUT NORMALIZATION)
+   Apply after existing component styles
+   ========================================================= */
+@media (max-width: 768px) {
+  /* ---------- GLOBAL MOBILE SAFETY ---------- */
+  html,
+  body {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    -webkit-text-size-adjust: 100% !important;
+    text-size-adjust: 100% !important;
+  }
+  .app-shell,
+  .app-content,
+  .screen,
+  main,
+  .page-content,
+  .region-page,
+  .region-page-container,
+  .athlete-page,
+  .record-page,
+  .tournament-page,
+  #region-detail,
+  #athlete-profile-detail,
+  #record-detail-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+  .app-content {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  /* Every flex/grid child that may contain long text */
+  .app-card,
+  .region-card,
+  .athlete-card,
+  .record-card,
+  .tournament-card,
+  .region-hero,
+  .region-hero-card,
+  .region-federation-card,
+  .region-leader-card,
+  .region-athlete-card,
+  .region-record-card,
+  .region-tournament-card,
+  .athlete-tourn-card,
+  .athlete-hero-card,
+  .unified-record-card {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    padding: 12px 14px !important;
+    box-sizing: border-box !important;
+  }
+  .cards-list,
+  .records-grid,
+  .leaders-grid,
+  .athletes-grid,
+  .region-records-grid,
+  .region-leaders-grid,
+  .region-athletes-grid,
+  .region-tournaments-grid,
+  .tournament-grid,
+  .tournaments-grid,
+  .card-list,
+  .news-list,
+  .record-list {
+    gap: 8px !important;
+  }
+  .section,
+  .region-section {
+    margin-top: 18px !important;
+  }
+  /* ---------- REGION HERO ---------- */
+  .region-hero,
+  .region-hero-card {
+    display: grid !important;
+    grid-template-columns: 56px minmax(0, 1fr) !important;
+    gap: 10px !important;
+    align-items: center !important;
+    width: 100% !important;
+    padding: 12px 14px !important;
+    min-height: 0 !important;
+    border-radius: 16px !important;
+    box-sizing: border-box !important;
+  }
+  .region-hero-logo,
+  .region-hero-emblem,
+  .region-emblem {
+    width: 56px !important;
+    height: 56px !important;
+    min-width: 56px !important;
+    object-fit: contain !important;
+    border-radius: 12px !important;
+  }
+  .region-hero-content,
+  .region-hero-info {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+  .region-title,
+  .region-hero-name {
+    margin: 2px 0 4px !important;
+    max-width: 100% !important;
+    font-size: 24px !important;
+    line-height: 1.05 !important;
+    font-weight: 800 !important;
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+    word-break: normal !important;
+    hyphens: none !important;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 2 !important;
+    overflow: hidden !important;
+  }
+  .region-meta,
+  .region-district-tag {
+    margin: 0 0 2px !important;
+    font-size: 13px !important;
+    line-height: 1.25 !important;
+    white-space: normal !important;
+  }
+  .region-center,
+  .region-hero-capital {
+    font-size: 13px !important;
+    line-height: 1.25 !important;
+    white-space: normal !important;
+  }
+  /* ---------- REGION METRICS ---------- */
+  .region-stats,
+  .region-stats-grid,
+  .region-metrics-grid,
+  .athlete-metrics-strip {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    margin-top: 10px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .region-stat-card,
+  .region-metric-card,
+  .athlete-metric-card {
+    min-width: 0 !important;
+    min-height: 72px !important;
+    padding: 10px 12px !important;
+    border-radius: 14px !important;
+    box-sizing: border-box !important;
+  }
+  .region-stat-value,
+  .region-metric-value,
+  .region-stat-card b {
+    font-size: 24px !important;
+    line-height: 1.05 !important;
+    font-weight: 800 !important;
+  }
+  .region-stat-label,
+  .region-metric-label,
+  .region-stat-card span {
+    margin-top: 3px !important;
+    font-size: 12px !important;
+    line-height: 1.2 !important;
+    white-space: normal !important;
+  }
+  /* ---------- FEDERATION CARD ---------- */
+  .region-federation-card {
+    width: 100% !important;
+    padding: 12px 14px !important;
+    margin-top: 10px !important;
+    border-radius: 16px !important;
+    box-sizing: border-box !important;
+  }
+  .region-federation-title {
+    margin: 6px 0 8px !important;
+    max-width: 100% !important;
+    font-size: 18px !important;
+    line-height: 1.15 !important;
+    font-weight: 700 !important;
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+  }
+  .region-federation-card p {
+    font-size: 12px !important;
+    line-height: 1.35 !important;
+    margin: 3px 0 !important;
+  }
+  .region-contacts,
+  .federation-contacts,
+  .region-federation-contacts {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    margin-top: 8px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .contact-chip,
+  .region-contact-btn {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    padding: 0 10px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    border-radius: 999px !important;
+    font-size: 12px !important;
+    white-space: nowrap !important;
+    box-sizing: border-box !important;
+  }
+  .contact-chip.email,
+  .contact-chip[href^="mailto:"],
+  .region-contact-btn[href^="mailto:"] {
+    max-width: 100% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  /* ---------- TOURNAMENT LIST ---------- */
+  .region-tournaments-grid,
+  .tournament-grid,
+  .tournaments-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .region-tournament-card,
+  .tournament-list-card {
+    display: grid !important;
+    grid-template-columns: 64px minmax(0, 1fr) !important;
+    gap: 10px !important;
+    align-items: center !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 78px !important;
+    padding: 10px 12px !important;
+    border-radius: 14px !important;
+    box-sizing: border-box !important;
+  }
+  .region-tournament-thumb,
+  .tournament-thumb {
+    width: 64px !important;
+    height: 64px !important;
+    min-width: 64px !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+  }
+  .region-tournament-thumb img,
+  .tournament-thumb img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+  .region-tournament-content,
+  .tournament-card-content {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+  .region-tournament-title,
+  .tournament-card-title {
+    margin: 0 !important;
+    font-size: 16px !important;
+    line-height: 1.2 !important;
+    font-weight: 700 !important;
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+    word-break: normal !important;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 2 !important;
+    overflow: hidden !important;
+  }
+  .region-tournament-meta {
+    margin-top: 3px !important;
+    font-size: 12px !important;
+    line-height: 1.25 !important;
+  }
+  /* ---------- RECORDS ---------- */
+  .region-records-grid,
+  .records-grid,
+  .record-list,
+  .athlete-records-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .record-card,
+  .region-record-card,
+  .unified-record-card {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 12px 14px !important;
+    border-radius: 16px !important;
+    box-sizing: border-box !important;
+  }
+  .urc-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+    margin-bottom: 4px !important;
+  }
+  .urc-disc-wrap {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    min-width: 0 !important;
+  }
+  .record-title,
+  .urc-discipline {
+    margin: 0 !important;
+    max-width: 100% !important;
+    font-size: 17px !important;
+    line-height: 1.2 !important;
+    font-weight: 700 !important;
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+    word-break: normal !important;
+  }
+  .urc-result-row {
+    margin: 4px 0 6px !important;
+    display: flex !important;
+    align-items: baseline !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+  }
+  .record-value,
+  .urc-value {
+    margin: 0 !important;
+    font-size: 30px !important;
+    line-height: 1 !important;
+    font-weight: 800 !important;
+  }
+  .record-status,
+  .urc-status-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    max-width: 100% !important;
+    min-height: 28px !important;
+    padding: 4px 8px !important;
+    border-radius: 999px !important;
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+  }
+  .urc-athlete-section {
+    margin-top: 6px !important;
+    gap: 2px !important;
+  }
+  .record-athlete,
+  .urc-athlete-name {
+    margin: 0 !important;
+    font-size: 15px !important;
+    line-height: 1.2 !important;
+    font-weight: 700 !important;
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+  }
+  .urc-meta-line {
+    font-size: 12px !important;
+    line-height: 1.3 !important;
+    color: #94a3b8 !important;
+    margin-top: 2px !important;
+  }
+  .record-chips,
+  .urc-chips-row {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+    margin-top: 4px !important;
+  }
+  .record-chip,
+  .urc-chip {
+    min-height: 26px !important;
+    padding: 0 8px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    border-radius: 999px !important;
+    font-size: 11px !important;
+  }
+  .record-tournament,
+  .urc-event-row,
+  .urc-event-btn {
+    margin-top: 6px !important;
+    padding: 5px 8px !important;
+    min-height: 0 !important;
+    font-size: 13px !important;
+    line-height: 1.25 !important;
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+    box-sizing: border-box !important;
+    max-width: 100% !important;
+    border-radius: 8px !important;
+  }
+  .record-more,
+  .urc-footer {
+    margin-top: 8px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+  }
+  /* ---------- REGION LEADERS ---------- */
+  .region-leaders-grid,
+  .leaders-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .region-leader-card {
+    display: grid !important;
+    grid-template-columns: 46px minmax(0, 1fr) auto !important;
+    gap: 10px !important;
+    align-items: center !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 72px !important;
+    padding: 10px 12px !important;
+    border-radius: 14px !important;
+    box-sizing: border-box !important;
+  }
+  .region-leader-avatar {
+    width: 46px !important;
+    height: 46px !important;
+    min-width: 46px !important;
+    border-radius: 50% !important;
+  }
+  .region-leader-main,
+  .region-leader-info {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+  .region-leader-name {
+    font-size: 15px !important;
+    line-height: 1.2 !important;
+    font-weight: 700 !important;
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 2 !important;
+    overflow: hidden !important;
+  }
+  .region-leader-meta {
+    margin-top: 2px !important;
+    font-size: 12px !important;
+    line-height: 1.25 !important;
+  }
+  .region-leader-badges {
+    display: flex !important;
+    gap: 4px !important;
+    flex-wrap: wrap !important;
+    justify-content: flex-end !important;
+  }
+  /* ---------- ALL ATHLETES ---------- */
+  .region-athletes-grid,
+  .athletes-grid,
+  .athlete-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .region-athlete-card,
+  .athlete-list-card {
+    display: grid !important;
+    grid-template-columns: 46px minmax(0, 1fr) auto !important;
+    gap: 10px !important;
+    align-items: center !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 72px !important;
+    padding: 10px 12px !important;
+    border-radius: 14px !important;
+    box-sizing: border-box !important;
+  }
+  .athlete-avatar {
+    width: 46px !important;
+    height: 46px !important;
+    min-width: 46px !important;
+    border-radius: 50% !important;
+  }
+  .athlete-list-main {
+    min-width: 0 !important;
+  }
+  .athlete-list-name {
+    font-size: 15px !important;
+    line-height: 1.2 !important;
+    font-weight: 700 !important;
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 2 !important;
+    overflow: hidden !important;
+  }
+  .athlete-list-meta {
+    margin-top: 2px !important;
+    font-size: 12px !important;
+    line-height: 1.2 !important;
+  }
+  .athlete-starts-badge {
+    flex: 0 0 auto !important;
+    min-height: 26px !important;
+    padding: 2px 8px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    border-radius: 8px !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+  }
+  /* ---------- SEARCH ---------- */
+  .region-athlete-search,
+  .athlete-search,
+  .region-search {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 48px !important;
+    padding: 0 12px !important;
+    font-size: 15px !important;
+    border-radius: 14px !important;
+    box-sizing: border-box !important;
+  }
+  /* ---------- SECTION HEADERS ---------- */
+  .section-title,
+  .region-section-title,
+  .region-section-head h3,
+  .section-head h2 {
+    max-width: 100% !important;
+    font-size: 20px !important;
+    line-height: 1.1 !important;
+    margin-bottom: 8px !important;
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+  }
+  /* ---------- MAP ---------- */
+  .map-card,
+  .map-viewport,
+  .region-map-section {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+  .map-card,
+  .map-viewport {
+    overflow: hidden !important;
+  }
+  .map-viewport {
+    height: clamp(240px, 68vw, 320px) !important;
+  }
+  .map-viewport svg {
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+  }
+  /* ---------- FIXED BOTTOM NAV & SCROLL TOP ---------- */
+  :root {
+    --bottom-nav-height: 64px !important;
+  }
+  .app-bottom-nav,
+  .bottom-nav {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: calc(64px + env(safe-area-inset-bottom, 0px)) !important;
+    z-index: 1000 !important;
+    padding: 4px 6px env(safe-area-inset-bottom, 0px) !important;
+    background: rgba(7, 17, 31, .96) !important;
+    backdrop-filter: blur(18px) !important;
+    -webkit-backdrop-filter: blur(18px) !important;
+    transform: none !important;
+  }
+  .bottom-nav button {
+    gap: 2px !important;
+  }
+  .bottom-nav span {
+    font-size: 20px !important;
+    height: 22px !important;
+  }
+  .bottom-nav small {
+    font-size: 10px !important;
+  }
+  .scroll-top-btn {
+    width: 42px !important;
+    height: 42px !important;
+    bottom: calc(72px + env(safe-area-inset-bottom, 0px)) !important;
+    right: max(14px, env(safe-area-inset-right, 0px)) !important;
+  }
+  .app-content,
+  main,
+  .screen {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px) + 20px) !important;
+  }
+  /* ---------- NO ACCIDENTAL HORIZONTAL SCROLL ---------- */
+  .region-page *,
+  .region-page-container *,
+  .athlete-page *,
+  .record-page *,
+  .tournament-page * {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* =========================================================
+   VERY NARROW SCREENS (<= 430px)
+   ========================================================= */
+@media (max-width: 430px) {
+  .app-content {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+  .region-hero,
+  .region-hero-card {
+    grid-template-columns: 50px minmax(0, 1fr) !important;
+    gap: 10px !important;
+    padding: 10px 12px !important;
+  }
+  .region-hero-logo,
+  .region-hero-emblem,
+  .region-emblem {
+    width: 50px !important;
+    height: 50px !important;
+    min-width: 50px !important;
+  }
+  .region-title,
+  .region-hero-name {
+    font-size: 22px !important;
+  }
+  .region-federation-title {
+    font-size: 17px !important;
+  }
+  .region-tournament-card {
+    grid-template-columns: 58px minmax(0, 1fr) !important;
+    padding: 8px 10px !important;
+  }
+  .region-tournament-thumb {
+    width: 58px !important;
+    height: 58px !important;
+    min-width: 58px !important;
+  }
+  .region-leader-card {
+    grid-template-columns: 42px minmax(0, 1fr) !important;
+    padding: 8px 10px !important;
+  }
+  .region-leader-avatar {
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+  }
+  .region-leader-badges {
+    grid-column: 2 !important;
+    justify-self: start !important;
+    margin-top: 4px !important;
+  }
+  .region-athlete-card,
+  .athlete-list-card {
+    grid-template-columns: 42px minmax(0, 1fr) auto !important;
+    padding: 8px 10px !important;
+  }
+  .athlete-avatar {
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+  }
+  .section-title,
+  .region-section-title,
+  .region-section-head h3 {
+    font-size: 19px !important;
+  }
+}
+
+/* ===================================================
+   v92: Единый ResultRow и нормализация участников
+   =================================================== */
+
+.result-type-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 7px;
+  border-radius: 6px;
+  width: fit-content;
+  margin-bottom: 3px;
+  line-height: 1.2;
+}
+
+.result-type-badge.type-individual {
+  background: rgba(59, 130, 246, 0.15);
+  color: #93c5fd;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.result-type-badge.type-regional-team {
+  background: rgba(16, 185, 129, 0.15);
+  color: #6ee7b7;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.result-type-badge.type-team {
+  background: rgba(168, 85, 247, 0.15);
+  color: #d8b4fe;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.region-name-btn,
+.athlete-name-btn {
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  text-align: left;
+  cursor: pointer;
+  color: #f8fafc;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 100%;
+}
+
+.region-name-btn:hover b,
+.athlete-name-btn:hover b {
+  text-decoration: underline;
+}
+
+.region-name-btn b,
+.athlete-name-btn b,
+.team-title-text,
+.region-title-text {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.25;
+}
+
+.region-profile-btn,
+.athlete-profile-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.region-profile-btn {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+
+.region-profile-btn:hover {
+  background: rgba(16, 185, 129, 0.25);
+  border-color: rgba(16, 185, 129, 0.5);
+}
+
+.athlete-profile-btn {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.35);
+}
+
+.athlete-profile-btn:hover {
+  background: rgba(59, 130, 246, 0.25);
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+.result-team-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #cbd5e1;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.result-type-note {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.filter-disabled-team {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.filter-note-inline {
+  font-size: 10px;
+  color: #94a3b8;
+  font-weight: 400;
+  margin-left: 4px;
+}
+
+/* =========================================================
+   v95 — Mobile XS Density Mode (@media max-width: 768px)
+   ========================================================= */
+@media (max-width: 768px) {
+  :root {
+    --mobile-page-x: 12px;
+    --mobile-card-pad: 10px;
+    --mobile-gap: 7px;
+    --mobile-section-gap: 14px;
+    --m-page-x: 12px;
+    --m-card-pad: 10px;
+    --m-card-gap: 7px;
+    --m-section-gap: 14px;
+    --m-bottom-nav-h: 58px;
+  }
+
+  /* Общие мобильные отступы и плотность */
+  .app-content,
+  main,
+  #app {
+    padding-left: var(--mobile-page-x, 12px) !important;
+    padding-right: var(--mobile-page-x, 12px) !important;
+  }
+
+  .app-card,
+  .region-card,
+  .record-card,
+  .leader-card,
+  .athlete-card,
+  .tournament-card,
+  .region-hero-card,
+  .region-federation-card,
+  .region-tournament-card,
+  .region-leader-card,
+  .region-athlete-card,
+  .athlete-tourn-card,
+  .history-card,
+  .athlete-hero-card,
+  .unified-record-card,
+  .event-card,
+  .news-card {
+    padding: var(--mobile-card-pad, 10px) !important;
+  }
+
+  .cards-list,
+  .records-grid,
+  .leaders-grid,
+  .athletes-grid,
+  .card-list,
+  .news-list,
+  .record-list,
+  .region-stats-grid,
+  .athlete-stats-grid,
+  .region-tournaments-grid,
+  .region-records-grid,
+  .region-leaders-grid,
+  .region-athletes-grid {
+    gap: var(--mobile-gap, 7px) !important;
+  }
+
+  .section,
+  .region-section-block,
+  .athlete-section,
+  .detail-section {
+    margin-top: var(--mobile-section-gap, 14px) !important;
+  }
+
+  /* 1. Заголовок региона */
+  .region-hero-title,
+  .region-title,
+  .region-hero-name {
+    font-size: clamp(21px, 5.6vw, 27px) !important;
+    line-height: 1.02 !important;
+    margin: 3px 0 !important;
+  }
+  .region-hero-kicker,
+  .region-meta,
+  .region-district-tag {
+    font-size: 11px !important;
+  }
+  .region-hero-center,
+  .region-center,
+  .region-hero-capital {
+    font-size: 12px !important;
+  }
+
+  /* 2. Сам hero региона */
+  .region-hero,
+  .region-hero-card {
+    padding: 11px 12px !important;
+    gap: 9px !important;
+  }
+  .region-hero-logo,
+  .region-hero-emblem,
+  .region-emblem {
+    width: 52px !important;
+    height: 52px !important;
+    min-width: 52px !important;
+    max-width: 52px !important;
+  }
+
+  /* 3. Статистика региона */
+  .region-stat-card {
+    min-height: 66px !important;
+    padding: 9px 10px !important;
+  }
+  .region-stat-value,
+  .region-stat-card b {
+    font-size: 22px !important;
+    line-height: 1.05 !important;
+  }
+  .region-stat-label,
+  .region-stat-card span {
+    font-size: 11px !important;
+  }
+
+  /* 4. Федерация */
+  .region-federation-card,
+  .federation-card {
+    padding: 12px !important;
+  }
+  .region-federation-title,
+  .federation-title {
+    font-size: 16px !important;
+    line-height: 1.15 !important;
+    margin: 4px 0 !important;
+  }
+  .region-federation-details p,
+  .federation-meta {
+    font-size: 12px !important;
+    line-height: 1.3 !important;
+  }
+  .region-federation-contacts .region-contact-btn,
+  .region-federation-contacts .contact-chip,
+  .federation-actions .btn,
+  .federation-actions .chip {
+    min-height: 34px !important;
+    height: 34px !important;
+    padding: 0 10px !important;
+    font-size: 12px !important;
+  }
+
+  /* 5. Заголовки секций */
+  .section-title,
+  .region-section-title,
+  .region-section-head h3,
+  .section-head h2,
+  .athlete-section-title,
+  .athlete-section-title span:first-child {
+    font-size: 19px !important;
+    line-height: 1.05 !important;
+    margin-bottom: 8px !important;
+  }
+  .section-head,
+  .region-section-head {
+    margin-bottom: 8px !important;
+    padding-bottom: 4px !important;
+  }
+
+  /* 6. Турнирные карточки */
+  .region-tournament-card,
+  .tournament-list-card,
+  .tournament-card,
+  .event-card {
+    padding: 10px !important;
+    gap: 9px !important;
+  }
+  .region-tournament-thumb,
+  .tournament-list-thumb,
+  .tournament-thumb,
+  .event-card img {
+    width: 56px !important;
+    height: 56px !important;
+    min-width: 56px !important;
+    max-width: 56px !important;
+    border-radius: 8px !important;
+  }
+  .rtc-city,
+  .tournament-city {
+    font-size: 11px !important;
+  }
+  .rtc-title,
+  .region-tournament-title,
+  .tournament-title,
+  .event-card b {
+    font-size: 15px !important;
+    line-height: 1.08 !important;
+    margin: 3px 0 !important;
+  }
+  .rtc-link,
+  .tournament-link,
+  .event-card small {
+    font-size: 12px !important;
+    margin-top: 6px !important;
+  }
+
+  /* 7. Карточки рекордов */
+  .record-card,
+  .unified-record-card {
+    padding: 12px !important;
+    border-radius: 18px !important;
+    gap: 8px !important;
+  }
+  .urc-discipline,
+  .record-title {
+    font-size: 17px !important;
+    line-height: 1.08 !important;
+  }
+  .urc-value,
+  .record-value {
+    font-size: 28px !important;
+    line-height: 1.05 !important;
+  }
+  .urc-athlete-name,
+  .record-athlete {
+    font-size: 15px !important;
+  }
+  .urc-meta-line,
+  .record-meta {
+    font-size: 12px !important;
+    line-height: 1.25 !important;
+  }
+  .urc-status-badge,
+  .record-badge {
+    min-height: 28px !important;
+    height: 28px !important;
+    font-size: 11px !important;
+    padding: 4px 9px !important;
+  }
+  .urc-event-row,
+  .urc-event-btn,
+  .rrc-event-btn,
+  .record-tournament {
+    padding: 7px 9px !important;
+    font-size: 12px !important;
+    margin-top: 6px !important;
+  }
+  .urc-footer,
+  .urc-more-link,
+  .record-more {
+    font-size: 12px !important;
+    margin-top: 6px !important;
+  }
+
+  /* 8. Лидеры региона */
+  .region-leader-card,
+  .leader-card {
+    min-height: 68px !important;
+    padding: 8px 10px !important;
+    grid-template-columns: 44px minmax(0, 1fr) auto !important;
+    gap: 8px !important;
+  }
+  .region-leader-avatar,
+  .region-leader-avatar img,
+  .region-leader-card .athlete-avatar,
+  .region-leader-card .athlete-avatar-monogram,
+  .leader-avatar {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    max-width: 44px !important;
+  }
+  .region-leader-name,
+  .leader-name {
+    font-size: 14px !important;
+    line-height: 1.15 !important;
+  }
+  .region-leader-info span,
+  .leader-meta {
+    font-size: 11px !important;
+  }
+  .reg-badge-win,
+  .reg-badge-rec,
+  .leader-badge {
+    min-height: 24px !important;
+    height: 24px !important;
+    padding: 2px 7px !important;
+    font-size: 10px !important;
+  }
+
+  /* 9. Карточка атлета */
+  .athlete-hero,
+  .athlete-hero-card {
+    padding: 12px !important;
+    gap: 9px !important;
+  }
+  .athlete-hero-avatar-wrap,
+  .athlete-hero-photo,
+  .athlete-hero-avatar-placeholder,
+  .athlete-avatar {
+    width: 58px !important;
+    height: 58px !important;
+    min-width: 58px !important;
+    max-width: 58px !important;
+  }
+  .athlete-hero-name,
+  .athlete-name {
+    font-size: 21px !important;
+    line-height: 1.1 !important;
+  }
+  .athlete-hero-meta,
+  .athlete-location {
+    font-size: 12px !important;
+  }
+  .athlete-hero-btn,
+  .athlete-actions .btn {
+    min-height: 36px !important;
+    height: 36px !important;
+    font-size: 12px !important;
+    padding: 0 10px !important;
+  }
+  .athlete-metric-card,
+  .athlete-stat-card {
+    min-height: 62px !important;
+    padding: 8px 10px !important;
+  }
+  .athlete-metric-val,
+  .athlete-stat-value {
+    font-size: 21px !important;
+    line-height: 1.05 !important;
+  }
+  .athlete-metric-lbl,
+  .athlete-stat-label {
+    font-size: 11px !important;
+  }
+
+  /* 10. История турниров */
+  .athlete-tourn-card,
+  .history-card {
+    padding: 11px !important;
+  }
+  .athlete-tourn-title,
+  .history-title {
+    font-size: 16px !important;
+    line-height: 1.1 !important;
+  }
+  .athlete-tourn-head .result-place-badge,
+  .history-place-badge,
+  .history-head .result-place-badge {
+    min-height: 30px !important;
+    height: 30px !important;
+    font-size: 11px !important;
+    padding: 0 8px !important;
+  }
+  .athlete-tourn-sub,
+  .history-meta {
+    font-size: 12px !important;
+  }
+  .athlete-tourn-result-box,
+  .history-result-box {
+    min-height: 38px !important;
+    padding: 6px 10px !important;
+  }
+  .history-result-value {
+    font-size: 21px !important;
+    line-height: 1.05 !important;
+  }
+  .athlete-protocol-btn,
+  .history-protocol-btn {
+    min-height: 34px !important;
+    height: 34px !important;
+    font-size: 12px !important;
+    padding: 0 10px !important;
+  }
+
+  /* 11. Bottom nav */
+  .app-bottom-nav,
+  .bottom-nav {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: calc(58px + env(safe-area-inset-bottom, 0px)) !important;
+    min-height: 58px !important;
+    padding: 3px 6px env(safe-area-inset-bottom, 0px) !important;
+    z-index: 1000 !important;
+  }
+  .app-bottom-nav .label,
+  .bottom-nav small {
+    font-size: 9px !important;
+  }
+  .app-bottom-nav svg,
+  .bottom-nav span svg,
+  .bottom-nav span {
+    width: 20px !important;
+    height: 20px !important;
+    font-size: 18px !important;
+  }
+
+  main,
+  #app,
+  .screen,
+  .app-content {
+    padding-bottom: calc(58px + env(safe-area-inset-bottom, 0px) + 12px) !important;
+  }
+
+  .scroll-top-btn {
+    width: 44px !important;
+    height: 44px !important;
+    right: 12px !important;
+    bottom: calc(58px + env(safe-area-inset-bottom, 0px) + 10px) !important;
+    z-index: 1001 !important;
+  }
+
+  /* ==========================================================
+     v96 — TYPOGRAPHY, CARD COMPACTNESS & WORD BREAKS
+     ========================================================== */
+
+  /* 1. Global word wrapping and balanced text for all titles */
+  .card-title,
+  .section-title,
+  .record-title,
+  .region-title,
+  .rtc-title,
+  .tournament-card-title,
+  .region-tournament-title,
+  .urc-discipline,
+  .region-hero-title,
+  .region-hero-name,
+  .region-section-head h3,
+  .federation-title,
+  .region-federation-title,
+  .event-card h3,
+  .event-card b,
+  .history-card b {
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+    text-wrap: balance !important;
+    white-space: normal !important;
+  }
+
+  /* 2. Tournament card compactness & grid width on mobile */
+  .region-tournament-card,
+  .tournament-card,
+  .event-card,
+  .tournament-list-card {
+    padding: 12px !important;
+    border-radius: 18px !important;
+    gap: 10px !important;
+    display: grid !important;
+    grid-template-columns: 54px minmax(0, 1fr) !important;
+    align-items: center !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .region-tournament-thumb,
+  .tournament-thumb,
+  .tournament-list-thumb,
+  .event-card img {
+    width: 54px !important;
+    height: 54px !important;
+    min-width: 54px !important;
+    max-width: 54px !important;
+    border-radius: 12px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .region-tournament-content,
+  .region-tournament-body,
+  .tournament-card-content,
+  .event-card-content,
+  .event-card > div {
+    min-width: 0 !important;
+    width: 100% !important;
+    flex: 1 1 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 3. Tournament titles: clean compact size, 14px */
+  .rtc-title,
+  .region-tournament-title,
+  .tournament-card-title,
+  .tournament-title,
+  .event-card b,
+  .event-card h3 {
+    font-size: 14px !important;
+    line-height: 1.22 !important;
+    margin: 2px 0 !important;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 3 !important;
+    overflow: hidden !important;
+    text-wrap: balance !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+    white-space: normal !important;
+  }
+
+  /* 4. Record cards: discipline 14px (clamp 3), value 24px */
+  .record-card,
+  .unified-record-card {
+    padding: 12px !important;
+    border-radius: 18px !important;
+    gap: 8px !important;
+  }
+
+  .urc-discipline,
+  .record-title {
+    font-size: 14px !important;
+    line-height: 1.22 !important;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 3 !important;
+    overflow: hidden !important;
+    text-wrap: balance !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+    white-space: normal !important;
+  }
+
+  .urc-value,
+  .record-value {
+    font-size: 24px !important;
+    line-height: 1.05 !important;
+  }
+
+  /* 5. Mobile section titles: 20px */
+  .section-title,
+  .region-section-title,
+  .region-section-head h3,
+  .section-head h2,
+  .athlete-section-title,
+  .athlete-section-title span:first-child,
+  .detail-section h2 {
+    font-size: 20px !important;
+    line-height: 1.08 !important;
+    margin-bottom: 8px !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+    text-wrap: balance !important;
+  }
+
+  .event-card-head-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 6px !important;
+    width: 100% !important;
+  }
+
+  .event-card .event-status {
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    font-size: 9px !important;
+    font-weight: 800 !important;
+    padding: 2px 7px !important;
+    line-height: 1.25 !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    border-radius: 6px !important;
+  }
+}
+
+/* Event Card clean layout: no badge overlap */
+.event-card-head-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  width: 100%;
+}
+
+.event-card .event-status {
+  position: static;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 7px;
+  line-height: 1.25;
+  white-space: nowrap;
+  flex-shrink: 0;
+  border-radius: 6px;
+}
+
+.event-mat-card.reg {
+  border-color: rgba(249, 115, 22, 0.4) !important;
+  background: rgba(249, 115, 22, 0.08) !important;
+}
+
+.event-mat-card.reg .mat-icon {
+  background: rgba(249, 115, 22, 0.16) !important;
+  color: #fb923c !important;
+}
+
+.event-mat-card.reg > b {
+  color: #fb923c !important;
+}
+
+/* ==========================================================================
+   ATHLETE SOCIAL PROFILE & REGIONAL HIERARCHY
+   ========================================================================== */
+
+/* 1. Athlete Hierarchy Bar */
+.athlete-hierarchy-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.athlete-hierarchy-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.athlete-hierarchy-chain {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ah-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.ah-step.clickable {
+  cursor: pointer;
+  background: rgba(56, 189, 248, 0.04);
+  border-color: rgba(56, 189, 248, 0.25);
+}
+
+.ah-step.clickable:hover {
+  background: rgba(56, 189, 248, 0.1);
+  border-color: rgba(56, 189, 248, 0.4);
+  transform: translateY(-1px);
+}
+
+.ah-badge {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 4px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.ah-badge.fed {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.ah-badge.district {
+  background: rgba(168, 85, 247, 0.15);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.ah-badge.region {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+.ah-badge.team {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.ah-badge.rank {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.ah-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.ah-sub {
+  font-size: 10.5px;
+  color: #64748b;
+  margin-bottom: 2px;
+}
+
+.ah-info b {
+  font-size: 13.5px;
+  color: #f8fafc;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ah-link {
+  font-size: 11px;
+  color: #38bdf8;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.ah-sep {
+  text-align: center;
+  font-size: 11px;
+  color: #475569;
+  line-height: 1;
+  margin: -2px 0;
+}
+
+/* 2. Athlete Hero Region Link button */
+.athlete-hero-region-badge-btn {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 9999px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+}
+
+.athlete-hero-region-badge-btn:hover {
+  background: rgba(56, 189, 248, 0.22);
+}
+
+/* 3. Athlete Programs Section */
+.athlete-programs-section {
+  margin: 18px 0;
+}
+
+.athlete-programs-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+@media (min-width: 680px) {
+  .athlete-programs-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.athlete-prog-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.athlete-prog-card.active-flow {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.08) 0%, rgba(168, 85, 247, 0.08) 100%);
+  border-color: rgba(56, 189, 248, 0.35);
+}
+
+.apc-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.apc-badge {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.apc-badge.allround {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.apc-badge.herogto {
+  background: rgba(56, 189, 248, 0.18);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+.apc-badge.records {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.apc-icon {
+  font-size: 18px;
+}
+
+.apc-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.apc-desc {
+  margin: 0;
+  font-size: 12.5px;
+  color: #94a3b8;
+  line-height: 1.45;
+}
+
+.apc-stat {
+  font-size: 11.5px;
+  color: #cbd5e1;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.apc-btn {
+  height: 38px;
+  padding: 0 14px;
+  font-size: 12.5px;
+  font-weight: 700;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: #f8fafc;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.apc-btn.primary {
+  background: linear-gradient(135deg, #0284c7, #2563eb);
+  border-color: #0284c7;
+  color: #fff;
+}
+
+.apc-btn:hover {
+  transform: translateY(-1px);
+}
+
+/* 4. Regional Community & Social Network */
+.athlete-region-community {
+  margin: 18px 0;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.athlete-region-tag-btn {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.athlete-region-stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 12px 0 16px;
+}
+
+.ars-item {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 10px 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ars-val {
+  font-size: 18px;
+  font-weight: 800;
+  color: #38bdf8;
+}
+
+.ars-lbl {
+  font-size: 10px;
+  color: #94a3b8;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.teammates-sub-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.teammates-sub-head span {
+  font-size: 13px;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.teammates-sub-head small {
+  font-size: 11px;
+  color: #64748b;
+}
+
+.teammates-scroll-row {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.teammate-mini-card {
+  flex: 0 0 108px;
+  scroll-snap-align: start;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.teammate-mini-card:hover {
+  background: rgba(56, 189, 248, 0.08);
+  border-color: rgba(56, 189, 248, 0.3);
+  transform: translateY(-2px);
+}
+
+.tm-avatar-wrap {
+  width: 44px;
+  height: 44px;
+  margin-bottom: 6px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.tm-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tm-avatar-monogram {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 14px;
+  color: #fff;
+}
+
+.tm-name {
+  font-size: 11.5px;
+  line-height: 1.25;
+  color: #f8fafc;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 28px;
+}
+
+.tm-meta {
+  font-size: 10px;
+  color: #38bdf8;
+  margin-top: 4px;
+  font-weight: 600;
+}
+
+.teammate-mini-card.tm-more {
+  justify-content: center;
+  border-style: dashed;
+  border-color: rgba(56, 189, 248, 0.35);
+  background: rgba(56, 189, 248, 0.04);
+}
+
+.tm-more-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  font-weight: 800;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+
+.teammate-mini-card.tm-more b {
+  font-size: 11px;
+  color: #38bdf8;
+}
+
+.teammate-mini-card.tm-more span {
+  font-size: 9.5px;
+  color: #94a3b8;
+}
+
+/* 5. Tournament Formats & Programs Badges */
+.event-head-tags {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.event-fmt-badge {
+  font-size: 9px;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+
+.event-fmt-badge.hybrid {
+  background: rgba(168, 85, 247, 0.18);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.35);
+}
+
+.event-fmt-badge.online {
+  background: rgba(56, 189, 248, 0.18);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+.event-fmt-badge.offline {
+  background: rgba(100, 116, 139, 0.2);
+  color: #cbd5e1;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+.event-card-programs {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin: 4px 0;
+}
+
+.event-prog-chip {
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+}
+
+.event-prog-chip.herogto {
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.08);
+  border-color: rgba(56, 189, 248, 0.25);
+}
+
+.event-prog-chip.records {
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.08);
+  border-color: rgba(245, 158, 11, 0.25);
+}
+
+.event-prog-chip.allround {
+  color: #a78bfa;
+  background: rgba(167, 139, 250, 0.08);
+  border-color: rgba(167, 139, 250, 0.25);
+}
+
+/* Event Detail Format Pill */
+.event-format-pill {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.event-format-pill.hybrid {
+  background: rgba(168, 85, 247, 0.2);
+  color: #d8b4fe;
+  border: 1px solid rgba(168, 85, 247, 0.4);
+}
+
+.event-format-pill.online {
+  background: rgba(56, 189, 248, 0.2);
+  color: #7dd3fc;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+}
+
+.event-format-pill.offline {
+  background: rgba(148, 163, 184, 0.2);
+  color: #e2e8f0;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+/* Event Programs Showcase Section */
+.event-programs-showcase {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 20px;
+}
+
+.eps-header small {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #38bdf8;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.eps-header h2 {
+  font-size: 16px;
+  font-weight: 800;
+  color: #f8fafc;
+  margin: 4px 0 6px;
+}
+
+.eps-header p {
+  font-size: 13px;
+  color: #94a3b8;
+  margin: 0 0 14px;
+  line-height: 1.45;
+}
+
+.eps-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.eps-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.eps-card.herogto {
+  background: rgba(56, 189, 248, 0.04);
+  border-color: rgba(56, 189, 248, 0.25);
+}
+
+.eps-card.records {
+  background: rgba(245, 158, 11, 0.04);
+  border-color: rgba(245, 158, 11, 0.25);
+}
+
+.eps-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.eps-badge {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 5px;
+  text-transform: uppercase;
+}
+
+.eps-badge.allround {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+}
+
+.eps-badge.herogto {
+  background: rgba(56, 189, 248, 0.2);
+  color: #38bdf8;
+}
+
+.eps-badge.records {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+}
+
+.eps-icon {
+  font-size: 18px;
+}
+
+.eps-card h3 {
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.eps-card p {
+  margin: 0 0 8px;
+  font-size: 12.5px;
+  color: #94a3b8;
+  line-height: 1.45;
+}
+
+.eps-tag {
+  font-size: 11px;
+  color: #cbd5e1;
+  margin-bottom: 8px;
+}
+
+.eps-btn {
+  height: 38px;
+  padding: 0 16px;
+  font-size: 12.5px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #0284c7, #2563eb);
+  color: #fff;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.eps-btn.secondary {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #f8fafc;
+}
+
+/* --- v166 Interactive Tournament Card Actions & Touch Targets (44px min) --- */
+.event-card {
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 160px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  padding: 0 !important;
+}
+
+.event-card-main {
+  display: grid;
+  grid-template-columns: 105px 1fr;
+  cursor: pointer;
+  width: 100%;
+  flex: 1;
+  text-align: left;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  appearance: none;
+}
+
+.event-card-main:focus-visible {
+  outline: 2px solid #38bdf8;
+  outline-offset: -2px;
+}
+
+.event-card-main img {
+  width: 100%;
+  height: 100%;
+  min-height: 130px;
+  object-fit: cover;
+  background: #17263a;
+}
+
+.event-card-content {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.event-card-btn-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 10px 14px 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.ec-btn {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 14px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: #f1f5f9;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.ec-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.ec-btn:active {
+  transform: scale(0.96);
+}
+
+.ec-btn:focus-visible {
+  outline: 2px solid #38bdf8;
+  outline-offset: 2px;
+}
+
+.ec-btn-reg {
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.25), rgba(234, 88, 12, 0.35));
+  border-color: rgba(249, 115, 22, 0.6);
+  color: #ffedd5;
+}
+
+.ec-btn-reg:hover {
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.38), rgba(234, 88, 12, 0.48));
+  border-color: rgba(249, 115, 22, 0.85);
+}
+
+.ec-btn-results {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.18), rgba(37, 99, 235, 0.26));
+  border-color: rgba(56, 189, 248, 0.45);
+  color: #e0f2fe;
+}
+
+.ec-btn-results:hover {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.3), rgba(37, 99, 235, 0.38));
+  border-color: rgba(56, 189, 248, 0.7);
+}
+
+.ec-btn-photos {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.18), rgba(147, 51, 234, 0.26));
+  border-color: rgba(168, 85, 247, 0.45);
+  color: #f3e8ff;
+}
+
+.ec-btn-photos:hover {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(147, 51, 234, 0.38));
+  border-color: rgba(168, 85, 247, 0.7);
+}
+
+.ec-btn-videos {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.18), rgba(220, 38, 38, 0.26));
+  border-color: rgba(239, 68, 68, 0.45);
+  color: #fee2e2;
+}
+
+.ec-btn-videos:hover {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.3), rgba(220, 38, 38, 0.38));
+  border-color: rgba(239, 68, 68, 0.7);
+}
+
+.ec-btn-overview {
+  background: rgba(255, 255, 255, 0.04);
+  color: #94a3b8;
+  margin-left: auto;
+}
+
+@media(min-width: 1024px) {
+  .event-card {
+    min-height: 420px;
+    border-radius: 22px;
+  }
+  .event-card-main {
+    display: flex;
+    flex-direction: column;
+  }
+  .event-card-main img {
+    height: 225px;
+  }
+  .event-card:first-child .event-card-main {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+  }
+  .event-card:first-child .event-card-main img {
+    height: 100%;
+  }
+}
+
+/* Active filter chips bar & reset */
+.active-filters-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 8px 12px;
+  margin-top: 8px;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 12px;
+}
+
+.active-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.active-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #e0f2fe;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.active-chip:hover {
+  background: rgba(56, 189, 248, 0.25);
+  border-color: rgba(56, 189, 248, 0.6);
+}
+
+.active-chip-remove {
+  font-size: 13px;
+  font-weight: 700;
+  color: #94a3b8;
+  margin-left: 2px;
+}
+
+.active-chip:hover .active-chip-remove {
+  color: #f87171;
+}
+
+.reset-filters-btn {
+  background: transparent;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #f87171;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.reset-filters-btn:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: #ef4444;
+}
+
+/* Media sync indicator */
+.media-sync-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #94a3b8;
+  margin-bottom: 12px;
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+}
+
+.media-sync-indicator svg {
+  color: #38bdf8;
+  flex-shrink: 0;
+}
+
+/* Zero layout shift for media thumbnails */
+.media-thumb-wrap {
+  position: relative !important;
+  width: 130px !important;
+  height: 80px !important;
+  aspect-ratio: 16 / 9 !important;
+  min-width: 130px !important;
+  max-width: 130px !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  background: #17263a !important;
+  flex-shrink: 0 !important;
+}
+
+.media-thumb-wrap img, .media-card img {
+  width: 100% !important;
+  height: 100% !important;
+  aspect-ratio: 16 / 9 !important;
+  object-fit: cover !important;
+  display: block !important;
+  border-radius: 12px !important;
+}

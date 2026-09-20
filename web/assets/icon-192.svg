@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#121826" />
+      <stop offset="100%" stop-color="#0A0E17" />
+    </linearGradient>
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#008BE2" />
+      <stop offset="100%" stop-color="#005B9E" />
+    </linearGradient>
+    <linearGradient id="redGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF3838" />
+      <stop offset="100%" stop-color="#D9141B" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FCD34D" />
+      <stop offset="100%" stop-color="#F59E0B" />
+    </linearGradient>
+  </defs>
+
+  <rect width="192" height="192" rx="42" fill="url(#bgGrad)" stroke="#1E283D" stroke-width="4"/>
+  
+  <g transform="translate(46, 22)">
+    <!-- Tricolor Shield -->
+    <path d="M50 0 L88 20 L82 82 L50 106 L18 82 L12 20 Z" fill="#0E131E" stroke="#0078BF" stroke-width="3"/>
+    <path d="M16 22 L50 6 L84 22 L82 42 L50 42 L18 42 Z" fill="#FFFFFF" opacity="0.95"/>
+    <path d="M18 42 L50 42 L82 42 L80 64 L50 64 L20 64 Z" fill="url(#blueGrad)"/>
+    <path d="M20 64 L50 64 L80 64 L76 79 L50 102 L24 79 Z" fill="url(#redGrad)"/>
+
+    <!-- Central Gold Star -->
+    <circle cx="50" cy="52" r="22" fill="#0A0E17" stroke="url(#goldGrad)" stroke-width="2"/>
+    <polygon points="50,38 54,48 65,49 57,56 60,67 50,61 40,67 43,56 35,49 46,48" fill="url(#goldGrad)"/>
+  </g>
+
+  <text x="96" y="162" font-family="'Inter', -apple-system, sans-serif" font-weight="900" font-size="16" fill="#FFFFFF" text-anchor="middle" letter-spacing="1.5">
+    МНОГОБОРЬЕ <tspan fill="#008BE2">ГТО</tspan>
+  </text>
+</svg>

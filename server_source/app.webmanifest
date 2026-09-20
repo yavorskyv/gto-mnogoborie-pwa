@@ -1,0 +1,17 @@
+{
+  "name": "Лидерборды — турниры и профиль",
+  "short_name": "Лидерборды",
+  "description": "Все турниры по функциональному многоборью, живое табло, расписание и профиль атлета.",
+  "lang": "ru",
+  "start_url": "/m/live.html",
+  "scope": "/m/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#07090d",
+  "theme_color": "#07090d",
+  "icons": [
+    { "src": "/uploads/pwa_icon_192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/uploads/pwa_icon_512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/uploads/pwa_icon_512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

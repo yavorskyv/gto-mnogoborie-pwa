@@ -1,0 +1,3778 @@
+/* ==========================================================================
+   МОДУЛЬ «ГЕРОЙ ГТО» (Hero GTO Mobile PWA Extension)
+   Федерация многоборья ГТО России · 2026
+   ========================================================================== */
+
+:root {
+  --hero-neon-red: #ef4444;
+  --hero-neon-blue: #38bdf8;
+  --hero-neon-gold: #f59e0b;
+  --hero-neon-green: #10b981;
+  --hero-card-bg: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.85));
+  --hero-card-border: rgba(56, 189, 248, 0.25);
+  --hero-glow: 0 0 25px rgba(56, 189, 248, 0.2);
+}
+
+/* Навигационная кнопка-бейдж в шапке */
+.desktop-main-nav button[data-go="hero"],
+.desktop-subnav button[data-go="hero"] {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(56, 189, 248, 0.15));
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 6px 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);
+  transition: all 0.2s ease;
+}
+
+.desktop-main-nav button[data-go="hero"]:hover {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.3), rgba(56, 189, 248, 0.3));
+  border-color: #ef4444;
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+}
+
+/* Контейнер экрана Герой ГТО */
+.hero-app-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 10px 16px 60px;
+}
+
+/* Верхняя карточка статуса экосистемы */
+.hero-header-banner {
+  background: linear-gradient(135deg, #0b1329 0%, #1e1b4b 50%, #172554 100%);
+  border: 1px solid rgba(129, 140, 248, 0.3);
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+.hero-header-banner::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.25) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-banner-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.hero-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  color: #fca5a5;
+}
+
+.hero-live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #86efac;
+  font-weight: 600;
+}
+
+.hero-live-dot {
+  width: 8px;
+  height: 8px;
+  background: #22c55e;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #22c55e;
+  animation: pulse-dot 1.8s infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.6; }
+}
+
+.hero-banner-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(20px, 3.5vw, 28px);
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 6px 0;
+}
+
+.hero-banner-subtitle {
+  color: #94a3b8;
+  font-size: 14px;
+  margin: 0;
+  max-width: 600px;
+  line-height: 1.5;
+}
+
+/* Семейный свитчер профилей (Взрослый / Дети) */
+.family-profile-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 12px 0 6px;
+  margin-bottom: 20px;
+  scrollbar-width: none;
+}
+.family-profile-bar::-webkit-scrollbar { display: none; }
+
+.family-profile-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.family-profile-chip:hover {
+  background: rgba(30, 41, 59, 0.9);
+  border-color: rgba(56, 189, 248, 0.4);
+  color: #fff;
+}
+
+.family-profile-chip.active {
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.35), rgba(30, 58, 138, 0.5));
+  border-color: #38bdf8;
+  color: #fff;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+}
+
+.family-profile-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #0284c7;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.family-profile-add {
+  border-style: dashed;
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+/* Табы функционала Hero GTO */
+.hero-tabs-rail {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.hero-tab-btn {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 12px;
+  padding: 12px 10px;
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.hero-tab-btn svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2.2;
+}
+
+.hero-tab-btn:hover {
+  background: rgba(30, 41, 59, 0.8);
+  color: #fff;
+}
+
+.hero-tab-btn.active {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(56, 189, 248, 0.2));
+  border-color: #38bdf8;
+  color: #fff;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.25);
+}
+
+@media (max-width: 768px) {
+  .hero-header-banner {
+    padding: 14px 16px !important;
+    margin-bottom: 12px !important;
+    border-radius: 16px !important;
+  }
+  .hero-banner-title {
+    font-size: 20px !important;
+    margin: 4px 0 !important;
+  }
+  .hero-banner-subtitle {
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+    margin: 0 !important;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .hero-tabs-rail {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+    margin-bottom: 14px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+  .hero-tab-btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 8px 4px !important;
+    font-size: 11.5px !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    min-height: 38px !important;
+    box-sizing: border-box !important;
+  }
+  .hero-tab-btn:nth-child(4) {
+    grid-column: 1 / 2;
+  }
+  .hero-tab-btn:nth-child(5) {
+    grid-column: 2 / 4;
+  }
+}
+
+/* Контейнеры секций табов */
+.hero-view-pane {
+  display: none;
+  animation: fadeInPane 0.25s ease;
+}
+.hero-view-pane.active { display: block; }
+
+@keyframes fadeInPane {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* -------------------------------------------------------------
+   ТАБ 1: СООРЕВНОВАТЕЛЬНЫЙ QR-ПРОПУСК (Apple Wallet Style)
+   ------------------------------------------------------------- */
+.hero-pass-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+@media (min-width: 768px) {
+  .hero-pass-layout {
+    grid-template-columns: 360px 1fr;
+  }
+}
+
+.athlete-pass-card {
+  background: linear-gradient(160deg, #1e293b 0%, #0f172a 60%, #020617 100%);
+  border: 2px solid rgba(56, 189, 248, 0.4);
+  border-radius: 24px;
+  padding: 24px;
+  position: relative;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 30px rgba(56, 189, 248, 0.15);
+  overflow: hidden;
+}
+
+.athlete-pass-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, #ef4444, #38bdf8, #f59e0b);
+}
+
+.pass-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.pass-federation-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.pass-federation-brand img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+.pass-federation-brand b {
+  display: block;
+  font-size: 13px;
+  color: #fff;
+  line-height: 1.2;
+}
+.pass-federation-brand small {
+  font-size: 10px;
+  color: #94a3b8;
+}
+
+.pass-stage-badge {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  color: #fbbf24;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.pass-qr-box {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 16px 0;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+.pass-qr-box svg {
+  width: 100%;
+  max-width: 190px;
+  height: auto;
+}
+
+.pass-athlete-info {
+  text-align: center;
+  margin-bottom: 16px;
+}
+.pass-athlete-name {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 4px;
+}
+.pass-athlete-uin {
+  font-family: monospace;
+  font-size: 12px;
+  color: #38bdf8;
+  letter-spacing: 0.08em;
+}
+
+.pass-status-pill {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #34d399;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.pass-actions-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.pass-action-btn {
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: none;
+  transition: all 0.2s;
+}
+.pass-action-btn.primary {
+  background: #0284c7;
+  color: #fff;
+}
+.pass-action-btn.secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+}
+
+/* Правая панель информации атлета */
+.athlete-profile-specs {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.profile-spec-card {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.spec-card-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #e2e8f0;
+  margin: 0 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.specs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+.spec-item {
+  background: rgba(30, 41, 59, 0.5);
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+.spec-item small {
+  display: block;
+  font-size: 11px;
+  color: #94a3b8;
+  margin-bottom: 2px;
+}
+.spec-item b {
+  font-size: 14px;
+  color: #fff;
+}
+
+/* -------------------------------------------------------------
+   ТАБ 2: ВИДЕОФИКСАЦИЯ НОРМАТИВОВ С КАМЕРЫ (HUD OVERLAY)
+   ------------------------------------------------------------- */
+.hud-recorder-box {
+  background: #090e1a;
+  border: 2px solid rgba(56, 189, 248, 0.3);
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
+}
+
+.hud-viewport-stage {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #020617;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hud-video-elem {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Оверлей судейского HUD поверх видео */
+.hud-overlay-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, transparent 20%, transparent 80%, rgba(0,0,0,0.7) 100%);
+}
+
+.hud-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.hud-watermark {
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 6px 12px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hud-rec-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(239, 68, 68, 0.85);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+.hud-center-timer {
+  align-self: center;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(10px);
+  border: 2px solid #38bdf8;
+  border-radius: 20px;
+  padding: 12px 30px;
+  text-align: center;
+  box-shadow: 0 0 30px rgba(56, 189, 248, 0.4);
+}
+.hud-timer-digits {
+  font-family: 'Unbounded', monospace;
+  font-size: clamp(32px, 6vw, 56px);
+  font-weight: 900;
+  color: #fff;
+  line-height: 1;
+}
+.hud-timer-mode {
+  font-size: 11px;
+  font-weight: 800;
+  color: #38bdf8;
+  letter-spacing: 0.1em;
+  margin-top: 4px;
+}
+
+.hud-bottom-bar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.hud-rep-counter {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+  padding: 8px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.hud-rep-counter small {
+  font-size: 10px;
+  font-weight: 800;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+.hud-rep-counter b {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 28px;
+  font-weight: 900;
+  color: #22c55e;
+}
+
+.hud-controls-dock {
+  background: #0f172a;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  border-top: 1px solid rgba(148, 163, 184, 0.15);
+}
+
+.hud-select-discipline {
+  background: #1e293b;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.hud-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hud-control-btn {
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+.hud-control-btn.rec-btn {
+  background: #ef4444;
+  color: #fff;
+}
+.hud-control-btn.rec-btn:hover { background: #dc2626; }
+.hud-control-btn.rep-btn {
+  background: #22c55e;
+  color: #fff;
+}
+.hud-control-btn.norep-btn {
+  background: #eab308;
+  color: #000;
+}
+
+/* -------------------------------------------------------------
+   ТАБ 3: ЗАЛ НАГРАД И ДИПЛОМЫ
+   ------------------------------------------------------------- */
+.awards-showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.award-card-item {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.8));
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 18px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s ease;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.award-card-item:hover {
+  transform: translateY(-3px);
+  border-color: #f59e0b;
+  box-shadow: 0 15px 35px rgba(245, 158, 11, 0.2);
+}
+
+.award-badge-ribbon {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+.award-badge-ribbon.gold {
+  background: rgba(245, 158, 11, 0.2);
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  color: #fbbf24;
+}
+.award-badge-ribbon.silver {
+  background: rgba(203, 213, 225, 0.2);
+  border: 1px solid rgba(203, 213, 225, 0.5);
+  color: #e2e8f0;
+}
+
+.award-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 6px;
+}
+.award-event-name {
+  font-size: 13px;
+  color: #94a3b8;
+  margin: 0 0 14px;
+}
+
+.award-meta-row {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid rgba(148, 163, 184, 0.15);
+  font-size: 12px;
+  color: #cbd5e1;
+}
+
+.award-actions-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.award-btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  text-align: center;
+  transition: all 0.2s;
+}
+.award-btn.view {
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: #38bdf8;
+}
+.award-btn.share {
+  background: #f59e0b;
+  color: #000;
+}
+
+/* -------------------------------------------------------------
+   ТАБ 4: ЗАЯВКИ И ТУРНИРЫ
+   ------------------------------------------------------------- */
+.apps-list-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.app-event-item {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 14px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.app-event-info b {
+  display: block;
+  font-size: 15px;
+  color: #fff;
+  margin-bottom: 4px;
+}
+.app-event-info small {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.app-event-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.app-event-badge.confirmed {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #34d399;
+}
+.app-event-badge.pending {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  color: #fbbf24;
+}
+
+/* Полноэкранный просмотр диплома */
+.diploma-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.diploma-modal-dialog {
+  background: #0f172a;
+  border: 2px solid #f59e0b;
+  border-radius: 20px;
+  max-width: 600px;
+  width: 100%;
+  padding: 24px;
+  position: relative;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.8), 0 0 40px rgba(245, 158, 11, 0.3);
+}
+
+.diploma-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* v103: формы, сканер, сохранение сета (честная версия) */
+.hero-form{display:grid;gap:14px}
+.hero-form label{display:grid;gap:6px;font-size:12px;font-weight:700;color:#cbd5e1}
+.hero-form input,.hero-form select{height:44px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:#fff;padding:0 12px;font-size:15px;font-family:inherit;width:100%}
+.hero-form input::placeholder{color:#64748b}
+.hero-form-row{display:flex;gap:12px;flex-wrap:wrap}
+.hero-form-row>label,.hero-form-row>input{flex:1;min-width:130px}
+.hero-form-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.scan-frame{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:62%;aspect-ratio:1;border:3px solid rgba(56,189,248,.85);border-radius:18px;box-shadow:0 0 0 2000px rgba(0,0,0,.35)}
+.hero-set-card{margin-top:14px;padding:16px;border:1px solid rgba(56,189,248,.35);border-radius:16px;background:rgba(15,23,42,0.9);box-shadow:0 10px 30px rgba(0,0,0,0.5);color:#e2e8f0;font-size:13px}
+.hero-set-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.hero-set-saved{margin-top:14px;padding:12px 14px;border-radius:12px;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.35);color:#86efac;font-weight:700;font-size:13px}
+
+/* --- Фирменные шрифты TT Squares (Брендбук «Герой ГТО») --- */
+@font-face {
+  font-family: 'TT Squares';
+  src: url('../fonts/TTSquares-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'TT Squares';
+  src: url('../fonts/TTSquares-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'TT Squares Condensed';
+  src: url('../fonts/TTSquaresCondensed-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+.hero-app-container h1,
+.hero-app-container h2,
+.hero-app-container .hero-banner-title {
+  font-family: 'TT Squares', 'Unbounded', sans-serif !important;
+  letter-spacing: 0.02em;
+}
+
+/* Оверлей обратного отсчёта 3-2-1-GO */
+.hud-countdown-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.hud-countdown-digit {
+  font-family: 'TT Squares', 'Unbounded', sans-serif;
+  font-size: clamp(72px, 20vw, 130px);
+  font-weight: 900;
+  color: #f59e0b;
+  text-shadow: 0 0 30px rgba(245, 158, 11, 0.8), 0 0 60px rgba(245, 158, 11, 0.4);
+  animation: countdown-pop 0.9s ease-out forwards;
+}
+@keyframes countdown-pop {
+  0% { transform: scale(0.4); opacity: 0; }
+  40% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.9; }
+}
+
+/* Модальное окно техники и стандартов выполнения */
+.technique-modal-dialog {
+  background: #0b1329;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 20px;
+  max-width: 640px;
+  width: 100%;
+  max-height: 88vh;
+  overflow-y: auto;
+  padding: 24px;
+  position: relative;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.85);
+}
+.technique-chip-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 16px 0 20px;
+}
+.technique-chip {
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.technique-chip.active {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: #38bdf8;
+  color: #fff;
+}
+.technique-section {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+.technique-section h4 {
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.technique-section ul {
+  margin: 0;
+  padding-left: 18px;
+  color: #94a3b8;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.technique-section ul li {
+  margin-bottom: 6px;
+}
+
+/* Бенчмарк карточка с рекордом и нормативом */
+.benchmark-badge-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+}
+.benchmark-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+.badge-gold { background: rgba(245, 158, 11, 0.18); border: 1px solid rgba(245, 158, 11, 0.4); color: #fbbf24; }
+.badge-silver { background: rgba(148, 163, 184, 0.18); border: 1px solid rgba(148, 163, 184, 0.4); color: #e2e8f0; }
+.badge-record { background: rgba(56, 189, 248, 0.18); border: 1px solid rgba(56, 189, 248, 0.4); color: #38bdf8; }
+
+/* Модальное окно предпросмотра Stories */
+.stories-preview-dialog {
+  background: #020617;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 20px;
+  max-width: 420px;
+  width: 100%;
+  padding: 20px;
+  text-align: center;
+}
+.stories-preview-canvas {
+  width: 100%;
+  max-width: 320px;
+  border-radius: 16px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+  margin: 12px auto 16px;
+  display: block;
+}
+
+/* Судейский режим сканера */
+.judge-mode-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  color: #fca5a5;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.judge-entry-card {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 16px;
+  padding: 16px;
+  margin-top: 14px;
+}
+
+/* Официальный диплом фиксации результата */
+.hero-diploma-dialog {
+  background: #0b1329;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 20px;
+  max-width: 780px;
+  width: 100%;
+  padding: 24px;
+  position: relative;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.9);
+}
+.hero-diploma-sheet {
+  background: #ffffff;
+  color: #0f172a;
+  border-radius: 12px;
+  padding: 36px 40px;
+  position: relative;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  border: 6px double #b45309;
+  background-image: radial-gradient(circle at center, rgba(245,158,11,0.03) 0%, transparent 70%);
+}
+.diploma-crest {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #b45309;
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+}
+.diploma-crest-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.diploma-title {
+  font-family: 'TT Squares', 'Unbounded', sans-serif;
+  font-size: 24px;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #92400e;
+  letter-spacing: 0.05em;
+  margin: 0 0 6px;
+  text-align: center;
+}
+.diploma-subtitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: #64748b;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 24px;
+}
+.diploma-recipient-block {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.diploma-recipient-label {
+  font-size: 13px;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.diploma-recipient-name {
+  font-family: 'TT Squares', 'Unbounded', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 6px 0;
+  text-decoration: underline;
+  text-decoration-color: #f59e0b;
+  text-underline-offset: 6px;
+}
+.diploma-body-text {
+  font-size: 15px;
+  line-height: 1.6;
+  text-align: center;
+  color: #334155;
+  margin: 18px 0;
+}
+.diploma-result-highlight {
+  display: inline-block;
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  color: #92400e;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: 800;
+  font-family: 'TT Squares', monospace;
+  margin: 8px 0;
+}
+.diploma-footer-grid {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px dashed #cbd5e1;
+}
+.diploma-sign-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+}
+.diploma-sign-name {
+  font-size: 13px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-top: 4px;
+}
+
+/* Стили таблицы протокола судьи */
+.judge-table-wrap {
+  overflow-x: auto;
+  margin-top: 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.judge-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  text-align: left;
+}
+.judge-table th {
+  background: rgba(15, 23, 42, 0.95);
+  color: #94a3b8;
+  padding: 10px 12px;
+  font-weight: 700;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.judge-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  color: #cbd5e1;
+}
+.judge-table tr:hover td {
+  background: rgba(255,255,255,0.02);
+}
+.judge-badge-ok {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 11px;
+}
+.judge-badge-norep {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 11px;
+}
+
+/* Печать диплома */
+@media print {
+  body.printing-hero-diploma * {
+    visibility: hidden;
+  }
+  body.printing-hero-diploma #hero-diploma-modal,
+  body.printing-hero-diploma #hero-diploma-modal .hero-diploma-sheet,
+  body.printing-hero-diploma #hero-diploma-modal .hero-diploma-sheet * {
+    visibility: visible;
+  }
+  body.printing-hero-diploma #hero-diploma-modal {
+    position: fixed;
+    inset: 0;
+    background: #fff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: block !important;
+    z-index: 999999;
+  }
+  body.printing-hero-diploma .hero-diploma-dialog {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+  body.printing-hero-diploma .diploma-modal-close,
+  body.printing-hero-diploma .hero-diploma-actions {
+    display: none !important;
+  }
+  body.printing-hero-diploma .hero-diploma-sheet {
+    box-shadow: none !important;
+    border: 4px double #b45309 !important;
+    margin: 0 auto;
+    page-break-inside: avoid;
+  }
+}
+
+/* =========================================================================
+   ЭРГОНОМИЧНЫЙ UX/UI: МОДУЛЬ «ГЕРОЙ ГТО» (ВИДЕОФИКСАЦИЯ И СЕРТИФИКАТ)
+   ========================================================================= */
+
+/* 1. Контейнер видеофиксатора */
+.hero-recorder-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+/* 2. Служебная панель до записи (Service Toolbar) */
+.hero-service-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 16px;
+  padding: 10px 14px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.hero-service-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.hero-exercise-row {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.hero-select-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.hero-field-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+}
+
+.hero-service-toolbar select.hud-select-discipline {
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.hero-btn-service {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  color: #cbd5e1;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+  touch-action: manipulation;
+  transition: all 0.15s ease;
+}
+
+.hero-btn-service:active {
+  transform: scale(0.96);
+  background: rgba(56, 189, 248, 0.15);
+  border-color: #38bdf8;
+  color: #fff;
+}
+
+.hero-btn-service.active {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: #38bdf8;
+  color: #38bdf8;
+}
+
+.hero-device-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+
+/* 3. Видоискатель (Viewfinder Stage) */
+.hero-viewfinder-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.camera-viewfinder-card {
+  position: relative;
+  width: 100%;
+  background: #020617;
+  border: 2px solid rgba(56, 189, 248, 0.35);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65);
+  transition: border-color 0.2s ease;
+}
+
+.camera-viewfinder-card.is-portrait {
+  aspect-ratio: 9 / 16;
+  max-width: 440px;
+}
+
+.camera-viewfinder-card.is-landscape {
+  aspect-ratio: 16 / 9;
+  max-width: 100%;
+}
+
+.camera-live-canvas {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 4. Нижний пульт управления (Hero Control Deck) */
+.hero-control-deck {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Большая главная кнопка СТАРТ */
+.hero-main-rec-btn {
+  width: 100%;
+  min-height: 54px;
+  border-radius: 16px;
+  font-family: 'Unbounded', 'TT Squares', sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  border: none;
+  touch-action: manipulation;
+  user-select: none;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.hero-main-rec-btn:active {
+  transform: scale(0.97);
+}
+
+.hero-main-rec-btn.start {
+  background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+  color: #ffffff;
+  box-shadow: 0 8px 24px rgba(239, 68, 68, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.rec-dot-icon {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: inline-block;
+  animation: recPulse 1.4s infinite ease-in-out;
+}
+
+@keyframes recPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+/* Режим активной записи: блок кнопок счета */
+.hero-deck-active {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.hero-reps-action-bar {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  gap: 12px;
+  width: 100%;
+}
+
+.hero-action-rep-btn {
+  min-height: 62px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  border: 2px solid transparent;
+  transition: transform 0.1s ease, box-shadow 0.15s ease;
+}
+
+.hero-action-rep-btn:active {
+  transform: scale(0.95);
+}
+
+/* Кнопка No-Rep (левая рука / большой палец) */
+.hero-action-rep-btn.norep {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.18), rgba(185, 28, 28, 0.28));
+  border-color: rgba(239, 68, 68, 0.6);
+  color: #fca5a5;
+  box-shadow: 0 6px 18px rgba(239, 68, 68, 0.25);
+}
+
+.hero-action-rep-btn.norep:active {
+  background: rgba(239, 68, 68, 0.4);
+}
+
+.hero-action-rep-btn.norep .rep-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+.hero-action-rep-btn.norep .rep-badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: #f87171;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 1px 8px;
+  border-radius: 8px;
+  margin-top: 1px;
+}
+
+/* Кнопка +1 Зачёт (правая рука / основной тап) */
+.hero-action-rep-btn.plus-one {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-color: #34d399;
+  color: #ffffff;
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.45);
+}
+
+.hero-action-rep-btn.plus-one:active {
+  background: #059669;
+}
+
+.hero-action-rep-btn.plus-one .rep-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+}
+
+.hero-action-rep-btn.plus-one .rep-badge {
+  font-size: 12px;
+  font-weight: 800;
+  color: #a7f3d0;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 2px 10px;
+  border-radius: 8px;
+  margin-top: 1px;
+}
+
+/* Обособленная кнопка СТОП */
+.hero-stop-action-bar {
+  width: 100%;
+}
+
+.hero-main-rec-btn.stop {
+  background: rgba(30, 41, 59, 0.9);
+  border: 1.5px solid rgba(239, 68, 68, 0.5);
+  color: #fca5a5;
+  min-height: 48px;
+  font-size: 13px;
+}
+
+.hero-main-rec-btn.stop:hover,
+.hero-main-rec-btn.stop:active {
+  background: rgba(239, 68, 68, 0.85);
+  color: #fff;
+  border-color: #ef4444;
+}
+
+.stop-sq-icon {
+  font-size: 14px;
+}
+
+/* 5. Режим чистой записи (Focus Recording Mode) — ТЗ HOTFIX 2026 */
+body.hero-recording-focus .app-header,
+body.hero-recording-focus .desktop-site-header,
+body.hero-recording-focus .bottom-nav,
+body.hero-recording-focus .desktop-subnav,
+body.hero-recording-focus .desktop-site-footer,
+body.hero-recording-focus .hero-header-banner,
+body.hero-recording-focus .hero-tabs-rail,
+body.hero-recording-focus .hero-service-toolbar,
+body.hero-recording-focus .hero-recorder-footer-hint,
+body.hero-recording-focus #scroll-top-btn,
+body.hero-recording-focus .detail-back,
+body.hero-recorder-active .app-header,
+body.hero-recorder-active .desktop-site-header,
+body.hero-recorder-active .bottom-nav,
+body.hero-recorder-active .desktop-subnav,
+body.hero-recorder-active .desktop-site-footer,
+body.hero-recorder-active .hero-header-banner,
+body.hero-recorder-active .hero-tabs-rail,
+body.hero-recorder-active .hero-service-toolbar,
+body.hero-recorder-active .hero-recorder-footer-hint,
+body.hero-recorder-active #scroll-top-btn,
+body.hero-recorder-active .detail-back,
+body.hero-recorder-active #hero-panes-container,
+body.hero-recorder-active .hero-athlete-bar,
+body.hero-recorder-active .hero-tabs-content,
+body.hero-recorder-active #hero-pre-camera-card {
+  display: none !important;
+}
+
+html.hero-recorder-active,
+html:has(body.hero-recorder-active),
+html:has(body.hero-recording-focus) {
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 100% !important;
+  height: 100dvh !important;
+  max-height: 100dvh !important;
+}
+
+body.hero-recording-focus,
+body.hero-recorder-active,
+body.recorder-fullscreen {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100% !important;
+  height: 100dvh !important;
+  max-height: 100dvh !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  touch-action: none;
+}
+
+body.hero-recording-focus .hero-app-container,
+body.hero-recorder-active .hero-app-container {
+  max-width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.hero-recorder-fullscreen {
+  display: none !important;
+}
+
+body.hero-recording-focus .hero-recorder-container,
+body.hero-recorder-active .hero-recorder-container,
+body.hero-recorder-active .hero-recorder-fullscreen {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 10000 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  background: #000 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  padding-top: max(8px, env(safe-area-inset-top)) !important;
+  padding-right: max(8px, env(safe-area-inset-right)) !important;
+  padding-bottom: max(8px, env(safe-area-inset-bottom)) !important;
+  padding-left: max(8px, env(safe-area-inset-left)) !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+@supports not (height: 100dvh) {
+  body.hero-recording-focus .hero-recorder-container,
+  body.hero-recorder-active .hero-recorder-container,
+  .hero-recorder-fullscreen {
+    height: 100vh !important;
+  }
+}
+
+/* Pre-Camera Card (До включения камеры) */
+.hero-pre-camera-card {
+  background: var(--hero-card-bg);
+  border: 1px solid var(--hero-card-border);
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .hero-pre-camera-card {
+    padding: 12px 14px !important;
+    margin-bottom: 12px !important;
+    border-radius: 16px !important;
+  }
+  .hero-pre-camera-title {
+    font-size: 16px !important;
+    margin: 0 0 4px !important;
+  }
+  .hero-pre-camera-desc {
+    display: none !important;
+  }
+  .hero-pre-camera-fields {
+    gap: 8px !important;
+    margin-bottom: 10px !important;
+  }
+  .hero-pre-camera-fields select {
+    padding: 8px 10px !important;
+    font-size: 13px !important;
+  }
+  .hero-pre-camera-actions {
+    gap: 6px !important;
+    margin-bottom: 10px !important;
+  }
+  .hero-pre-camera-actions button {
+    height: 36px !important;
+    font-size: 12px !important;
+    padding: 0 10px !important;
+  }
+  .hero-primary-camera-btn {
+    height: 48px !important;
+    font-size: 15px !important;
+  }
+}
+
+.hero-pre-camera-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: #38bdf8;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.hero-pre-camera-title {
+  margin: 0 0 6px;
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.hero-pre-camera-desc {
+  margin: 0 0 16px;
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.45;
+}
+
+.hero-pre-camera-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.hero-pre-camera-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.hero-primary-camera-btn {
+  width: 100%;
+  height: 52px;
+  min-height: 48px;
+  border-radius: 14px;
+  border: 0;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 4px 18px rgba(239, 68, 68, 0.4);
+  touch-action: manipulation;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.hero-primary-camera-btn:active {
+  transform: scale(0.98);
+}
+
+.hero-primary-camera-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.hero-camera-error-banner {
+  margin-top: 14px;
+  padding: 12px 14px;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  border-radius: 12px;
+  color: #fca5a5;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.hero-camera-error-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.hero-camera-error-btn {
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  background: rgba(239, 68, 68, 0.25);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Верхний HUD в режиме рекордера (HOTFIX #2) */
+.hero-recorder-hud-top {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: calc(6px + env(safe-area-inset-top, 0px)) 12px 6px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 70%, transparent 100%);
+  color: #fff;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.hero-recorder-hud-row1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 10px;
+}
+
+.hero-recorder-hud-row2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.hero-recorder-container.is-landscape .hero-recorder-hud-top {
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 6px 16px !important;
+  gap: 16px !important;
+}
+
+.hero-recorder-container.is-landscape .hero-recorder-hud-row1 {
+  width: auto !important;
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+
+.hero-recorder-container.is-landscape .hero-recorder-hud-row2 {
+  width: auto !important;
+  gap: 12px !important;
+}
+
+.hero-hud-close-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  background: rgba(239, 68, 68, 0.25);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  transition: background 0.15s ease, transform 0.15s ease;
+  z-index: 30;
+}
+.hero-hud-close-btn:active {
+  transform: scale(0.95);
+  background: rgba(239, 68, 68, 0.45);
+}
+
+.hud-athlete-title {
+  font-weight: 700;
+  font-size: 13px;
+  color: #f1f5f9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100vw - 120px);
+  min-width: 0;
+  text-align: right;
+}
+.hero-recorder-container.is-landscape .hud-athlete-title {
+  text-align: left;
+  max-width: 40vw;
+}
+
+.hud-timer-badge {
+  font-family: 'SF Mono', 'Roboto Mono', monospace;
+  font-size: 20px;
+  font-weight: 900;
+  color: #38bdf8;
+  letter-spacing: 0.05em;
+  background: rgba(15, 23, 42, 0.7);
+  padding: 4px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.hud-rec-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 12px;
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  color: #fca5a5;
+}
+
+.hud-rec-status.ready {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: rgba(16, 185, 129, 0.5);
+  color: #86efac;
+}
+
+.hud-rec-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ef4444;
+  animation: pulse-dot 1s infinite;
+}
+
+.hud-rec-status.ready .hud-rec-dot {
+  background: #10b981;
+  animation: none;
+}
+
+body.hero-recording-focus .hero-viewfinder-wrapper,
+body.hero-recorder-active .hero-viewfinder-wrapper {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #000 !important;
+  margin: 0 !important;
+  height: 100% !important;
+  max-height: 100% !important;
+}
+
+body.hero-recording-focus .camera-viewfinder-card,
+body.hero-recorder-active .camera-viewfinder-card {
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  border-radius: 0 !important;
+  border: none !important;
+  background: #000 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+}
+
+.camera-viewfinder-video {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  background: #000 !important;
+  z-index: 1 !important;
+}
+
+body.hero-recording-focus .camera-live-canvas,
+body.hero-recorder-active .camera-live-canvas {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  z-index: 2 !important;
+  pointer-events: none !important;
+}
+
+.camera-countdown-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 25 !important;
+  background: rgba(2, 6, 23, 0.85) !important;
+  backdrop-filter: blur(8px) !important;
+  display: none !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 20px !important;
+  pointer-events: none !important;
+}
+
+.camera-countdown-overlay.is-active,
+.camera-countdown-overlay.is-counting-down {
+  display: flex !important;
+  pointer-events: auto !important;
+}
+
+.camera-countdown-overlay[hidden] {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+.cam-big-countdown {
+  font-family: 'Unbounded', 'TT Squares', sans-serif !important;
+  font-size: clamp(72px, 22vw, 140px) !important;
+  font-weight: 900 !important;
+  color: #38bdf8 !important;
+  text-shadow: 0 0 35px rgba(56, 189, 248, 0.7) !important;
+  line-height: 1 !important;
+}
+
+.cam-cancel-countdown-btn {
+  min-width: 44px !important;
+  min-height: 44px !important;
+  padding: 10px 24px !important;
+  border-radius: 12px !important;
+  background: rgba(239, 68, 68, 0.35) !important;
+  border: 1px solid rgba(239, 68, 68, 0.6) !important;
+  color: #fff !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  cursor: pointer !important;
+  touch-action: manipulation !important;
+}
+
+body.hero-recording-focus .hero-control-deck,
+body.hero-recorder-active .hero-control-deck {
+  position: relative !important;
+  z-index: 20 !important;
+  width: 100% !important;
+  background: linear-gradient(0deg, rgba(2,6,23,0.95) 0%, rgba(2,6,23,0.7) 60%, transparent 100%) !important;
+  padding: 12px 16px max(16px, env(safe-area-inset-bottom)) !important;
+  box-sizing: border-box !important;
+  margin-top: auto !important;
+}
+
+.hero-action-rep-btn {
+  min-height: 52px !important;
+  border-radius: 14px !important;
+  touch-action: manipulation !important;
+  font-weight: 800 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 2px !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: transform 0.1s ease !important;
+}
+.hero-action-rep-btn:active {
+  transform: scale(0.96) !important;
+}
+
+.hero-action-rep-btn.plus-one {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4) !important;
+}
+
+.hero-action-rep-btn.norep {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.4) !important;
+}
+
+/* HOTFIX #2: Состояние disabled для кнопок рекордера (п. 7, 8 ТЗ) */
+.hero-action-rep-btn.is-disabled,
+.hero-main-rec-btn.stop.is-disabled,
+button.is-disabled {
+  opacity: 0.45 !important;
+  pointer-events: none !important;
+  cursor: not-allowed !important;
+}
+
+.camera-preview-close-btn {
+  position: absolute !important;
+  top: 12px !important;
+  right: 12px !important;
+  min-width: 44px !important;
+  min-height: 44px !important;
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 50% !important;
+  background: rgba(239, 68, 68, 0.3) !important;
+  border: 1.5px solid rgba(239, 68, 68, 0.6) !important;
+  color: #fff !important;
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  cursor: pointer !important;
+  touch-action: manipulation !important;
+  z-index: 50 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.hero-set-saved {
+  pointer-events: none !important;
+}
+
+/* 6. Адаптация под LANDSCAPE 16:9 (п. 14, 16, 17, 18 ТЗ) */
+.hero-recorder-container.hero-recorder-fullscreen.is-landscape {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100dvh !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px) !important;
+  z-index: 10000 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  background: #000 !important;
+  box-sizing: border-box !important;
+}
+
+.hero-recorder-container.is-landscape .hero-viewfinder-wrapper {
+  flex: 1 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.hero-recorder-container.is-landscape .camera-viewfinder-card {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  aspect-ratio: 16 / 9 !important;
+  position: relative !important;
+  margin: 0 auto !important;
+  border-radius: 0 !important;
+}
+
+.hero-recorder-container.is-landscape .camera-viewfinder-video,
+.hero-recorder-container.is-landscape .camera-live-canvas {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+}
+
+.hero-recorder-container.is-landscape .hero-recorder-deck {
+  flex-shrink: 0 !important;
+  padding: 8px 16px calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+  background: rgba(0, 0, 0, 0.88) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.hero-recorder-container.is-landscape .hero-deck-active {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr 1.35fr !important;
+  align-items: stretch !important;
+  justify-content: center !important;
+  width: 100% !important;
+  max-width: 800px !important;
+  margin: 0 auto !important;
+  gap: 12px !important;
+}
+
+.hero-recorder-container.is-landscape .hero-reps-action-bar {
+  display: contents !important;
+}
+
+.hero-recorder-container.is-landscape .hero-action-rep-btn {
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 48px !important;
+  padding: 0 12px !important;
+}
+
+.hero-recorder-container.is-landscape .hero-main-rec-btn.stop {
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 48px !important;
+  margin: 0 !important;
+  padding: 0 16px !important;
+}
+
+/* 7. Стили предпросмотра видео (Preview) и Review-Card (п. 9, 10, 19-25 ТЗ) */
+body.hero-review-active .bottom-nav,
+body.hero-review-active .desktop-site-footer,
+body.hero-review-active .desktop-site-header,
+body.hero-review-active .app-header,
+body.hero-review-active #scroll-top-btn {
+  display: none !important;
+}
+
+body.hero-review-active {
+  overflow-x: hidden !important;
+  background: #090d16 !important;
+}
+
+#hero-preview-slot:not(:empty) {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 100000 !important;
+  background: rgba(0, 0, 0, 0.92) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: env(safe-area-inset-top, 14px) env(safe-area-inset-right, 14px) env(safe-area-inset-bottom, 14px) env(safe-area-inset-left, 14px) !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  box-sizing: border-box !important;
+}
+
+#hero-preview-slot:empty {
+  display: none !important;
+}
+
+.hero-deck-active[hidden],
+.hero-deck-pre[hidden] {
+  display: none !important;
+}
+
+.camera-preview-modal {
+  width: 100% !important;
+  max-width: 680px !important;
+  max-height: 92dvh !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  background: rgba(15, 23, 42, 0.98) !important;
+  border: 1px solid rgba(96, 165, 250, 0.35) !important;
+  border-radius: 20px !important;
+  padding: 16px !important;
+  position: relative !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8) !important;
+  margin: auto !important;
+}
+
+.camera-preview-modal.is-portrait,
+.camera-preview-modal.preview-portrait {
+  max-width: min(92vw, 420px) !important;
+  margin: auto !important;
+}
+
+.camera-preview-modal.is-landscape,
+.camera-preview-modal.preview-landscape {
+  max-width: min(94vw, 840px) !important;
+  margin: auto !important;
+}
+
+.preview-frame {
+  position: relative !important;
+  width: 100% !important;
+  max-height: 48dvh !important;
+  margin: 0 auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #000 !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+
+.preview-frame.is-portrait,
+.preview-frame.preview-portrait {
+  aspect-ratio: 9 / 16;
+  max-height: 48dvh !important;
+  width: auto !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
+}
+
+.preview-frame.is-landscape,
+.preview-frame.preview-landscape {
+  aspect-ratio: 16 / 9;
+  max-height: 48dvh !important;
+  width: 100% !important;
+}
+
+.camera-preview-title {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding-right: 48px;
+  margin-bottom: 12px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.camera-preview-title b {
+  font-size: 15px;
+  color: #fff;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.camera-preview-title small {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 2px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.camera-preview-modal video.camera-preview-player {
+  max-height: 48dvh !important;
+  width: auto !important;
+  max-width: 100% !important;
+  object-fit: contain !important;
+  background: #000 !important;
+  border-radius: 12px !important;
+  display: block !important;
+  margin: 0 auto !important;
+}
+
+@media (max-height: 680px) {
+  .camera-preview-modal video.camera-preview-player,
+  .preview-frame.is-portrait {
+    max-height: 42dvh !important;
+  }
+}
+
+.camera-preview-modal.preview-landscape video.camera-preview-player,
+.camera-preview-modal video.camera-preview-player.preview-landscape {
+  max-height: 52dvh !important;
+  aspect-ratio: 16 / 9 !important;
+  width: 100% !important;
+  object-fit: contain !important;
+}
+
+.camera-preview-buttons {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 10px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  margin-top: 14px !important;
+}
+
+.camera-preview-modal.preview-landscape .camera-preview-buttons {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)) !important;
+  gap: 8px !important;
+}
+
+.camera-preview-buttons .camera-save-primary-btn {
+  grid-column: 1 / -1;
+}
+
+.camera-preview-buttons .camera-retry-btn {
+  grid-column: 1 / -1;
+}
+
+.camera-preview-modal.preview-landscape .camera-preview-buttons .camera-save-primary-btn,
+.camera-preview-modal.preview-landscape .camera-preview-buttons .camera-retry-btn {
+  grid-column: span 1 !important;
+}
+
+/* 8. Глобальные правила мобильной верстки и блок Сканер (п. 10, 11, 13 ТЗ) */
+@media (max-width: 768px) {
+  .page,
+  .card,
+  .panel,
+  .hero-module,
+  .admin-panel,
+  .start-card,
+  .video-review,
+  .profile-spec-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .camera-preview-modal.is-portrait,
+  .camera-preview-modal.preview-portrait {
+    width: 100% !important;
+    max-width: min(92vw, 420px) !important;
+    margin: auto !important;
+  }
+
+  .camera-preview-modal.is-landscape,
+  .camera-preview-modal.preview-landscape {
+    width: 100% !important;
+    max-width: min(94vw, 840px) !important;
+    margin: auto !important;
+  }
+
+  .hud-viewport-stage {
+    aspect-ratio: 4 / 3 !important;
+    max-height: 220px !important;
+  }
+
+  .hud-controls-dock {
+    padding: 10px !important;
+    gap: 8px !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .hud-controls-dock .hud-control-btn {
+    width: 100% !important;
+  }
+}
+
+/* =========================================================================
+   ПОЛНОЭКРАННЫЙ ПРОСМОТРЩИК СЕРТИФИКАТА / STORIES (DOCUMENT VIEWER)
+   ========================================================================= */
+.hero-certificate-viewer-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background: rgba(2, 6, 23, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: certFadeIn 0.2s ease;
+}
+
+@keyframes certFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Фиксированная шапка / Toolbar действий */
+.cert-toolbar {
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(15, 23, 42, 0.92);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: calc(10px + env(safe-area-inset-top, 0px)) 16px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.cert-toolbar-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cert-pill {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #38bdf8;
+}
+
+.cert-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  color: #fff;
+  font-family: 'Unbounded', sans-serif;
+}
+
+.cert-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cert-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  user-select: none;
+  touch-action: manipulation;
+  transition: transform 0.1s ease, background 0.15s ease;
+}
+
+.cert-btn:active {
+  transform: scale(0.96);
+}
+
+.cert-btn.primary {
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
+}
+
+.cert-btn.secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.cert-btn.close {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  font-size: 16px;
+  padding: 6px 12px;
+}
+
+/* Скроллируемая область просмотра */
+.cert-scroll-viewport {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding: 20px 16px calc(40px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  touch-action: pan-y pinch-zoom;
+}
+
+.cert-canvas-container {
+  max-width: 480px;
+  width: 100%;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
+  border: 2px solid rgba(56, 189, 248, 0.35);
+  background: #020617;
+  margin: 0 auto;
+}
+
+.cert-document-canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.cert-mobile-bottom-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 480px;
+  margin-top: 16px;
+}
+
+.cert-btn-mobile {
+  width: 100%;
+  min-height: 46px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.cert-btn-mobile.primary {
+  background: #0284c7;
+  color: #fff;
+}
+
+.cert-btn-mobile.secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* ==========================================================================
+   СУДЕЙСКАЯ ПАНЕЛЬ И ПРЕДВАРИТЕЛЬНЫЙ ЭКРАН (HOTFIX #3)
+   ========================================================================== */
+
+.hero-pre-options-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.hero-pre-opt-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hero-pre-opt-item label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.hero-opt-select {
+  width: 100%;
+  min-height: 40px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(15, 23, 42, 0.85);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  touch-action: manipulation;
+}
+
+.hero-opt-select:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+}
+
+/* Судейский режим */
+.judge-workspace-card {
+  position: relative;
+}
+
+.judge-speed-btn {
+  padding: 4px 10px;
+  min-height: 32px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+  color: #cbd5e1;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: all 0.15s ease;
+}
+
+.judge-speed-btn.active {
+  background: #38bdf8;
+  color: #0f172a;
+  border-color: #38bdf8;
+}
+
+.judge-speed-btn:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.judge-verdict-opt {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  transition: all 0.15s ease;
+}
+
+.judge-verdict-opt.selected {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.15);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+}
+
+.judge-timeline-marker {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  pointer-events: auto;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+  z-index: 5;
+}
+
+.judge-timeline-marker:hover {
+  transform: translate(-50%, -50%) scale(1.6);
+}
+
+.judge-timeline-marker.valid {
+  background: #10b981;
+  border: 2px solid #fff;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.8);
+}
+
+.judge-timeline-marker.norep {
+  background: #ef4444;
+  border: 2px solid #fff;
+  box-shadow: 0 0 6px rgba(239, 68, 68, 0.8);
+}
+
+
+/* ============================================================
+   HOTFIX v116 — Превью «Видеозапись готова»: центрирование видео
+   и защита от grid-blowout (autonomy.css задаёт .camera-preview-modal
+   display:grid; авто-колонка распирала контент вправо и обрезала его,
+   а портретный .preview-frame без заданной высоты схлопывался в 0×0).
+   Портрет 9:16 (iPhone). Ландшафт не затрагивается.
+   ============================================================ */
+.camera-preview-modal {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+.camera-preview-modal > * {
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+.preview-frame.is-portrait,
+.preview-frame.preview-portrait {
+  aspect-ratio: auto !important;
+  width: 100% !important;
+  height: 48dvh !important;
+  max-height: 48dvh !important;
+  margin: 0 !important;
+}
+@media (max-height: 680px) {
+  .preview-frame.is-portrait,
+  .preview-frame.preview-portrait {
+    height: 42dvh !important;
+    max-height: 42dvh !important;
+  }
+}
+.camera-preview-modal.is-portrait video.camera-preview-player,
+.camera-preview-modal.preview-portrait video.camera-preview-player,
+.preview-frame.is-portrait video.camera-preview-player {
+  height: 100% !important;
+  width: auto !important;
+  max-width: 100% !important;
+  object-fit: contain !important;
+  margin: 0 auto !important;
+  display: block !important;
+}
+.camera-preview-buttons {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+.camera-preview-buttons > button {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  white-space: normal !important;
+  overflow: hidden !important;
+}
+.camera-preview-buttons > button > span {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+
+/* ============================================================
+   HOTFIX v117 — Ландшафт: контролы ПОВЕРХ видео, видео на весь экран
+   (пропорции 16:9 целые, ничего не режется; боковые поля чёрные).
+   + кнопка «Старт» ручного режима.
+   ============================================================ */
+.hero-recorder-container.is-landscape .hero-viewfinder-wrapper {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+}
+.hero-recorder-container.is-landscape .hero-control-deck {
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  top: auto !important;
+  z-index: 20 !important;
+  width: 100% !important;
+  background: linear-gradient(0deg, rgba(2,6,23,0.92) 0%, rgba(2,6,23,0.45) 55%, transparent 100%) !important;
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px)) !important;
+  box-sizing: border-box !important;
+}
+/* компактный активный ряд: +1 / NO-REP / Завершить в одну линию по центру */
+.hero-recorder-container.is-landscape .hero-deck-active {
+  max-width: 760px !important;
+}
+.hero-recorder-container.is-landscape .hero-action-rep-btn,
+.hero-recorder-container.is-landscape .hero-main-rec-btn.stop {
+  min-height: 46px !important;
+}
+/* кнопка «Старт (отсчёт)» — на всю ширину над рядом кнопок */
+.hero-recorder-container.is-landscape #hero-start-attempt-bar {
+  grid-column: 1 / -1 !important;
+}
+
+/* Кнопка ручного старта отсчёта (обе ориентации) */
+.hero-main-rec-btn.start-attempt {
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  border: 1px solid #34d399 !important;
+  color: #fff !important;
+}
+.hero-main-rec-btn.start-attempt:active {
+  transform: scale(0.98) !important;
+}
+
+/* ============================================================
+   ЭТАЛОН «ГЕРОЙ ГТО»: РАМКА НАВЕДЕНИЯ, РЕЧЕВОЙ ПРОМПТ И ПРЕВЬЮ
+   ============================================================ */
+
+/* 1. Центрированная рамка наведения (Шаг 3 из 3: скриншоты 14, 15, 16) */
+.hero-aim-guide-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 15 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  pointer-events: none !important;
+  padding: 24px 16px !important;
+  box-sizing: border-box !important;
+}
+
+.hero-aim-guide-box {
+  position: relative !important;
+  width: min(74vw, 340px) !important;
+  height: min(68vh, 580px) !important;
+  border: 2px solid rgba(255, 255, 255, 0.75) !important;
+  border-radius: 36px !important;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.28), inset 0 0 20px rgba(255, 255, 255, 0.15) !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  animation: heroAimPulse 2.8s ease-in-out infinite !important;
+}
+
+@keyframes heroAimPulse {
+  0%, 100% { border-color: rgba(255, 255, 255, 0.85); box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.28), inset 0 0 24px rgba(56, 189, 248, 0.25); }
+  50% { border-color: rgba(56, 189, 248, 0.95); box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.28), inset 0 0 32px rgba(56, 189, 248, 0.45); }
+}
+
+.hero-aim-guide-label {
+  margin-top: -16px !important;
+  background: rgba(15, 23, 42, 0.9) !important;
+  color: #fff !important;
+  padding: 6px 18px !important;
+  border-radius: 999px !important;
+  font-size: 13.5px !important;
+  font-weight: 700 !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
+  white-space: nowrap !important;
+  letter-spacing: 0.02em !important;
+}
+
+/* 2. Подсказка речевой идентификации (Скриншот 17) */
+.hero-rec-speech-prompt {
+  position: absolute !important;
+  top: max(20px, env(safe-area-inset-top, 20px)) !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  background: rgba(2, 6, 23, 0.82) !important;
+  backdrop-filter: blur(8px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  color: #f8fafc !important;
+  padding: 8px 20px !important;
+  border-radius: 999px !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  text-align: center !important;
+  z-index: 22 !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6) !important;
+  max-width: 90vw !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* 3. Бейдж таймера обратного отсчета (Скриншот 17: «🔴 ОСТАЛОСЬ 00:54») */
+.hero-rec-countdown-badge {
+  position: absolute !important;
+  right: 20px !important;
+  bottom: calc(100px + env(safe-area-inset-bottom, 0px)) !important;
+  background: rgba(2, 6, 23, 0.82) !important;
+  backdrop-filter: blur(8px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  padding: 6px 14px !important;
+  border-radius: 999px !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  color: #fff !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  z-index: 22 !important;
+  font-family: 'Unbounded', sans-serif !important;
+}
+
+.hero-rec-countdown-dot {
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50% !important;
+  background: #ef4444 !important;
+  box-shadow: 0 0 10px #ef4444 !important;
+  animation: heroBlinkRed 1s infinite !important;
+}
+
+@keyframes heroBlinkRed {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* 4. Круглая кнопка СТОП по центру снизу (Скриншот 17) */
+.hero-rec-stop-ring-btn {
+  position: absolute !important;
+  bottom: calc(24px + env(safe-area-inset-bottom, 0px)) !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 76px !important;
+  height: 76px !important;
+  border-radius: 50% !important;
+  border: 4px solid #fff !important;
+  background: transparent !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  z-index: 22 !important;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.7) !important;
+  padding: 0 !important;
+  transition: transform 0.15s ease !important;
+}
+
+.hero-rec-stop-ring-btn:active {
+  transform: translateX(-50%) scale(0.92) !important;
+}
+
+.hero-rec-stop-inner-sq {
+  width: 32px !important;
+  height: 32px !important;
+  background: #ef4444 !important;
+  border-radius: 8px !important;
+}
+
+/* 5. Полноэкранный модал просмотра видео (Скриншот 18) */
+.hero-review-fullscreen-modal {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 99999 !important;
+  background: #020617 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: env(safe-area-inset-top, 20px) 20px calc(24px + env(safe-area-inset-bottom, 0px)) !important;
+  box-sizing: border-box !important;
+}
+
+.hero-review-top-bar {
+  width: 100% !important;
+  max-width: 440px !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+  margin-bottom: 12px !important;
+}
+
+.hero-review-dur-badge {
+  background: rgba(15, 23, 42, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  padding: 4px 12px !important;
+  border-radius: 999px !important;
+  color: #fff !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+}
+
+.hero-review-video-wrap {
+  flex: 1 !important;
+  width: 100% !important;
+  max-width: 440px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  background: #000 !important;
+}
+
+.hero-review-video-wrap video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  border-radius: 20px !important;
+}
+
+.hero-review-actions-deck {
+  width: 100% !important;
+  max-width: 440px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  margin-top: 16px !important;
+}
+
+.hero-btn-gradient-primary {
+  width: 100% !important;
+  min-height: 52px !important;
+  border-radius: 16px !important;
+  background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%) !important;
+  border: none !important;
+  color: #fff !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  font-family: 'Unbounded', sans-serif !important;
+  letter-spacing: 0.03em !important;
+  cursor: pointer !important;
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35) !important;
+  transition: transform 0.15s ease !important;
+}
+
+.hero-btn-gradient-primary:active {
+  transform: scale(0.98) !important;
+}
+
+.hero-btn-dark-secondary {
+  width: 100% !important;
+  min-height: 50px !important;
+  border-radius: 16px !important;
+  background: rgba(15, 23, 42, 0.95) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  color: #fff !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  font-family: 'Unbounded', sans-serif !important;
+  letter-spacing: 0.03em !important;
+  cursor: pointer !important;
+}
+
+.hero-btn-text-cancel {
+  background: transparent !important;
+  border: none !important;
+  color: #94a3b8 !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  padding: 8px !important;
+  cursor: pointer !important;
+  text-align: center !important;
+}
+
+/* 6. Bottom Sheet ввода повторений (Скриншот 19) */
+.hero-rep-sheet-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 100000 !important;
+  background: rgba(0, 0, 0, 0.7) !important;
+  backdrop-filter: blur(6px) !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: center !important;
+}
+
+.hero-rep-sheet-card {
+  width: 100% !important;
+  max-width: 480px !important;
+  background: #0d1626 !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 28px 28px 0 0 !important;
+  padding: 20px 24px calc(24px + env(safe-area-inset-bottom, 0px)) !important;
+  box-sizing: border-box !important;
+  box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.8) !important;
+  animation: heroSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+@keyframes heroSlideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.hero-sheet-handle {
+  width: 40px !important;
+  height: 4px !important;
+  background: rgba(255, 255, 255, 0.25) !important;
+  border-radius: 999px !important;
+  margin: 0 auto 16px !important;
+}
+
+.hero-sheet-title {
+  font-size: 20px !important;
+  font-weight: 800 !important;
+  color: #fff !important;
+  margin: 0 0 6px !important;
+  font-family: 'Unbounded', sans-serif !important;
+}
+
+.hero-sheet-subtitle {
+  font-size: 13.5px !important;
+  color: #94a3b8 !important;
+  line-height: 1.4 !important;
+  margin: 0 0 24px !important;
+}
+
+.hero-stepper-wrap {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 24px !important;
+  margin-bottom: 24px !important;
+}
+
+.hero-stepper-btn {
+  width: 60px !important;
+  height: 60px !important;
+  border-radius: 18px !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: #fff !important;
+  font-size: 28px !important;
+  font-weight: 400 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+}
+
+.hero-stepper-btn:active {
+  background: rgba(255, 255, 255, 0.16) !important;
+}
+
+.hero-stepper-display {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  min-width: 90px !important;
+}
+
+.hero-stepper-num {
+  font-size: 52px !important;
+  font-weight: 900 !important;
+  color: #fff !important;
+  font-family: 'Unbounded', sans-serif !important;
+  line-height: 1 !important;
+}
+
+.hero-stepper-lbl {
+  font-size: 11.5px !important;
+  font-weight: 700 !important;
+  color: #64748b !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  margin-top: 4px !important;
+}
+
+/* 7. Модальное окно подтверждения черновика (Скриншот 22) */
+.hero-saved-draft-card {
+  width: 100% !important;
+  max-width: 440px !important;
+  background: #0d1626 !important;
+  border-radius: 28px 28px 0 0 !important;
+  padding: 24px 24px calc(24px + env(safe-area-inset-bottom, 0px)) !important;
+  box-sizing: border-box !important;
+}
+
+.hero-saved-draft-title {
+  font-size: 20px !important;
+  font-weight: 800 !important;
+  color: #fff !important;
+  margin: 0 0 10px !important;
+  font-family: 'Unbounded', sans-serif !important;
+}
+
+.hero-saved-draft-desc {
+  font-size: 14px !important;
+  color: #94a3b8 !important;
+  line-height: 1.5 !important;
+  margin: 0 0 24px !important;
+}
+
+/* 8. Карточка активной онлайн-заявки (Скриншоты 10, 20, 23, 24) */
+.hero-draft-application-card {
+  margin-top: 20px;
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.85) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 18px;
+  box-sizing: border-box;
+}
+
+.hero-draft-badge-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.hero-draft-chip {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.hero-draft-badge {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.hero-draft-badge.draft {
+  background: rgba(148, 163, 184, 0.15);
+  color: #cbd5e1;
+}
+
+.hero-draft-badge.submitted {
+  background: rgba(56, 189, 248, 0.2);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+}
+
+.hero-draft-badge.reshoot {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.5);
+}
+
+.hero-draft-badge.approved {
+  background: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.4);
+}
+
+.hero-draft-stage-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 6px;
+  font-family: 'Unbounded', sans-serif;
+}
+
+.hero-draft-stage-desc {
+  font-size: 12.5px;
+  color: #94a3b8;
+  line-height: 1.45;
+  margin: 0 0 16px;
+}
+
+.hero-draft-judge-note {
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 12.5px;
+  color: #fde68a;
+  margin-bottom: 14px;
+  line-height: 1.4;
+}
+
+.hero-draft-exercises-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.hero-draft-ex-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 14px;
+  transition: border-color 0.2s;
+}
+
+.hero-draft-ex-row.is-done {
+  border-color: rgba(34, 197, 94, 0.3);
+  background: rgba(34, 197, 94, 0.04);
+}
+
+.hero-draft-ex-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  flex: 1;
+}
+
+.hero-draft-ex-idx {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hero-draft-ex-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.hero-draft-ex-name {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #f1f5f9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hero-draft-ex-state {
+  font-size: 12px;
+}
+
+.hero-draft-ex-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.hero-draft-play-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: #38bdf8;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.hero-draft-shoot-btn {
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 12.5px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.hero-draft-shoot-btn.primary {
+  background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(225, 29, 72, 0.3);
+}
+
+.hero-draft-shoot-btn.reshoot {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #e2e8f0;
+}
+
+.hero-draft-card-foot {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hero-draft-foot-hint {
+  font-size: 11.5px;
+  color: #64748b;
+  text-align: center;
+}
+
+/* 9. Модальное окно регистрации на турнир (Очный / Онлайн) */
+.hero-modal-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 100050 !important;
+  background: rgba(3, 7, 18, 0.82) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 16px !important;
+  box-sizing: border-box !important;
+}
+
+.hero-reg-dialog {
+  position: relative !important;
+  width: 100% !important;
+  max-width: 480px !important;
+  background: #0f172a !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 24px !important;
+  padding: 24px !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6) !important;
+  box-sizing: border-box !important;
+}
+
+.hero-modal-close-btn {
+  position: absolute !important;
+  top: 18px !important;
+  right: 18px !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: none !important;
+  color: #94a3b8 !important;
+  font-size: 15px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.hero-reg-badge {
+  display: inline-block !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  color: #38bdf8 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  background: rgba(56, 189, 248, 0.12) !important;
+  padding: 3px 10px !important;
+  border-radius: 999px !important;
+  margin-bottom: 8px !important;
+}
+
+.hero-reg-title {
+  font-size: 18px !important;
+  font-weight: 800 !important;
+  color: #fff !important;
+  margin: 0 0 4px !important;
+  font-family: 'Unbounded', sans-serif !important;
+  line-height: 1.35 !important;
+}
+
+.hero-reg-meta {
+  font-size: 12.5px !important;
+  color: #94a3b8 !important;
+  margin: 0 0 16px !important;
+}
+
+.hero-reg-profile-preview {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 12px !important;
+  padding: 12px !important;
+  margin-bottom: 16px !important;
+}
+
+.hero-reg-prof-name {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #f8fafc !important;
+  margin-bottom: 2px !important;
+}
+
+.hero-reg-prof-sub {
+  font-size: 12px !important;
+  color: #94a3b8 !important;
+}
+
+.hero-reg-format-card {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 12px !important;
+  padding: 12px 14px !important;
+  border-radius: 14px !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.08) !important;
+  margin-bottom: 10px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.hero-reg-format-card.selected {
+  border-color: #38bdf8 !important;
+  background: rgba(56, 189, 248, 0.08) !important;
+}
+
+.hrf-radio {
+  width: 18px !important;
+  height: 18px !important;
+  border-radius: 50% !important;
+  border: 2px solid #64748b !important;
+  margin-top: 2px !important;
+  flex-shrink: 0 !important;
+  position: relative !important;
+}
+
+.hero-reg-format-card.selected .hrf-radio {
+  border-color: #38bdf8 !important;
+}
+
+.hero-reg-format-card.selected .hrf-radio::after {
+  content: '' !important;
+  position: absolute !important;
+  inset: 3px !important;
+  border-radius: 50% !important;
+  background: #38bdf8 !important;
+}
+
+.hrf-title {
+  font-size: 13.5px !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+  margin-bottom: 3px !important;
+}
+
+.hrf-desc {
+  font-size: 12px !important;
+  color: #94a3b8 !important;
+  line-height: 1.4 !important;
+}
+
+/* ==========================================================================
+   IDENTITY RESOLVER CONFIRMATION & CAREER TIMELINE (v128)
+   ========================================================================== */
+
+.hero-identity-confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 17, 31, 0.88);
+  backdrop-filter: blur(12px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: heroFadeIn 0.25s ease-out;
+}
+
+.hero-identity-confirm-card {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border: 1.5px solid rgba(56, 189, 248, 0.4);
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(56, 189, 248, 0.2);
+  max-width: 520px;
+  width: 100%;
+  padding: 24px;
+  color: #fff;
+  position: relative;
+}
+
+.identity-confirm-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.5);
+  color: #38bdf8;
+  margin-bottom: 12px;
+}
+
+.identity-confirm-title {
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0 0 6px;
+  color: #fff;
+}
+
+.identity-confirm-region {
+  font-size: 13.5px;
+  color: #94a3b8;
+  margin: 0 0 16px;
+}
+
+.identity-confirm-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 12px;
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.identity-confirm-stats div b {
+  display: block;
+  font-size: 18px;
+  color: #38bdf8;
+  font-family: 'Unbounded', sans-serif;
+}
+
+.identity-confirm-stats div small {
+  font-size: 11px;
+  color: #64748b;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.identity-confirm-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.identity-confirm-actions button {
+  width: 100%;
+  padding: 13px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+/* Карьерный трек атлета (История всех соревнований) */
+.athlete-career-section {
+  margin-top: 24px;
+}
+
+.athlete-career-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.athlete-career-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.athlete-career-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.athlete-history-card {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 14px 16px;
+  transition: all 0.2s ease;
+}
+
+.athlete-history-card:hover {
+  border-color: rgba(56, 189, 248, 0.3);
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.ahc-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.ahc-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #f1f5f9;
+  line-height: 1.35;
+}
+
+.ahc-date {
+  font-size: 12px;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.ahc-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 12.5px;
+  color: #94a3b8;
+  margin-bottom: 8px;
+}
+
+.ahc-rank-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.ahc-rank-badge.gold {
+  background: rgba(245, 158, 11, 0.2);
+  border: 1px solid #f59e0b;
+  color: #fef3c7;
+}
+
+.ahc-rank-badge.silver {
+  background: rgba(148, 163, 184, 0.2);
+  border: 1px solid #94a3b8;
+  color: #f8fafc;
+}
+
+.ahc-rank-badge.bronze {
+  background: rgba(217, 119, 6, 0.2);
+  border: 1px solid #d97706;
+  color: #fed7aa;
+}
+
+.ahc-events-list {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ahc-event-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12.5px;
+}
+
+.ahc-event-name {
+  color: #cbd5e1;
+}
+
+.ahc-event-result {
+  font-weight: 700;
+  color: #38bdf8;
+  font-family: 'Unbounded', sans-serif;
+  font-size: 11.5px;
+}

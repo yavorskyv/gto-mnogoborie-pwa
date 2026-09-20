@@ -1,0 +1,62 @@
+{
+  "name": "Федерация многоборья ГТО России",
+  "short_name": "Многоборье ГТО",
+  "description": "Мобильный портал официальных соревнований, протоколов, нормативов и рекордов Федерации многоборья ГТО России.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#07111F",
+  "theme_color": "#07111F",
+  "categories": ["sports", "fitness", "news"],
+  "icons": [
+    {
+      "src": "./assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Калькулятор 18 ступеней ГТО",
+      "short_name": "Калькулятор",
+      "description": "Проверка результатов на знаки отличия ГТО и налоговый вычет",
+      "url": "./index.html#calculator",
+      "icons": [{ "src": "./assets/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Тренировочный таймер",
+      "short_name": "Таймер",
+      "description": "Интервальный таймер EMOM, AMRAP, Табата со звуком",
+      "url": "./index.html#timer",
+      "icons": [{ "src": "./assets/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Судейские стандарты No-Rep",
+      "short_name": "Стандарты",
+      "description": "Официальные правила выполнения упражнений и зачёта",
+      "url": "./index.html#standards",
+      "icons": [{ "src": "./assets/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Календарь соревнований",
+      "short_name": "Старты",
+      "description": "Официальные турниры и открытая регистрация",
+      "url": "./index.html#events",
+      "icons": [{ "src": "./assets/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Поиск атлета в протоколах",
+      "short_name": "Поиск",
+      "description": "Поиск по 21 официальному протоколу соревнований",
+      "url": "./index.html#athlete-search",
+      "icons": [{ "src": "./assets/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

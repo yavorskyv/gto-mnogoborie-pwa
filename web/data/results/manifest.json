@@ -1,0 +1,156 @@
+{
+  "generatedAt": "2026-09-13T11:17:37.211Z",
+  "sourceRows": 5013,
+  "events": {
+    "1": {
+      "slug": "igry-gto-2020-g-kislovodsk",
+      "count": 40,
+      "athletes": 0,
+      "teams": 40
+    },
+    "2": {
+      "slug": "igry-gto-2021-g-belgorod",
+      "count": 80,
+      "athletes": 33,
+      "teams": 47
+    },
+    "3": {
+      "slug": "1-y-otkrytyy-mezhdunarodnyy-kubok-moskvy-igry-gto-2022",
+      "count": 690,
+      "athletes": 517,
+      "teams": 173
+    },
+    "4": {
+      "slug": "1-y-otkrytyy-kubok-dalnego-vostoka-igry-gto-2022",
+      "count": 255,
+      "athletes": 197,
+      "teams": 58
+    },
+    "5": {
+      "slug": "igry-gto-v-samare-2022",
+      "count": 130,
+      "athletes": 85,
+      "teams": 45
+    },
+    "6": {
+      "slug": "2-y-otkrytyy-kubok-moskvy-igry-gto-2023",
+      "count": 420,
+      "athletes": 420,
+      "teams": 0
+    },
+    "7": {
+      "slug": "2-y-otkrytyy-kubok-dalnego-vostoka-igry-gto-2023",
+      "count": 79,
+      "athletes": 57,
+      "teams": 22
+    },
+    "8": {
+      "slug": "narodnye-igry-gto",
+      "count": 2322,
+      "athletes": 2322,
+      "teams": 0
+    },
+    "14": {
+      "slug": "tehnosport-pervyh",
+      "count": 45,
+      "athletes": 0,
+      "teams": 45
+    },
+    "15": {
+      "slug": "uchastie-v-mezhdunarodnom-festivale-molodezhi",
+      "count": 99,
+      "athletes": 99,
+      "teams": 0
+    },
+    "21": {
+      "slug": "iv-festival-chempionov-gto-igry-gto-2024",
+      "count": 144,
+      "athletes": 106,
+      "teams": 38
+    },
+    "33": {
+      "slug": "3-y-otkrytyy-kubok-moskvy-igry-gto-2024",
+      "count": 15,
+      "athletes": 15,
+      "teams": 0
+    },
+    "36": {
+      "slug": "3-y-otkrytyy-kubok-dalnego-vostoka-igry-gto-2024",
+      "count": 149,
+      "athletes": 149,
+      "teams": 0
+    },
+    "37": {
+      "slug": "event-37",
+      "count": 1,
+      "athletes": 1,
+      "teams": 0
+    },
+    "60": {
+      "slug": "narodnye-igry-gto-2025",
+      "count": 20,
+      "athletes": 20,
+      "teams": 0
+    },
+    "70": {
+      "slug": "narodnye-igry-gto-sportloto-2025-3-y-sezon",
+      "count": 12,
+      "athletes": 12,
+      "teams": 0
+    },
+    "71": {
+      "slug": "final-narodnyh-igr-gto-sportoloto-2025",
+      "count": 30,
+      "athletes": 30,
+      "teams": 0
+    },
+    "75": {
+      "slug": "iv-otkrytyy-kubok-dalnego-vostoka-igry-gto-2025",
+      "count": 4,
+      "athletes": 4,
+      "teams": 0
+    },
+    "80": {
+      "slug": "geroy-gto-final-3-go-sezona-narodnye-igry-gto-sportloto-2025",
+      "count": 9,
+      "athletes": 9,
+      "teams": 0
+    },
+    "87": {
+      "slug": "event-87",
+      "count": 15,
+      "athletes": 15,
+      "teams": 0
+    },
+    "95": {
+      "slug": "4-y-sezon-narodnyh-igr-gto-sportloto",
+      "count": 367,
+      "athletes": 367,
+      "teams": 0
+    },
+    "98": {
+      "slug": "chempionat-po-mnogoboryu-gto",
+      "count": 6,
+      "athletes": 6,
+      "teams": 0
+    },
+    "99": {
+      "slug": "geroy-gto-final-4-go-sezona-narodnyh-igr-gto-sportloto-2026",
+      "count": 59,
+      "athletes": 59,
+      "teams": 0
+    },
+    "104": {
+      "slug": "narodnye-igry-gto-geroy-gto",
+      "count": 21,
+      "athletes": 21,
+      "teams": 0
+    },
+    "107": {
+      "slug": "den-fizkulturnika",
+      "count": 1,
+      "athletes": 1,
+      "teams": 0
+    }
+  }
+}

@@ -1,0 +1,2902 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Презентация: gto.com.ru (Было) vs Новая цифровая экосистема (Стало)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Unbounded:wght@600;700;800;900&display=swap" rel="stylesheet">
+<link rel="icon" href="./assets/favicon.png">
+<style>
+/* ==========================================================
+   NEO-SPORTS DESIGN TOKENS & VISUAL SYSTEM
+   ========================================================== */
+:root {
+  --bg-canvas: #050b14;
+  --bg-surface: #0a1424;
+  --bg-surface-elevated: #0f1d33;
+  --bg-card: rgba(17, 34, 58, 0.7);
+  
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+  
+  /* Contrast Before (gto.com.ru) vs After (New PWA) */
+  --was-red: #ef4444;
+  --was-red-bg: rgba(239, 68, 68, 0.12);
+  --was-red-border: rgba(239, 68, 68, 0.38);
+  --was-card-bg: rgba(30, 18, 24, 0.65);
+  
+  --now-green: #10b981;
+  --now-green-bg: rgba(16, 185, 129, 0.14);
+  --now-green-border: rgba(16, 185, 129, 0.45);
+  --now-cyan: #38bdf8;
+  --now-card-bg: rgba(13, 38, 56, 0.7);
+  
+  --blue-main: #0284c7;
+  --blue-light: #38bdf8;
+  --blue-glow: rgba(56, 189, 248, 0.35);
+  
+  --red-main: #e11d48;
+  --gold-main: #f59e0b;
+  --gold-light: #fbbf24;
+  
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-glass: rgba(255, 255, 255, 0.15);
+  --border-neon: rgba(56, 189, 248, 0.5);
+  
+  --font-display: 'Unbounded', -apple-system, sans-serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+  
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background: var(--bg-canvas);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+/* Ambient dynamic background */
+.ambient-glow {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(circle at 15% 25%, rgba(2, 132, 199, 0.16) 0%, transparent 45%),
+    radial-gradient(circle at 85% 75%, rgba(225, 29, 72, 0.14) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(10, 20, 36, 0.7) 0%, transparent 100%);
+}
+
+.ambient-grid {
+  position: fixed;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ==========================================================
+   DECK VIEWPORT & STAGE
+   ========================================================== */
+.deck-wrapper {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 1;
+}
+
+.deck-stage {
+  position: relative;
+  width: 100%;
+  max-width: 1440px;
+  aspect-ratio: 16 / 9;
+  max-height: 90vh;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-radius: 24px;
+  box-shadow: 
+    0 30px 80px -20px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(255, 255, 255, 0.07),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  display: flex;
+}
+
+/* ==========================================================
+   SLIDE TRANSITIONS & HEADERS
+   ========================================================== */
+.slide {
+  position: absolute;
+  inset: 0;
+  padding: 44px 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(45px) scale(0.97);
+  transition: opacity 0.4s var(--ease-spring), transform 0.4s var(--ease-spring), visibility 0.4s;
+  pointer-events: none;
+}
+
+.slide.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
+  z-index: 2;
+}
+
+.slide.prev {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-45px) scale(0.97);
+}
+
+.slide-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.slide-category {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--blue-light);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.slide-category::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--red-main);
+  box-shadow: 0 0 10px var(--red-main);
+}
+
+.slide-title {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 2.3vw, 34px);
+  font-weight: 800;
+  line-height: 1.15;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+}
+
+.slide-title em {
+  font-style: normal;
+  color: var(--blue-light);
+}
+
+.slide-subtitle {
+  font-size: clamp(13px, 1.05vw, 15px);
+  color: var(--text-muted);
+  margin-top: 5px;
+  max-width: 880px;
+  line-height: 1.4;
+}
+
+.slide-brand-mark {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(10px);
+  padding: 7px 14px;
+  border-radius: 30px;
+  border: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+}
+
+.slide-brand-mark img {
+  height: 24px;
+  width: auto;
+  object-fit: contain;
+}
+
+.slide-brand-mark span {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #fff;
+}
+
+.slide-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  min-height: 0;
+}
+
+.slide-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-subtle);
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.slide-footer-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.slide-footer-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 4px 10px;
+  border-radius: 6px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* ==========================================================
+   BEFORE VS AFTER (GTO.COM.RU vs НОВАЯ ЭКОСИСТЕМА)
+   ========================================================== */
+.badge-was {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #f87171;
+  background: var(--was-red-bg);
+  border: 1px solid var(--was-red-border);
+  padding: 4px 9px;
+  border-radius: 6px;
+}
+
+.badge-now {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #34d399;
+  background: var(--now-green-bg);
+  border: 1px solid var(--now-green-border);
+  padding: 4px 9px;
+  border-radius: 6px;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
+}
+
+/* Side by side comparison card */
+.feature-split-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.08fr;
+  gap: 24px;
+  height: 100%;
+  align-items: stretch;
+}
+
+.contrast-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  justify-content: center;
+}
+
+.contrast-card {
+  padding: 16px 20px;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.contrast-card.was {
+  background: var(--was-card-bg);
+  border: 1px dashed var(--was-red-border);
+}
+
+.contrast-card.now {
+  background: var(--now-card-bg);
+  border: 1px solid var(--now-green-border);
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.12);
+}
+
+.contrast-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.contrast-card-head h4 {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.contrast-card p {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+.contrast-card ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.contrast-card.was ul li::before {
+  content: '✕ ';
+  color: var(--was-red);
+  font-weight: bold;
+}
+
+.contrast-card.now ul li::before {
+  content: '✓ ';
+  color: var(--now-green);
+  font-weight: bold;
+}
+
+.feature-visual-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  border-radius: 18px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* ==========================================================
+   SLIDE 1: COVER
+   ========================================================== */
+.slide-cover {
+  justify-content: center;
+  padding: 50px 70px;
+  background: 
+    radial-gradient(circle at 85% 45%, rgba(225, 29, 72, 0.14) 0%, transparent 45%),
+    radial-gradient(circle at 20% 75%, rgba(2, 132, 199, 0.18) 0%, transparent 45%),
+    var(--bg-surface);
+}
+
+.cover-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.cover-pill {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(225, 29, 72, 0.15);
+  color: #ff4a4f;
+  border: 1px solid rgba(225, 29, 72, 0.35);
+  padding: 6px 14px;
+  border-radius: 20px;
+}
+
+.cover-pill.blue {
+  background: rgba(2, 132, 199, 0.15);
+  color: var(--blue-light);
+  border-color: rgba(2, 132, 199, 0.35);
+}
+
+.cover-hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3.4vw, 50px);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  margin-bottom: 14px;
+}
+
+.cover-hero-title span {
+  display: block;
+  background: linear-gradient(135deg, #ffffff 40%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.cover-hero-title em {
+  font-style: normal;
+  background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.cover-desc {
+  font-size: clamp(14px, 1.15vw, 17px);
+  line-height: 1.5;
+  color: var(--text-muted);
+  max-width: 880px;
+  margin-bottom: 30px;
+}
+
+.cover-stats-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glass);
+  border-radius: 18px;
+  padding: 18px 24px;
+}
+
+.cover-stat-item b {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(22px, 2.2vw, 32px);
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.1;
+}
+
+.cover-stat-item span {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  display: block;
+}
+
+/* ==========================================================
+   SLIDE 2: THE MASTER "GTO.COM.RU vs NEW PLATFORM" MATRIX
+   ========================================================== */
+.matrix-table {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  height: 100%;
+  justify-content: center;
+}
+
+.matrix-row {
+  display: grid;
+  grid-template-columns: 190px 1fr 1fr;
+  gap: 14px;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 11px 16px;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.matrix-row:hover {
+  border-color: var(--border-neon);
+  transform: translateX(4px);
+}
+
+.matrix-domain {
+  font-family: var(--font-display);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.matrix-cell-was {
+  background: rgba(239, 68, 68, 0.08);
+  border-left: 3px solid var(--was-red);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #cbd5e1;
+  line-height: 1.35;
+}
+
+.matrix-cell-now {
+  background: rgba(16, 185, 129, 0.1);
+  border-left: 3px solid var(--now-green);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #fff;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.matrix-cell-now b {
+  color: var(--blue-light);
+}
+
+/* ==========================================================
+   SLIDE 3: SCALE IN NUMBERS
+   ========================================================== */
+.metrics-hero-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 16px;
+  height: 100%;
+}
+
+.metric-big-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glass);
+  border-radius: 18px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+.metric-big-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--border-subtle);
+}
+
+.metric-big-card.highlight::before {
+  background: linear-gradient(90deg, var(--blue-light), var(--blue-main));
+}
+
+.metric-big-card.highlight-red::before {
+  background: linear-gradient(90deg, var(--red-main), #ff6b72);
+}
+
+.metric-value-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.metric-number {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 3vw, 44px);
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+
+.metric-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--blue-light);
+}
+
+.metric-label {
+  font-size: clamp(13px, 1vw, 15px);
+  font-weight: 700;
+  color: #fff;
+  margin-top: 6px;
+}
+
+.metric-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin-top: 4px;
+}
+
+/* Mini visual components */
+.coat-preview-strip {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  padding: 10px 0;
+}
+
+.coat-preview-strip img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: contain;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 6px;
+  border-radius: 10px;
+  border: 1px solid var(--border-subtle);
+}
+
+.service-card-mini {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.service-card-mini .icon {
+  font-size: 22px;
+  line-height: 1;
+  background: rgba(56, 189, 248, 0.15);
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.service-card-mini b {
+  font-size: 13.5px;
+  color: #fff;
+  display: block;
+}
+
+.service-card-mini span {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.35;
+  display: block;
+  margin-top: 3px;
+}
+
+/* ==========================================================
+   ROADMAP & CONTACTS
+   ========================================================== */
+.roadmap-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  height: 100%;
+}
+
+.roadmap-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glass);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+.roadmap-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 20px;
+  right: 20px;
+  height: 3px;
+  background: var(--border-subtle);
+  border-radius: 2px;
+}
+
+.roadmap-card.active::after {
+  background: linear-gradient(90deg, var(--blue-light), var(--now-green));
+}
+
+.roadmap-quarter {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--blue-light);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.roadmap-card h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.roadmap-card ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.roadmap-card ul li {
+  position: relative;
+  padding-left: 14px;
+}
+
+.roadmap-card ul li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--blue-light);
+  font-weight: bold;
+}
+
+.contacts-split {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 32px;
+  align-items: center;
+  height: 100%;
+}
+
+.contacts-info-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  border-radius: 20px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.contact-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.contact-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(2, 132, 199, 0.18);
+  color: var(--blue-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.contact-text small {
+  display: block;
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+}
+
+.contact-text b {
+  font-size: 15px;
+  color: #fff;
+}
+
+.qr-code-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #07111f;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.qr-code-card svg {
+  margin-bottom: 12px;
+}
+
+.qr-code-card b {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.qr-code-card span {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+/* ==========================================================
+   NAVIGATION TOOLBAR & CONTROLS
+   ========================================================== */
+.deck-toolbar {
+  position: fixed;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(10, 20, 36, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  border-radius: 40px;
+  padding: 6px 14px;
+  z-index: 100;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+}
+
+.toolbar-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 15px;
+}
+
+.toolbar-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.toolbar-btn:active {
+  transform: scale(0.92);
+}
+
+.toolbar-counter {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 800;
+  color: #fff;
+  padding: 0 10px;
+  min-width: 65px;
+  text-align: center;
+}
+
+.toolbar-sep {
+  width: 1px;
+  height: 20px;
+  background: var(--border-subtle);
+}
+
+/* Progress bar */
+.deck-progress {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  z-index: 101;
+}
+
+.deck-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--was-red), var(--blue-light), var(--now-green));
+  transition: width 0.3s ease;
+}
+
+/* Speaker Notes & Overview */
+.speaker-notes-panel {
+  position: fixed;
+  bottom: 76px;
+  right: 24px;
+  width: 390px;
+  max-height: 430px;
+  background: rgba(10, 20, 36, 0.96);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--border-neon);
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+  z-index: 120;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transform: translateY(20px);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s var(--ease-spring);
+}
+
+.speaker-notes-panel.open {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.speaker-notes-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 8px;
+}
+
+.speaker-notes-head b {
+  font-family: var(--font-display);
+  font-size: 13px;
+  color: var(--gold-light);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.speaker-notes-content {
+  font-size: 13px;
+  line-height: 1.55;
+  color: #e2e8f0;
+  overflow-y: auto;
+  max-height: 330px;
+  padding-right: 6px;
+}
+
+.speaker-notes-content p { margin-bottom: 8px; }
+.speaker-notes-content ul { padding-left: 16px; margin-bottom: 8px; }
+.speaker-notes-content li { margin-bottom: 4px; }
+
+.deck-overview {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 11, 20, 0.94);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  z-index: 150;
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.deck-overview.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.overview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.overview-header h2 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: #fff;
+}
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  overflow-y: auto;
+  padding-bottom: 20px;
+}
+
+.overview-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 14px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.overview-card:hover, .overview-card.current {
+  border-color: var(--blue-light);
+  background: var(--bg-surface-elevated);
+  transform: translateY(-2px);
+}
+
+.overview-card.current {
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.35);
+}
+
+.overview-card-num {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--blue-light);
+}
+
+.overview-card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.3;
+}
+
+/* Print Styles */
+@media print {
+  @page {
+    size: 297mm 210mm landscape;
+    margin: 0;
+  }
+  
+  html, body {
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+    background: #050b14 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  .deck-toolbar,
+  .deck-progress,
+  .ambient-glow,
+  .ambient-grid,
+  .speaker-notes-panel,
+  .deck-overview {
+    display: none !important;
+  }
+  
+  .deck-wrapper {
+    display: block !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+  
+  .deck-stage {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    aspect-ratio: auto !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+  
+  .slide {
+    display: flex !important;
+    position: relative !important;
+    inset: auto !important;
+    width: 297mm !important;
+    height: 210mm !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    padding: 22mm 26mm !important;
+    background: #0a1424 !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .deck-wrapper { padding: 12px; }
+  .slide { padding: 26px 32px; }
+  .matrix-row { grid-template-columns: 140px 1fr 1fr; gap: 10px; }
+}
+
+@media (max-width: 768px) {
+  .slide { padding: 18px 20px; }
+  .slide-brand-mark { display: none; }
+  .matrix-row { grid-template-columns: 1fr; gap: 8px; }
+  .feature-split-layout { grid-template-columns: 1fr; overflow-y: auto; }
+  .cover-stats-strip { grid-template-columns: repeat(2, 1fr); }
+  .metrics-hero-grid { grid-template-columns: 1fr; overflow-y: auto; }
+}
+
+/* ==========================================================
+   SCREENSHOT SHOWCASE & LIGHTBOX (БЫЛО vs СТАЛО)
+   ========================================================== */
+.screenshot-showcase-split {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  justify-content: space-between;
+}
+
+.screenshot-window {
+  background: #060e20;
+  border-radius: 12px;
+  border: 1px solid var(--border-glass);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+  cursor: pointer;
+  position: relative;
+  flex: 1;
+  min-height: 145px;
+}
+
+.screenshot-window:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.65);
+}
+
+.screenshot-window.was-window {
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.screenshot-window.was-window:hover {
+  border-color: rgba(239, 68, 68, 0.8);
+  box-shadow: 0 12px 28px rgba(239, 68, 68, 0.18);
+}
+
+.screenshot-window.now-window {
+  border-color: rgba(16, 185, 129, 0.45);
+}
+
+.screenshot-window.now-window:hover {
+  border-color: rgba(16, 185, 129, 0.9);
+  box-shadow: 0 14px 32px rgba(16, 185, 129, 0.22);
+}
+
+.window-bar {
+  background: rgba(11, 23, 48, 0.95);
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 11px;
+}
+
+.window-dots {
+  display: flex;
+  gap: 5px;
+}
+
+.window-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.window-dot.red { background: #ef4444; }
+.window-dot.yellow { background: #f59e0b; }
+.window-dot.green { background: #10b981; }
+
+.window-url {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  font-weight: 600;
+}
+
+.was-window .window-url {
+  color: #fca5a5;
+}
+
+.now-window .window-url {
+  color: #6ee7b7;
+}
+
+.zoom-hint {
+  font-size: 10.5px;
+  color: #cbd5e1;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-left: auto;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.2s;
+}
+
+.screenshot-window:hover .zoom-hint {
+  background: rgba(56, 189, 248, 0.25);
+  color: #fff;
+}
+
+.window-body {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  background: #020617;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.window-body img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.screenshot-window:hover .window-body img {
+  transform: scale(1.025);
+}
+
+/* Lightbox Modal */
+.screenshot-lightbox-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 7, 18, 0.92);
+  backdrop-filter: blur(16px);
+  z-index: 999999;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.screenshot-lightbox-modal.active {
+  display: flex;
+  opacity: 1;
+}
+
+.lightbox-content {
+  position: relative;
+  max-width: 92vw;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  background: #0b1528;
+  border: 1px solid var(--border-glass);
+  border-radius: 16px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.85);
+  overflow: hidden;
+}
+
+.lightbox-header {
+  padding: 12px 20px;
+  background: rgba(15, 23, 42, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.lightbox-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lightbox-close {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.lightbox-close:hover {
+  background: #ef4444;
+}
+
+.lightbox-img-wrapper {
+  overflow: auto;
+  max-height: calc(88vh - 56px);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background: #020617;
+  padding: 12px;
+}
+
+.lightbox-img-wrapper img {
+  max-width: 100%;
+  max-height: 82vh;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+
+.cover-visual-preview-row {
+  display: grid;
+  grid-template-columns: 1.2fr 1.2fr 0.8fr;
+  gap: 16px;
+  margin: 18px 0 22px;
+  width: 100%;
+}
+
+.cover-preview-card {
+  background: #040d21;
+  border-radius: 12px;
+  border: 1px solid var(--border-glass);
+  overflow: hidden;
+  height: 155px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.cover-preview-card:hover {
+  transform: translateY(-3px);
+}
+
+.cover-preview-card.was-card {
+  border-color: rgba(239, 68, 68, 0.4);
+}
+.cover-preview-card.was-card:hover {
+  border-color: rgba(239, 68, 68, 0.8);
+}
+
+.cover-preview-card.now-card {
+  border-color: rgba(16, 185, 129, 0.4);
+}
+.cover-preview-card.now-card:hover {
+  border-color: rgba(16, 185, 129, 0.8);
+}
+
+.cover-preview-card.pwa-card {
+  border-color: rgba(56, 189, 248, 0.4);
+}
+.cover-preview-card.pwa-card:hover {
+  border-color: rgba(56, 189, 248, 0.8);
+}
+
+.preview-tag {
+  background: rgba(11, 23, 48, 0.95);
+  font-size: 10.5px;
+  font-weight: 800;
+  padding: 5px 12px;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+}
+
+.preview-tag.red { color: #fca5a5; }
+.preview-tag.green { color: #6ee7b7; }
+
+.cover-preview-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+}
+
+</style>
+</head>
+<body>
+
+<div class="ambient-glow" aria-hidden="true"></div>
+<div class="ambient-grid" aria-hidden="true"></div>
+
+<main class="deck-wrapper">
+  <div class="deck-stage" id="deck-stage">
+
+    <!-- ==========================================================
+         SLIDE 1: COVER
+         ========================================================== -->
+    <section class="slide slide-cover active" data-slide="1" data-title="Сайт vs Экосистема">
+      <div class="cover-badge-row">
+        <span class="cover-pill">Сравнительный аудит</span>
+        <span class="cover-pill blue">gto.com.ru ➔ Новая PWA-платформа</span>
+      </div>
+      <h1 class="cover-hero-title">
+        <span>Эволюция цифрового спорта:</span>
+        <em>Сайт gto.com.ru vs Новая PWA-экосистема</em>
+      </h1>
+      <p class="cover-desc">
+        Наглядный аудит качественного скачка: почему традиционного веб-сайта Федерации стало недостаточно и как новая мобильная PWA-платформа объединила 3 203 атлета, 85 регионов РФ, онлайн-протоколы и суверенные сервисы.
+      </p>
+      
+      <div class="cover-visual-preview-row">
+        <div class="cover-preview-card was-card" onclick="openScreenshotModal('./assets/presentation/gto_home.png', 'БЫЛО: Статичный десктопный сайт gto.com.ru')">
+          <div class="preview-tag red">🔴 БЫЛО НА GTO.COM.RU</div>
+          <img src="./assets/presentation/gto_home.png" alt="gto.com.ru">
+        </div>
+        <div class="cover-preview-card now-card" onclick="openScreenshotModal('./assets/presentation/now_home.png', 'СТАЛО: Мультисервисная экосистема ФМГТО-РФ')">
+          <div class="preview-tag green">🟢 СТАЛО В НОВОЙ ЭКОСИСТЕМЕ</div>
+          <img src="./assets/presentation/now_home.png" alt="Новая платформа">
+        </div>
+        <div class="cover-preview-card pwa-card" onclick="openScreenshotModal('./assets/presentation/now_mobile_pwa.png', 'СТАЛО: Нативное PWA-приложение для iOS и Android')">
+          <div class="preview-tag green">📱 МОБИЛЬНОЕ PWA (OFFLINE)</div>
+          <img src="./assets/presentation/now_mobile_pwa.png" alt="PWA Mobile" style="object-fit:cover;">
+        </div>
+      </div>
+
+      <div class="cover-stats-strip">
+        <div class="cover-stat-item">
+          <b>113</b>
+          <span>Стартов в календаре</span>
+        </div>
+        <div class="cover-stat-item">
+          <b>3 203</b>
+          <span>Атлета в единой базе</span>
+        </div>
+        <div class="cover-stat-item">
+          <b>85</b>
+          <span>Субъектов РФ на карте</span>
+        </div>
+        <div class="cover-stat-item">
+          <b>321</b>
+          <span>Рекорд России</span>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="slide-footer-meta">
+          <span>Сравнительный анализ и презентация инноваций</span>
+          <span>·</span>
+          <span>2026</span>
+        </div>
+        <span class="slide-footer-tag">Презентация</span>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         SLIDE 2: THE DIRECT COMPARISON MATRIX (10 POINTS)
+         ========================================================== -->
+    <section class="slide" data-slide="2" data-title="Матрица: Сайт vs PWA">
+      <div class="slide-header">
+        <div>
+          <div class="slide-category">Генеральное сопоставление</div>
+          <h2 class="slide-title">Матрица трансформации: <em>gto.com.ru vs Новая экосистема</em></h2>
+          <p class="slide-subtitle">Прямое сравнение ключевых возможностей оригинального сайта Федерации и созданной платформы.</p>
+        </div>
+        <div class="slide-brand-mark">
+          <img src="./assets/logo-clean.png" alt="ГТО">
+          <span>ФМГТО РФ</span>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="matrix-table">
+          <div class="matrix-row">
+            <div class="matrix-domain">📱 Мобильность</div>
+            <div class="matrix-cell-was">
+              <span class="badge-was">НА САЙТЕ GTO.COM.RU (БЫЛО)</span>
+              <div style="margin-top: 4px;">Классический веб-сайт, мелкий шрифт, нет мобильного приложения на смартфонах.</div>
+            </div>
+            <div class="matrix-cell-now">
+              <span class="badge-now">В НОВОЙ ЭКОСИСТЕМЕ (СТАЛО)</span>
+              <div style="margin-top: 4px;"><b>Автономное PWA-приложение</b> с установкой на экран iPhone и Android в 1 клик.</div>
+            </div>
+          </div>
+
+          <div class="matrix-row">
+            <div class="matrix-domain">📡 Офлайн-режим</div>
+            <div class="matrix-cell-was">
+              <span class="badge-was">НА САЙТЕ GTO.COM.RU (БЫЛО)</span>
+              <div style="margin-top: 4px;">Полный отказ без связи: белый экран в спортзалах, подвальных манежах и поездках.</div>
+            </div>
+            <div class="matrix-cell-now">
+              <span class="badge-now">В НОВОЙ ЭКОСИСТЕМЕ (СТАЛО)</span>
+              <div style="margin-top: 4px;"><b>100% работа без интернета</b> (Service Worker Cache First): протоколы и сервисы открываются мгновенно.</div>
+            </div>
+          </div>
+
+          <div class="matrix-row">
+            <div class="matrix-domain">📊 Протоколы</div>
+            <div class="matrix-cell-was">
+              <span class="badge-was">НА САЙТЕ GTO.COM.RU (БЫЛО)</span>
+              <div style="margin-top: 4px;">Ссылки на Яндекс.Диск и сканы PDF: некликабельно, ручной поиск среди сотен листов.</div>
+            </div>
+            <div class="matrix-cell-now">
+              <span class="badge-now">В НОВОЙ ЭКОСИСТЕМЕ (СТАЛО)</span>
+              <div style="margin-top: 4px;"><b>25 интерактивных протоколов</b> (5 013 результатов) с поиском и детализацией комплексов (WOD).</div>
+            </div>
+          </div>
+
+          <div class="matrix-row">
+            <div class="matrix-domain">👤 Реестр атлетов</div>
+            <div class="matrix-cell-was">
+              <span class="badge-was">НА САЙТЕ GTO.COM.RU (БЫЛО)</span>
+              <div style="margin-top: 4px;">Базы атлетов не было вообще: спортсмен не может открыть свой профиль или историю.</div>
+            </div>
+            <div class="matrix-cell-now">
+              <span class="badge-now">В НОВОЙ ЭКОСИСТЕМЕ (СТАЛО)</span>
+              <div style="margin-top: 4px;"><b>Единый реестр 3 203 атлетов</b>, личные карточки, динамика баллов, призовые места.</div>
+            </div>
+          </div>
+
+          <div class="matrix-row">
+            <div class="matrix-domain">⏱️ Спортивные сервисы</div>
+            <div class="matrix-cell-was">
+              <span class="badge-was">НА САЙТЕ GTO.COM.RU (БЫЛО)</span>
+              <div style="margin-top: 4px;">Сервисы отсутствовали полностью — спортсмены искали платные таймеры в сторах.</div>
+            </div>
+            <div class="matrix-cell-now">
+              <span class="badge-now">В НОВОЙ ЭКОСИСТЕМЕ (СТАЛО)</span>
+              <div style="margin-top: 4px;"><b>Калькулятор 18 ступеней ГТО, соревновательный WOD-таймер</b> и видеорегистратор отборов в 1 окне.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="slide-footer-meta">
+          <span>Сравнение функционала: Классический сайт gto.com.ru vs Новая PWA-платформа</span>
+        </div>
+        <span class="slide-footer-tag">Аудит</span>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         SLIDE 3: SCALE IN NUMBERS
+         ========================================================== -->
+    <section class="slide" data-slide="3" data-title="Масштаб в цифрах">
+      <div class="slide-header">
+        <div>
+          <div class="slide-category">Масштаб платформы</div>
+          <h2 class="slide-title">Оцифрованный массив данных Федерации</h2>
+          <p class="slide-subtitle">Фактический объем данных, собранный, проверенный и структурированный в новой системе.</p>
+        </div>
+        <div class="slide-brand-mark">
+          <img src="./assets/logo-clean.png" alt="ГТО">
+          <span>ФМГТО РФ</span>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="metrics-hero-grid">
+          <div class="metric-big-card highlight">
+            <div class="metric-value-row">
+              <span class="metric-number">113</span>
+              <span class="metric-badge">Турниры</span>
+            </div>
+            <div>
+              <div class="metric-label">Официальных стартов в календаре</div>
+              <div class="metric-sub">Единый архив соревнований с 2022 по 2026 год с привязкой протоколов и медиа.</div>
+            </div>
+          </div>
+          <div class="metric-big-card highlight-red">
+            <div class="metric-value-row">
+              <span class="metric-number">3 203</span>
+              <span class="metric-badge">Атлеты</span>
+            </div>
+            <div>
+              <div class="metric-label">Спортсмена в едином реестре</div>
+              <div class="metric-sub">Личный профиль каждого участника с историей выступлений (на gto.com.ru этого не было).</div>
+            </div>
+          </div>
+          <div class="metric-big-card">
+            <div class="metric-value-row">
+              <span class="metric-number">5 013</span>
+              <span class="metric-badge">Результаты</span>
+            </div>
+            <div>
+              <div class="metric-label">Оцифрованных результатов протоколов</div>
+              <div class="metric-sub">25 протоколов соревнований переведены из «слепых» PDF в интерактивные таблицы.</div>
+            </div>
+          </div>
+          <div class="metric-big-card">
+            <div class="metric-value-row">
+              <span class="metric-number">85</span>
+              <span class="metric-badge">География</span>
+            </div>
+            <div>
+              <div class="metric-label">Субъектов РФ на интерактивной карте</div>
+              <div class="metric-sub">Вместо сухого списка — векторная карта РФ, гербы регионов и 49 аккредитованных федераций.</div>
+            </div>
+          </div>
+          <div class="metric-big-card">
+            <div class="metric-value-row">
+              <span class="metric-number">321</span>
+              <span class="metric-badge">Рекорды</span>
+            </div>
+            <div>
+              <div class="metric-label">Официальный рекорд России</div>
+              <div class="metric-sub">Интерактивный реестр рекордов с фильтрацией по полу, возрасту и движениям.</div>
+            </div>
+          </div>
+          <div class="metric-big-card highlight">
+            <div class="metric-value-row">
+              <span class="metric-number">0.4 сек</span>
+              <span class="metric-badge">Скорость</span>
+            </div>
+            <div>
+              <div class="metric-label">Мгновенный отклик интерфейса</div>
+              <div class="metric-sub">Ядро Vanilla JS &lt; 300 Кб без тяжелых плагинов против тяжелого классического сайта.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="slide-footer-meta">
+          <span>Сводные показатели оцифровки Федерации многоборья ГТО России</span>
+        </div>
+        <span class="slide-footer-tag">Метрики</span>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         SLIDE 4: PROTOCOLS & RESULTS (GTO.COM.RU vs NEW PWA)
+         ========================================================== -->
+    <section class="slide" data-slide="4" data-title="Протоколы турниров">
+      <div class="slide-header">
+        <div>
+          <div class="slide-category">Протоколы соревнований</div>
+          <h2 class="slide-title">От ссылок на PDF к интерактивным протоколам</h2>
+          <p class="slide-subtitle">Как преобразился доступ к результатам соревнований для спортсменов, тренеров и судей.</p>
+        </div>
+        <div class="slide-brand-mark">
+          <img src="./assets/logo-clean.png" alt="ГТО">
+          <span>ФМГТО РФ</span>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="feature-split-layout">
+          <div class="contrast-panel">
+            <div class="contrast-card was">
+              <div class="contrast-card-head">
+                <span class="badge-was">НА САЙТЕ GTO.COM.RU (БЫЛО)</span>
+                <span style="font-size: 11px; color: var(--was-red);">Сканы и ссылки</span>
+              </div>
+              <h4>Ссылки на внешние облачные диски и PDF-файлы</h4>
+              <p>Организаторы выгружали протоколы на Яндекс.Диск в виде сканов или огромных таблиц. Невозможно было найти спортсмена по поиску, отфильтровать категорию или посмотреть баллы за отдельный комплекс на телефоне.</p>
+              <ul>
+                <li>Сложно читать таблицы на смартфонах;</li>
+                <li>Ссылки на облака со временем ломаются и устаревают;</li>
+                <li>Нельзя перейти в профиль участника.</li>
+              </ul>
+            </div>
+            <div class="contrast-card now">
+              <div class="contrast-card-head">
+                <span class="badge-now">В НОВОЙ ЭКОСИСТЕМЕ (СТАЛО)</span>
+                <span style="font-size: 11px; color: var(--now-green);">25 оцифрованных протоколов</span>
+              </div>
+              <h4>5 013 оцифрованных результатов в единой базе</h4>
+              <p>Интерактивная таблица каждого турнира с мгновенным переключением категорий, детализацией баллов за каждый комплекс (WOD) и кликабельными фамилиями участников с переходом в профиль.</p>
+              <ul>
+                <li>Мгновенный поиск атлета по фамилии;</li>
+                <li>Адаптивные карточки результатов под мобильные экраны;</li>
+                <li>Доступность протоколов даже без интернета (офлайн).</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="feature-visual-card" style="padding: 10px; background: rgba(11,23,48,0.45); border: 1px solid var(--border-glass);">
+            <div class="screenshot-showcase-split">
+              <div class="screenshot-window was-window" onclick="openScreenshotModal('./assets/presentation/gto_competitions.png', 'Сайт gto.com.ru: Соревнования со ссылкой на Яндекс.Форму и PDF-сканы')">
+                <div class="window-bar">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="window-url">🔴 БЫЛО: gto.com.ru/sorevnovaniya (Яндекс.Форма)</span>
+                  <span class="zoom-hint">🔍 Увеличить</span>
+                </div>
+                <div class="window-body">
+                  <img src="./assets/presentation/gto_competitions.png" alt="Сайт gto.com.ru: Соревнования со ссылкой на Яндекс.Форму и PDF-сканы">
+                </div>
+              </div>
+              <div class="screenshot-window now-window" style="flex:1;" onclick="openScreenshotModal('./assets/presentation/now_events.png', 'Новая система: 113 турниров, интерактивные протоколы и WOD-детализация')">
+                <div class="window-bar">
+                  <div class="window-dots"><span class="window-dot green"></span><span class="window-dot green"></span><span class="window-dot green"></span></div>
+                  <span class="window-url">🟢 СТАЛО: app.gto.com.ru/#competitions (113 турниров)</span>
+                  <span class="zoom-hint">🔍 Увеличить</span>
+                </div>
+                <div class="window-body">
+                  <img src="./assets/presentation/now_events.png" alt="Новая система: 113 турниров, интерактивные протоколы и WOD-детализация">
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="slide-footer-meta">
+          <span>Оцифровано 25 официальных протоколов соревнований Федерации</span>
+        </div>
+        <span class="slide-footer-tag">Протоколы</span>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         SLIDE 5: ATHLETES REGISTRY (GTO.COM.RU vs NEW PWA)
+         ========================================================== -->
+    <section class="slide" data-slide="5" data-title="Реестр 3 203 атлетов">
+      <div class="slide-header">
+        <div>
+          <div class="slide-category">Спортсмены</div>
+          <h2 class="slide-title">База атлетов: <em>То, чего вообще не было на сайте</em></h2>
+          <p class="slide-subtitle">На gto.com.ru не существовало каталога спортсменов — в новой системе создан реестр 3 203 участников.</p>
+        </div>
+        <div class="slide-brand-mark">
+          <img src="./assets/logo-clean.png" alt="ГТО">
+          <span>ФМГТО РФ</span>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="feature-split-layout">
+          <div class="contrast-panel">
+            <div class="contrast-card was">
+              <div class="contrast-card-head">
+                <span class="badge-was">НА САЙТЕ GTO.COM.RU (БЫЛО)</span>
+                <span style="font-size: 11px; color: var(--was-red);">Раздела не существовало</span>
+              </div>
+              <h4>Спортсмены оставались «безымянными»</h4>
+              <p>На официальном сайте Федерации не было ни карточек спортсменов, ни поиска по фамилии, ни истории выступлений. Спортсмен не мог доказать свои успехи или посмотреть, в каких турнирах он участвовал 2 года назад.</p>
+              <ul>
+                <li>Нет единого реестра участников соревнований;</li>
+                <li>Невозможно отслеживать спортивный прогресс;</li>
+                <li>Нет персональных рекордов спортсмена.</li>
+              </ul>
+            </div>
+            <div class="contrast-card now">
+              <div class="contrast-card-head">
+                <span class="badge-now">В НОВОЙ ЭКОСИСТЕМЕ (СТАЛО)</span>
+                <span style="font-size: 11px; color: var(--now-green);">3 203 цифровых паспорта</span>
+              </div>
+              <h4>Персональный профиль и сквозная история стартов</h4>
+              <p>Каждый участник получил личную страницу: город, регион, все пройденные турниры, занятые места, призовые подиумы и личные рекорды в беге, подтягиваниях и рывке гири.</p>
+              <ul>
+                <li>Мгновенный поиск атлета по всей стране за 0.1 сек;</li>
+                <li>Сквозная привязка ко всем протоколам Федерации;</li>
+                <li>Встроенный генератор карточек достижений для соцсетей.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="feature-visual-card" style="padding: 10px; background: rgba(11,23,48,0.45); border: 1px solid var(--border-glass);">
+            <div class="screenshot-showcase-split">
+              <div class="screenshot-window was-window" onclick="openScreenshotModal('./assets/presentation/gto_home.png', 'Сайт gto.com.ru: Каталог спортсменов и поиск участников отсутствуют')">
+                <div class="window-bar">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="window-url">🔴 БЫЛО: На gto.com.ru база атлетов отсутствовала</span>
+                  <span class="zoom-hint">🔍 Увеличить</span>
+                </div>
+                <div class="window-body">
+                  <img src="./assets/presentation/gto_home.png" alt="Сайт gto.com.ru: Каталог спортсменов и поиск участников отсутствуют">
+                </div>
+              </div>
+              <div class="screenshot-window now-window" style="flex:1;" onclick="openScreenshotModal('./assets/presentation/now_athletes.png', 'Новая система: Единый реестр 3 203 атлетов с карточками и рекордами')">
+                <div class="window-bar">
+                  <div class="window-dots"><span class="window-dot green"></span><span class="window-dot green"></span><span class="window-dot green"></span></div>
+                  <span class="window-url">🟢 СТАЛО: app.gto.com.ru/#athletes (3 203 спортсмена)</span>
+                  <span class="zoom-hint">🔍 Увеличить</span>
+                </div>
+                <div class="window-body">
+                  <img src="./assets/presentation/now_athletes.png" alt="Новая система: Единый реестр 3 203 атлетов с карточками и рекордами">
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="slide-footer-meta">
+          <span>3 203 верифицированных профиля в базе данных Федерации</span>
+        </div>
+        <span class="slide-footer-tag">Реестр атлетов</span>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         SLIDE 6: SOCIAL MEDIA STORIES (GTO.COM.RU vs NEW PWA)
+         ========================================================== -->
+    <section class="slide" data-slide="6" data-title="Вирусные Stories">
+      <div class="slide-header">
+        <div>
+          <div class="slide-category">Вирусный маркетинг</div>
+          <h2 class="slide-title">Генератор карточек достижений для соцсетей</h2>
+          <p class="slide-subtitle">Инструмент бесплатного продвижения Федерации через гордость спортсменов своими результатами.</p>
+        </div>
+        <div class="slide-brand-mark">
+          <img src="./assets/logo-clean.png" alt="ГТО">
+          <span>ФМГТО РФ</span>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="feature-split-layout">
+          <div class="contrast-panel">
+            <div class="contrast-card was">
+              <div class="contrast-card-head">
+                <span class="badge-was">НА САЙТЕ GTO.COM.RU (БЫЛО)</span>
+                <span style="font-size: 11px; color: var(--was-red);">Ноль инструментов</span>
+              </div>
+              <h4>Спортсменам нечем было делиться</h4>
+              <p>Единственный способ поделиться успехом — сфотографировать бумажную грамоту или медаль на телефон. Федерация теряла огромный потенциал вирусного охвата в молодежных соцсетях.</p>
+              <ul>
+                <li>Никакой брендированной спортивной инфографики;</li>
+                <li>Спортсмены не упоминают сайт Федерации в соцсетях;</li>
+                <li>Нулевой прирост подписчиков через участников.</li>
+              </ul>
+            </div>
+            <div class="contrast-card now">
+              <div class="contrast-card-head">
+                <span class="badge-now">В НОВОЙ ЭКОСИСТЕМЕ (СТАЛО)</span>
+                <span style="font-size: 11px; color: var(--now-green);">HTML5 Canvas Генератор</span>
+              </div>
+              <h4>Карточка достижения (1080×1350) в 1 клик</h4>
+              <p>Встроенный генератор карточек для VK и Telegram Stories: фамилия, город, дисциплина, рекордный результат, стильный темный фон и официальная символика Федерации.</p>
+              <ul>
+                <li>Мгновенный экспорт в галерею смартфона;</li>
+                <li>Сотни тысяч органических просмотров в Stories;</li>
+                <li>Нативное продвижение бренда Федерации и спонсоров.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="feature-visual-card" style="padding: 10px; background: rgba(11,23,48,0.45); border: 1px solid var(--border-glass);">
+            <div class="screenshot-showcase-split">
+              <div class="screenshot-window was-window" onclick="openScreenshotModal('./assets/presentation/gto_competitions.png', 'Раньше: Нечитаемые сканы PDF-таблиц и скриншоты со смартфона')">
+                <div class="window-bar">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="window-url">🔴 БЫЛО: Сканы судейских ведомостей PDF</span>
+                  <span class="zoom-hint">🔍 Увеличить</span>
+                </div>
+                <div class="window-body">
+                  <img src="./assets/presentation/gto_competitions.png" alt="Раньше: Нечитаемые сканы PDF-таблиц и скриншоты со смартфона">
+                </div>
+              </div>
+              <div class="screenshot-window now-window" style="flex:1.3;" onclick="openScreenshotModal('./assets/presentation/sample_stories.png', 'Сейчас: Встроенный генератор Stories 1080×1350 для соцсетей (VK / Telegram)')">
+                <div class="window-bar">
+                  <div class="window-dots"><span class="window-dot green"></span><span class="window-dot green"></span><span class="window-dot green"></span></div>
+                  <span class="window-url">🟢 СТАЛО: Stories Generator 1080×1350 (VK / TG)</span>
+                  <span class="zoom-hint">🔍 Увеличить</span>
+                </div>
+                <div class="window-body">
+                  <img src="./assets/presentation/sample_stories.png" alt="Сейчас: Встроенный генератор Stories 1080×1350 для соцсетей (VK / Telegram)">
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="slide-footer-meta">
+          <span>Формат Stories: 1080×1350 px · Высокое разрешение для экранов смартфонов</span>
+        </div>
+        <span class="slide-footer-tag">SMM & Stories</span>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         SLIDE 7: RUSSIAN RECORDS (GTO.COM.RU vs NEW PWA)
+         ========================================================== -->
+    <section class="slide" data-slide="7" data-title="Рекорды России">
+      <div class="slide-header">
+        <div>
+          <div class="slide-category">Высшие достижения</div>
+          <h2 class="slide-title">Реестр рекордов: <em>От текстового списка к интерактиву</em></h2>
+          <p class="slide-subtitle">На gto.com.ru рекорды были неструктурированным текстом — в PWA создан интерактивный реестр 321 рекорда.</p>
+        </div>
+        <div class="slide-brand-mark">
+          <img src="./assets/logo-clean.png" alt="ГТО">
+          <span>ФМГТО РФ</span>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="feature-split-layout">
+          <div class="contrast-panel">
+            <div class="contrast-card was">
+              <div class="contrast-card-head">
+                <span class="badge-was">НА САЙТЕ GTO.COM.RU (БЫЛО)</span>
+                <span style="font-size: 11px; color: var(--was-red);">Статический список</span>
+              </div>
+              <h4>Неудобная простыня текста без фильтров</h4>
+              <p>Рекорды были представлены сплошным текстом или сканом документа. Нельзя было выбрать только женщин, отфильтровать возрастную группу или быстро узнать рекорд в подтягиваниях для своей ступени.</p>
+              <ul>
+                <li>Нет поиска по упражнению или спортсмену;</li>
+                <li>Нет привязки к судейскому протоколу;</li>
+                <li>Сложно проверять актуальность данных.</li>
+              </ul>
+            </div>
+            <div class="contrast-card now">
+              <div class="contrast-card-head">
+                <span class="badge-now">В НОВОЙ ЭКОСИСТЕМЕ (СТАЛО)</span>
+                <span style="font-size: 11px; color: var(--now-green);">321 верифицированный рекорд</span>
+              </div>
+              <h4>3-уровневая фильтрация и привязка к протоколам</h4>
+              <p>Мгновенная выборка по полу (мужчины/женщины), возрасту (юниоры, 18–29, 30–39, 40+) и движениям. Каждый рекорд подтвержден официальным протоколом, датой и городом проведения.</p>
+              <ul>
+                <li>Интерактивный поиск по фамилии рекордсмена;</li>
+                <li>Группировка по дисциплинам или возрастам;</li>
+                <li>Клик на рекордсмена ведет в его профиль.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="feature-visual-card" style="padding: 10px; background: rgba(11,23,48,0.45); border: 1px solid var(--border-glass);">
+            <div class="screenshot-showcase-split">
+              <div class="screenshot-window was-window" onclick="openScreenshotModal('./assets/presentation/gto_records.png', 'Сайт gto.com.ru: Статичный список рекордов без поиска и фильтров')">
+                <div class="window-bar">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="window-url">🔴 БЫЛО: gto.com.ru/rekordy/ (статичный текст)</span>
+                  <span class="zoom-hint">🔍 Увеличить</span>
+                </div>
+                <div class="window-body">
+                  <img src="./assets/presentation/gto_records.png" alt="Сайт gto.com.ru: Статичный список рекордов без поиска и фильтров">
+                </div>
+              </div>
+              <div class="screenshot-window now-window" style="flex:1;" onclick="openScreenshotModal('./assets/presentation/now_records.png', 'Новая система: 321 рекорд РФ с фильтрацией по полу, возрасту и движениям')">
+                <div class="window-bar">
+                  <div class="window-dots"><span class="window-dot green"></span><span class="window-dot green"></span><span class="window-dot green"></span></div>
+                  <span class="window-url">🟢 СТАЛО: app.gto.com.ru/#records (321 верифицированный рекорд)</span>
+                  <span class="zoom-hint">🔍 Увеличить</span>
+                </div>
+                <div class="window-body">
+                  <img src="./assets/presentation/now_records.png" alt="Новая система: 321 рекорд РФ с фильтрацией по полу, возрасту и движениям">
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="slide-footer-meta">
+          <span>Официальный реестр рекордов Федерации многоборья ГТО России</span>
+        </div>
+        <span class="slide-footer-tag">Рекорды</span>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         SLIDE 8: MAP & 85 REGIONS (GTO.COM.RU vs NEW PWA)
+         ========================================================== -->
+    <section class="slide" data-slide="8" data-title="Интерактивная карта">
+      <div class="slide-header">
+        <div>
+          <div class="slide-category">Регионы России</div>
+          <h2 class="slide-title">География: <em>От сухого списка к интерактивной карте</em></h2>
+          <p class="slide-subtitle">На gto.com.ru был текстовый список отделений — в PWA создана векторная карта 85 субъектов РФ.</p>
+        </div>
+        <div class="slide-brand-mark">
+          <img src="./assets/logo-clean.png" alt="ГТО">
+          <span>ФМГТО РФ</span>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="feature-split-layout">
+          <div class="contrast-panel">
+            <div class="contrast-card was">
+              <div class="contrast-card-head">
+                <span class="badge-was">НА САЙТЕ GTO.COM.RU (БЫЛО)</span>
+                <span style="font-size: 11px; color: var(--was-red);">Скупой текст</span>
+              </div>
+              <h4>Обычный текстовый перечень отделений</h4>
+              <p>На сайте был опубликован лишь список региональных контактов, многие из которых устаревали. Не было видно географии развития спорта, не было гербов субъектов РФ, не было привязки турниров к регионам.</p>
+              <ul>
+                <li>Нет визуального понимания охвата страны;</li>
+                <li>Нельзя посмотреть сильнейших атлетов края/области;</li>
+                <li>Нет геолокационного поиска отделения.</li>
+              </ul>
+            </div>
+            <div class="contrast-card now">
+              <div class="contrast-card-head">
+                <span class="badge-now">В НОВОЙ ЭКОСИСТЕМЕ (СТАЛО)</span>
+                <span style="font-size: 11px; color: var(--now-green);">Векторная SVG-карта РФ</span>
+              </div>
+              <h4>Интерактивный инструмент мониторинга 85 регионов</h4>
+              <p>Векторная карта с тепловыми режимами (спортсмены, турниры, рекорды), верифицированными контактами 49 председателей, гербами регионов и автоматическим поиском ближайшей федерации.</p>
+              <ul>
+                <li>Карточка региона со списком турниров и рекордов субъекта;</li>
+                <li>Нижняя шторка (bottom-sheet) под мобильные телефоны;</li>
+                <li>Мгновенный звонок председателю в 1 тап.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="feature-visual-card" style="padding: 10px; background: rgba(11,23,48,0.45); border: 1px solid var(--border-glass);">
+            <div class="screenshot-showcase-split">
+              <div class="screenshot-window was-window" onclick="openScreenshotModal('./assets/presentation/gto_regions.png', 'Сайт gto.com.ru: Страница контактов и статический список отделений')">
+                <div class="window-bar">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="window-url">🔴 БЫЛО: gto.com.ru/kontakty/ (Статический перечень отделений)</span>
+                  <span class="zoom-hint">🔍 Увеличить</span>
+                </div>
+                <div class="window-body">
+                  <img src="./assets/presentation/gto_regions.png" alt="Сайт gto.com.ru: Страница контактов и статический список отделений">
+                </div>
+              </div>
+              <div class="screenshot-window now-window" style="flex:1;" onclick="openScreenshotModal('./assets/presentation/now_regions.png', 'Новая система: Интерактивная векторная SVG-карта 85 субъектов РФ с гербами')">
+                <div class="window-bar">
+                  <div class="window-dots"><span class="window-dot green"></span><span class="window-dot green"></span><span class="window-dot green"></span></div>
+                  <span class="window-url">🟢 СТАЛО: app.gto.com.ru/#regions (Векторная карта РФ)</span>
+                  <span class="zoom-hint">🔍 Увеличить</span>
+                </div>
+                <div class="window-body">
+                  <img src="./assets/presentation/now_regions.png" alt="Новая система: Интерактивная векторная SVG-карта 85 субъектов РФ с гербами">
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="slide-footer-meta">
+          <span>85 субъектов РФ · 49 аккредитованных региональных федераций</span>
+        </div>
+        <span class="slide-footer-tag">Карта РФ</span>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         SLIDE 9: SPORTS SERVICES (GTO.COM.RU vs NEW PWA)
+         ========================================================== -->
+    <section class="slide" data-slide="9" data-title="Спортивные сервисы">
+      <div class="slide-header">
+        <div>
+          <div class="slide-category">Цифровые инструменты</div>
+          <h2 class="slide-title">Спортивные сервисы: <em>3 инструмента прямо в телефоне</em></h2>
+          <p class="slide-subtitle">На gto.com.ru не было сервисов — в PWA встроены калькулятор ступеней, соревновательный таймер и видеорегистратор.</p>
+        </div>
+        <div class="slide-brand-mark">
+          <img src="./assets/logo-clean.png" alt="ГТО">
+          <span>ФМГТО РФ</span>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="feature-split-layout">
+          <div class="contrast-panel">
+            <div class="contrast-card was">
+              <div class="contrast-card-head">
+                <span class="badge-was">НА САЙТЕ GTO.COM.RU (БЫЛО)</span>
+                <span style="font-size: 11px; color: var(--was-red);">Сервисы отсутствовали</span>
+              </div>
+              <h4>Спортсмены пользовались сторонними программами</h4>
+              <p>Для расчета знака ГТО приходилось искать громоздкие таблицы в приказах Минспорта. Для тренировок скачивали платные зарубежные таймеры с назойливой рекламой, а для онлайн-отборов не было инструмента записи видео с таймером в кадре.</p>
+              <ul>
+                <li>Нет встроенного калькулятора нормативов;</li>
+                <li>Нет профессионального соревновательного таймера;</li>
+                <li>Нет инструмента верификации видеоотборов.</li>
+              </ul>
+            </div>
+            <div class="contrast-card now">
+              <div class="contrast-card-head">
+                <span class="badge-now">В НОВОЙ ЭКОСИСТЕМЕ (СТАЛО)</span>
+                <span style="font-size: 11px; color: var(--now-green);">3 встроенных сервиса</span>
+              </div>
+              <h4>Официальные суверенные инструменты без интернета</h4>
+              <p>Все спортивные инструменты собраны в одном приложении и работают 100% автономно прямо в браузере без необходимости скачивать сторонний софт.</p>
+              <ul>
+                <li><b>Калькулятор ГТО:</b> все 18 ступеней (Приказ Минспорта №114);</li>
+                <li><b>WOD-таймер:</b> EMOM, AMRAP, Табата со звуком Web Audio API;</li>
+                <li><b>Qualifier HUD:</b> видеорегистратор с таймером в кадре.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="feature-visual-card" style="padding: 10px; background: rgba(11,23,48,0.45); border: 1px solid var(--border-glass);">
+            <div class="screenshot-showcase-split">
+              <div class="screenshot-window was-window" onclick="openScreenshotModal('./assets/presentation/gto_home.png', 'Сайт gto.com.ru: Спортивные сервисы и калькуляторы полностью отсутствовали')">
+                <div class="window-bar">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="window-url">🔴 БЫЛО: 0 тренировочных и судейских инструментов</span>
+                  <span class="zoom-hint">🔍 Увеличить</span>
+                </div>
+                <div class="window-body">
+                  <img src="./assets/presentation/gto_home.png" alt="Сайт gto.com.ru: Спортивные сервисы и калькуляторы полностью отсутствовали">
+                </div>
+              </div>
+              <div class="screenshot-window now-window" style="flex:1;" onclick="openScreenshotModal('./assets/presentation/now_calculator.png', 'Новая система: Калькулятор 18 ступеней ГТО, соревновательный WOD-таймер со звуком')">
+                <div class="window-bar">
+                  <div class="window-dots"><span class="window-dot green"></span><span class="window-dot green"></span><span class="window-dot green"></span></div>
+                  <span class="window-url">🟢 СТАЛО: app.gto.com.ru/#tools (Калькулятор & WOD)</span>
+                  <span class="zoom-hint">🔍 Увеличить</span>
+                </div>
+                <div class="window-body">
+                  <img src="./assets/presentation/now_calculator.png" alt="Новая система: Калькулятор 18 ступеней ГТО, соревновательный WOD-таймер со звуком">
+                </div>
+              </div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="slide-footer-meta">
+          <span>100% клиентские технологии: Web Audio API, Canvas, MediaRecorder, Офлайн</span>
+        </div>
+        <span class="slide-footer-tag">Сервисы</span>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         SLIDE 10: JUDGING & NO-REP (GTO.COM.RU vs NEW PWA)
+         ========================================================== -->
+    <section class="slide" data-slide="10" data-title="Судейские стандарты">
+      <div class="slide-header">
+        <div>
+          <div class="slide-category">Судейство</div>
+          <h2 class="slide-title">Стандарты судейства: <em>От общих слов к No-Rep критериям</em></h2>
+          <p class="slide-subtitle">На gto.com.ru правила были в общих PDF-документах — в PWA внедрен открытый каталог критериев зачёта.</p>
+        </div>
+        <div class="slide-brand-mark">
+          <img src="./assets/logo-clean.png" alt="ГТО">
+          <span>ФМГТО РФ</span>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="feature-split-layout">
+          <div class="contrast-panel">
+            <div class="contrast-card was">
+              <div class="contrast-card-head">
+                <span class="badge-was">НА САЙТЕ GTO.COM.RU (БЫЛО)</span>
+                <span style="font-size: 11px; color: var(--was-red);">Текстовые положения</span>
+              </div>
+              <h4>Общие фразы и споры на соревнованиях</h4>
+              <p>Правила описывались сухим бюрократическим языком в объемных положениях. На помостах регулярно возникали споры: судья не засчитал повторение, а спортсмен не понимал, в чем именно была биомеханическая ошибка.</p>
+              <ul>
+                <li>Нет наглядных иллюстраций правильной техники;</li>
+                <li>Нет четкого списка ошибок No-Rep;</li>
+                <li>Разная строгость судейства в разных регионах РФ.</li>
+              </ul>
+            </div>
+            <div class="contrast-card now">
+              <div class="contrast-card-head">
+                <span class="badge-now">В НОВОЙ ЭКОСИСТЕМЕ (СТАЛО)</span>
+                <span style="font-size: 11px; color: var(--now-green);">Каталог стандартов и No-Rep</span>
+              </div>
+              <h4>Открытые биомеханические стандарты Минспорта</h4>
+              <p>Каталог упражнений с четкими критериями зачёта (Valid Rep) и подробным описанием типичных ошибок (No-Rep). Единый стандарт для судейских коллегий от Калининграда до Сахалина.</p>
+              <ul>
+                <li>Фиксация крайних точек амплитуды в каждом движении;</li>
+                <li>Исключение разночтений и конфликтов на помостах;</li>
+                <li>Идеальное учебное пособие для подготовки судей.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="feature-visual-card">
+            <b style="font-size: 14px; color: #fff; display: block; margin-bottom: 10px;">Стандарты выполнения упражнений</b>
+            <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 10px; padding: 12px; margin-bottom: 10px;">
+              <b style="color: #34d399; font-size: 13px;">✓ Зачёт повторения (Valid Rep)</b>
+              <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Чёткая фиксация в фазе, подбородок строго выше перекладины, угол 90° в локтях при отжиманиях, полное выпрямление в коленях и тазу.</p>
+            </div>
+            <div style="background: rgba(225, 29, 72, 0.1); border: 1px solid rgba(225, 29, 72, 0.3); border-radius: 10px; padding: 12px;">
+              <b style="color: #ff4a4f; font-size: 13px;">✕ Незачёт (No-Rep)</b>
+              <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Срыв амплитуды, использование инерции ног (баттерфляй/киппинг) в строгих подтягиваниях, касание коленями помоста.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="slide-footer-meta">
+          <span>Утверждено Коллегией судей Федерации многоборья ГТО России</span>
+        </div>
+        <span class="slide-footer-tag">Судейство</span>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         SLIDE 11: TECH SOVEREIGNTY (GTO.COM.RU vs NEW PWA)
+         ========================================================== -->
+    <section class="slide" data-slide="11" data-title="PWA и суверенитет">
+      <div class="slide-header">
+        <div>
+          <div class="slide-category">Технологический суверенитет</div>
+          <h2 class="slide-title">Архитектура: <em>PWA против классического сайта</em></h2>
+          <p class="slide-subtitle">Почему PWA-технология стала технологическим прорывом по сравнению со старым сайтом gto.com.ru.</p>
+        </div>
+        <div class="slide-brand-mark">
+          <img src="./assets/logo-clean.png" alt="ГТО">
+          <span>ФМГТО РФ</span>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="feature-split-layout">
+          <div class="contrast-panel">
+            <div class="contrast-card was">
+              <div class="contrast-card-head">
+                <span class="badge-was">НА САЙТЕ GTO.COM.RU (БЫЛО)</span>
+                <span style="font-size: 11px; color: var(--was-red);">Зависимость и медлительность</span>
+              </div>
+              <h4>Тяжелый сайт без поддержки мобильных функций</h4>
+              <p>Обычный сайт требовал стабильного быстрого интернета. При плохом сигнале в спортивном манеже страницы висели, а на смартфонах приходилось постоянно приближать мелкий текст пальцами.</p>
+              <ul>
+                <li>Нельзя установить как приложение на рабочий стол;</li>
+                <li>Зависимость от внешних серверов и библиотек;</li>
+                <li>Нулевая отказоустойчивость при обрыве связи.</li>
+              </ul>
+            </div>
+            <div class="contrast-card now">
+              <div class="contrast-card-head">
+                <span class="badge-now">В НОВОЙ ЭКОСИСТЕМЕ (СТАЛО)</span>
+                <span style="font-size: 11px; color: var(--now-green);">Суверенное PWA</span>
+              </div>
+              <h4>Установка в 1 клик и молниеносная скорость</h4>
+              <p>Прогрессивное веб-приложение PWA работает на iPhone и Android без App Store и Google Play. Кэш Service Worker сохраняет базу и сервисы на устройстве. Скорость отклика — 0.4 секунды.</p>
+              <ul>
+                <li>100% независимость от зарубежных санкций и сторов;</li>
+                <li>Работает в подвалах и самолетах без интернета;</li>
+                <li>Хостинг в защищенном контуре серверов РФ.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="feature-visual-card" style="padding: 10px; background: rgba(11,23,48,0.45); border: 1px solid var(--border-glass);">
+            <div class="screenshot-showcase-split">
+              <div class="screenshot-window was-window" onclick="openScreenshotModal('./assets/presentation/gto_home.png', 'Сайт gto.com.ru: Классический сайт, 0% офлайн, зависимость от серверов')">
+                <div class="window-bar">
+                  <div class="window-dots"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span></div>
+                  <span class="window-url">🔴 БЫЛО: Традиционный сайт без PWA и офлайна</span>
+                  <span class="zoom-hint">🔍 Увеличить</span>
+                </div>
+                <div class="window-body">
+                  <img src="./assets/presentation/gto_home.png" alt="Сайт gto.com.ru: Классический сайт, 0% офлайн, зависимость от серверов">
+                </div>
+              </div>
+              <div class="screenshot-window now-window" style="flex:1.3;" onclick="openScreenshotModal('./assets/presentation/now_mobile_pwa.png', 'Новая система: PWA-приложение в 1 клик на экран смартфона, 100% офлайн')">
+                <div class="window-bar">
+                  <div class="window-dots"><span class="window-dot green"></span><span class="window-dot green"></span><span class="window-dot green"></span></div>
+                  <span class="window-url">🟢 СТАЛО: Нативное PWA-приложение (iOS/Android)</span>
+                  <span class="zoom-hint">🔍 Увеличить</span>
+                </div>
+                <div class="window-body">
+                  <img src="./assets/presentation/now_mobile_pwa.png" alt="Новая система: PWA-приложение в 1 клик на экран смартфона, 100% офлайн">
+                </div>
+              </div>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="slide-footer-meta">
+          <span>Progressive Web App (PWA) v100 · 100% Отечественная разработка</span>
+        </div>
+        <span class="slide-footer-tag">Суверенитет</span>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         SLIDE 12: PARTNERS & SPONSORS
+         ========================================================== -->
+    <section class="slide" data-slide="12" data-title="Партнёры и спонсоры">
+      <div class="slide-header">
+        <div>
+          <div class="slide-category">Партнёрство и инвестиции</div>
+          <h2 class="slide-title">Возможности для генеральных партнеров и спонсоров</h2>
+          <p class="slide-subtitle">Выход на многотысячную активную спортивную аудиторию и укрепление статуса социально ответственного бренда.</p>
+        </div>
+        <div class="slide-brand-mark">
+          <img src="./assets/logo-clean.png" alt="ГТО">
+          <span>ФМГТО РФ</span>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="feature-split-layout">
+          <div class="contrast-panel">
+            <div class="contrast-card was">
+              <div class="contrast-card-head">
+                <span class="badge-was">НА САЙТЕ GTO.COM.RU (БЫЛО)</span>
+                <span style="font-size: 11px; color: var(--was-red);">Слабый отклик</span>
+              </div>
+              <h4>Статичные баннеры в подвале страницы</h4>
+              <p>Логотипы спонсоров размещались внизу сайта, где их никто не замечал. Партнеры не получали измеримого охвата и не могли взаимодействовать с активной аудиторией соревнований.</p>
+            </div>
+            <div class="contrast-card now">
+              <div class="contrast-card-head">
+                <span class="badge-now">В НОВОЙ ЭКОСИСТЕМЕ (СТАЛО)</span>
+                <span style="font-size: 11px; color: var(--now-green);">Нативный цифровой контакт</span>
+              </div>
+              <h4>Интеграция в таймеры, трансляции и карточки Stories</h4>
+              <p>Логотип партнера виден спортсмену во время тренировок в WOD-таймере, в прямых трансляциях турниров и на карточках достижений, которые тысячи атлетов выкладывают в свои социальные сети.</p>
+            </div>
+          </div>
+
+          <div class="feature-visual-card">
+            <b style="font-size: 14px; color: #fff; display: block; margin-bottom: 10px;">Профиль целевой спортивной аудитории</b>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <div style="background: rgba(255,255,255,0.04); padding: 12px; border-radius: 10px;">
+                <b style="color: #fff; font-size: 13px;">Ядро аудитории</b>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Мужчины и женщины 18–45 лет с высоким уровнем дохода, физической активности и дисциплины.</p>
+              </div>
+              <div style="background: rgba(255,255,255,0.04); padding: 12px; border-radius: 10px;">
+                <b style="color: #fff; font-size: 13px;">Ценности</b>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Здоровье, дисциплина, патриотизм, регулярные тренировки, функциональная экипировка.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="slide-footer-meta">
+          <span>Специальные спонсорские пакеты для турниров высшей категории</span>
+        </div>
+        <span class="slide-footer-tag">Сотрудничество</span>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         SLIDE 13: ROADMAP 2026-2027
+         ========================================================== -->
+    <section class="slide" data-slide="13" data-title="План развития">
+      <div class="slide-header">
+        <div>
+          <div class="slide-category">Дорожная карта</div>
+          <h2 class="slide-title">Стратегический план развития платформы (2026–2027)</h2>
+          <p class="slide-subtitle">Поэтапное масштабирование и интеграция с государственными спортивными системами РФ.</p>
+        </div>
+        <div class="slide-brand-mark">
+          <img src="./assets/logo-clean.png" alt="ГТО">
+          <span>ФМГТО РФ</span>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="roadmap-grid">
+          <div class="roadmap-card active">
+            <div>
+              <div class="roadmap-quarter">III–IV КВАРТАЛ 2026</div>
+              <h3>Электронный планшет судьи</h3>
+            </div>
+            <ul>
+              <li>Планшетный интерфейс для судей на помостах</li>
+              <li>Real-time подсчёт баллов и мгновенная синхронизация</li>
+              <li>Онлайн-табло турнира в манеже и в трансляциях</li>
+            </ul>
+          </div>
+          <div class="roadmap-card">
+            <div>
+              <div class="roadmap-quarter">I КВАРТАЛ 2027</div>
+              <h3>Онлайн-заявки и эквайринг</h3>
+            </div>
+            <ul>
+              <li>Электронная подача заявок спортсменами</li>
+              <li>Оплата стартовых взносов в 1 клик через СБП</li>
+              <li>Мгновенное страхование участников онлайн</li>
+            </ul>
+          </div>
+          <div class="roadmap-card">
+            <div>
+              <div class="roadmap-quarter">II КВАРТАЛ 2027</div>
+              <h3>Интеграция с ГИС «Спорт»</h3>
+            </div>
+            <ul>
+              <li>Шлюз с государственной системой Минспорта</li>
+              <li>Автоматическая передача протоколов на разряды</li>
+              <li>Единый реестр спортивных судей и категорий</li>
+            </ul>
+          </div>
+          <div class="roadmap-card">
+            <div>
+              <div class="roadmap-quarter">III–IV КВАРТАЛ 2027</div>
+              <h3>Всероссийский клубный рейтинг</h3>
+            </div>
+            <ul>
+              <li>Рейтинг спортивных клубов и регионов РФ</li>
+              <li>Личные кабинеты региональных представителей</li>
+              <li>Национальная лига многоборья ГТО</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="slide-footer-meta">
+          <span>Комплексный план цифровизации Федерации многоборья ГТО</span>
+        </div>
+        <span class="slide-footer-tag">Roadmap</span>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         SLIDE 14: CONTACTS & SUMMARY
+         ========================================================== -->
+    <section class="slide" data-slide="14" data-title="Контакты">
+      <div class="slide-header">
+        <div>
+          <div class="slide-category">Контакты и взаимодействие</div>
+          <h2 class="slide-title">Многоборье ГТО России: Твой старт начинается здесь</h2>
+          <p class="slide-subtitle">Приглашаем к сотрудничеству региональные министерства спорта, спортивные федерации и генеральных партнеров.</p>
+        </div>
+        <div class="slide-brand-mark">
+          <img src="./assets/logo-clean.png" alt="ГТО">
+          <span>ФМГТО РФ</span>
+        </div>
+      </div>
+      <div class="slide-body">
+        <div class="contacts-split">
+          <div class="contacts-info-card">
+            <div class="contact-row">
+              <div class="contact-icon">📍</div>
+              <div class="contact-text">
+                <small>Центральный аппарат</small>
+                <b>Москва, Лужнецкая наб., д. 24 (ОК «Лужники»)</b>
+              </div>
+            </div>
+            <div class="contact-row">
+              <div class="contact-icon">🌐</div>
+              <div class="contact-text">
+                <small>Официальный портал</small>
+                <b>gto.com.ru</b>
+              </div>
+            </div>
+            <div class="contact-row">
+              <div class="contact-icon">✉️</div>
+              <div class="contact-text">
+                <small>Электронная почта</small>
+                <b>info@gto.com.ru</b>
+              </div>
+            </div>
+            <div class="contact-row">
+              <div class="contact-icon">📞</div>
+              <div class="contact-text">
+                <small>Горячая линия</small>
+                <b>+7 (986) 333-33-33</b>
+              </div>
+            </div>
+          </div>
+          <div class="qr-code-card">
+            <svg viewBox="0 0 160 160" width="160" height="160" aria-label="QR код">
+              <rect width="160" height="160" fill="#ffffff"/>
+              <path d="M15 15h45v45h-45zM75 15h15v15h-15zM100 15h45v45h-45zM25 25v25h25v-25zM110 25v25h25v-25zM35 35h5v5h-5zM120 35h5v5h-5zM15 100h45v45h-45zM25 110v25h25v-25zM35 120h5v5h-5zM75 75h15v15h-15zM100 75h15v15h-15zM130 75h15v15h-15zM75 100h15v15h-15zM95 100h20v10h-20zM125 100h20v30h-20zM75 130h35v15h-35z" fill="#07111f"/>
+            </svg>
+            <b>Отсканируйте камерой</b>
+            <span>Мгновенный переход на сайт и установка приложения</span>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <div class="slide-footer-meta">
+          <span>Федерация многоборья ГТО России © 2026</span>
+          <span>·</span>
+          <span>Все права защищены</span>
+        </div>
+        <span class="slide-footer-tag">gto.com.ru</span>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<!-- ==========================================================
+     DECK NAVIGATION TOOLBAR
+     ========================================================== -->
+<nav class="deck-toolbar" aria-label="Управление презентацией">
+  <button class="toolbar-btn" id="btn-prev" title="Предыдущий слайд (←, PageUp)">◀</button>
+  <span class="toolbar-counter" id="slide-counter">01 / 14</span>
+  <button class="toolbar-btn" id="btn-next" title="Следующий слайд (→, Space)">▶</button>
+  <div class="toolbar-sep"></div>
+  <button class="toolbar-btn" id="btn-overview" title="Сетка слайдов (G)">☷</button>
+  <button class="toolbar-btn" id="btn-notes" title="Заметки спикера (S)">💬</button>
+  <button class="toolbar-btn" id="btn-pdf" title="Печать в PDF / экспорт">🖨️</button>
+  <button class="toolbar-btn" id="btn-fullscreen" title="Полноэкранный режим (F)">⛶</button>
+  <div class="toolbar-sep"></div>
+  <a href="./index.html" class="toolbar-btn" title="Вернуться на сайт" style="text-decoration: none;">✕</a>
+</nav>
+
+<!-- Progress Bar -->
+<div class="deck-progress">
+  <div class="deck-progress-fill" id="progress-fill"></div>
+</div>
+
+<!-- Speaker Notes Drawer -->
+<aside class="speaker-notes-panel" id="speaker-notes-panel" aria-label="Заметки спикера">
+  <div class="speaker-notes-head">
+    <b><i>🎙️</i> Заметки спикера (<span id="notes-slide-num">1</span>)</b>
+    <button class="toolbar-btn" id="btn-close-notes" style="width: 24px; height: 24px;">×</button>
+  </div>
+  <div class="speaker-notes-content" id="speaker-notes-content"></div>
+</aside>
+
+<!-- Thumbnails Overview Modal -->
+<div class="deck-overview" id="deck-overview" aria-modal="true" role="dialog" hidden>
+  <div class="overview-header">
+    <h2>Все слайды презентации</h2>
+    <button class="toolbar-btn" id="btn-close-overview" style="font-size: 20px;">✕</button>
+  </div>
+  <div class="overview-grid" id="overview-grid"></div>
+</div>
+
+<!-- Presentation Engine Script -->
+<script>
+(() => {
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const totalSlides = slides.length;
+  let currentIndex = 0;
+  
+  const counterEl = document.getElementById('slide-counter');
+  const progressFill = document.getElementById('progress-fill');
+  const notesPanel = document.getElementById('speaker-notes-panel');
+  const notesContent = document.getElementById('speaker-notes-content');
+  const notesSlideNum = document.getElementById('notes-slide-num');
+  const overviewModal = document.getElementById('deck-overview');
+  const overviewGrid = document.getElementById('overview-grid');
+  
+  // Speaker Notes Database focused on gto.com.ru vs New PWA Platform
+  const SPEAKER_NOTES = {
+    1: `
+      <p><b>Вводное слово:</b></p>
+      <p>Уважаемые коллеги! Данная презентация наглядно раскрывает разницу между старым форматом присутствия Федерации на сайте <b>gto.com.ru</b> и <b>созданной цифровой PWA-экосистемой</b>.</p>
+      <ul>
+        <li>Мы покажем, как из обычного сайта с разрозненными ссылками на сканы и PDF возникла национальная спортивная платформа.</li>
+      </ul>
+    `,
+    2: `
+      <p><b>Генеральная матрица: Сайт gto.com.ru vs Новая экосистема:</b></p>
+      <ul>
+        <li><b>Мобильность:</b> На gto.com.ru — тяжелый десктопный сайт. В экосистеме — PWA-приложение, устанавливаемое на iPhone и Android в 1 клик.</li>
+        <li><b>Офлайн:</b> На gto.com.ru без связи ничего не работает. В экосистеме — 100% автономная работа в спортивных манежах без интернета.</li>
+        <li><b>Протоколы:</b> На gto.com.ru — «слепые» ссылки на Яндекс.Диск. В экосистеме — 25 оцифрованных протоколов и 5 013 результатов с поиском по фамилии.</li>
+        <li><b>Спортсмены:</b> На gto.com.ru раздела атлетов не существовало. В экосистеме — реестр 3 203 спортсменов со сквозной историей.</li>
+        <li><b>Сервисы:</b> На gto.com.ru сервисов не было. В экосистеме — калькулятор 18 ступеней, соревновательный WOD-таймер и видеорегистратор отборов.</li>
+      </ul>
+    `,
+    3: `
+      <p><b>Масштаб в цифрах:</b></p>
+      <ul>
+        <li>113 стартов в календаре с 2022 по 2026 год.</li>
+        <li>3 203 спортсмена в едином верифицированном реестре.</li>
+        <li>5 013 результатов в 25 протоколах.</li>
+        <li>85 регионов РФ на карте и 49 аккредитованных федераций.</li>
+        <li>321 официально подтвержденный рекорд России.</li>
+        <li>Скорость отклика интерфейса — 0.4 секунды.</li>
+      </ul>
+    `,
+    4: `
+      <p><b>Протоколы соревнований (gto.com.ru vs PWA):</b></p>
+      <ul>
+        <li><b>На gto.com.ru:</b> Результаты публиковались в виде сканов или файлов на Яндекс.Диске, где спортсменам приходилось вручную искать себя среди сотен страниц.</li>
+        <li><b>В новой экосистеме:</b> 25 интерактивных таблиц с мгновенным поиском по фамилии, разбивкой баллов по каждому комплексу и возможностью перейти в профиль любого атлета.</li>
+      </ul>
+    `,
+    5: `
+      <p><b>Реестр 3 203 атлетов (То, чего не было на сайте):</b></p>
+      <ul>
+        <li><b>На gto.com.ru:</b> Базы спортсменов не существовало вовсе. Спортсмен не имел цифрового следа и не мог посмотреть историю своих турниров.</li>
+        <li><b>В новой экосистеме:</b> Полноценный цифровой паспорт каждого из 3 203 атлетов: история стартов, призовые места, динамика баллов и личные рекорды в движениях.</li>
+      </ul>
+    `,
+    6: `
+      <p><b>Генератор Stories для соцсетей:</b></p>
+      <ul>
+        <li><b>На gto.com.ru:</b> Спортсменам нечем было делиться в соцсетях, кроме фото бумажных грамот.</li>
+        <li><b>В новой экосистеме:</b> Встроенный генератор карточек достижений (1080×1350) позволяет атлету в 1 клик выложить стильную Stories в VK или Telegram, бесплатно продвигая бренд Федерации.</li>
+      </ul>
+    `,
+    7: `
+      <p><b>Реестр рекордов России (gto.com.ru vs PWA):</b></p>
+      <ul>
+        <li><b>На gto.com.ru:</b> Рекорды велись плоским текстом без возможности фильтрации и без подтверждения протоколами.</li>
+        <li><b>В новой экосистеме:</b> 321 рекорд России с 3-уровневым фильтром (пол, возраст, движения). Каждый рекорд подтвержден судейским протоколом и городом проведения.</li>
+      </ul>
+    `,
+    8: `
+      <p><b>Интерактивная карта 85 регионов:</b></p>
+      <ul>
+        <li><b>На gto.com.ru:</b> Скупой текстовый список отделений без гербов и без понимания активности в округах.</li>
+        <li><b>В новой экосистеме:</b> Векторная SVG-карта РФ с тепловыми режимами, карточками 49 председателей, гербами и функцией автопоиска ближайшего отделения через геолокацию.</li>
+      </ul>
+    `,
+    9: `
+      <p><b>Спортивные сервисы (То, чего не было на сайте):</b></p>
+      <ul>
+        <li><b>На gto.com.ru:</b> Сервисы отсутствовали — спортсмены искали платные зарубежные таймеры и скачивали сканы приказов Минспорта.</li>
+        <li><b>В новой экосистеме:</b> Калькулятор всех 18 ступеней ГТО (Приказ №114), соревновательный WOD-таймер со звуком Web Audio API и видеорегистратор отборов с таймером в кадре. Всё работает без интернета!</li>
+      </ul>
+    `,
+    10: `
+      <p><b>Судейские стандарты и No-Rep:</b></p>
+      <ul>
+        <li><b>На gto.com.ru:</b> Общие формулировки в длинных текстовых документах порождали споры на помостах.</li>
+        <li><b>В новой экосистеме:</b> Открытый интерактивный каталог биомеханических стандартов зачёта (Rep) и разборов нарушений (No-Rep) для исключения субъективности.</li>
+      </ul>
+    `,
+    11: `
+      <p><b>Технологический суверенитет:</b></p>
+      <ul>
+        <li><b>На gto.com.ru:</b> Обычный сайт, зависящий от качества связи и внешних скриптов.</li>
+        <li><b>В новой экосистеме:</b> 100% суверенное PWA с мгновенной установкой без App Store/Google Play, кэшированием в офлайне и скоростью отклика 0.4 сек.</li>
+      </ul>
+    `,
+    12: `
+      <p><b>Партнёры и спонсоры:</b></p>
+      <ul>
+        <li><b>На gto.com.ru:</b> Баннеры в подвале сайта с минимальной видимостью.</li>
+        <li><b>В новой экосистеме:</b> Нативная интеграция бренда спонсора в WOD-таймеры, видеотрансляции и карточки Stories с выходом на многотысячную активную ЗОЖ-аудиторию.</li>
+      </ul>
+    `,
+    13: `
+      <p><b>Дорожная карта 2026–2027:</b></p>
+      <ul>
+        <li>Электронные планшеты для судей на помостах с синхронизацией в реальном времени.</li>
+        <li>Онлайн-заявки с оплатой взносов через СБП и страхованием в 1 клик.</li>
+        <li>Интеграция с государственной информационной системой ГИС «Спорт» Минспорта РФ.</li>
+      </ul>
+    `,
+    14: `
+      <p><b>Заключительное слово:</b></p>
+      <ul>
+        <li>Федерация многоборья ГТО России совершила технологический прорыв в национальном спорте.</li>
+        <li>Приглашаем протестировать экосистему по QR-коду или адресу gto.com.ru.</li>
+      </ul>
+    `
+  };
+  
+  function updateSlide(index) {
+    if (index < 0) index = 0;
+    if (index >= totalSlides) index = totalSlides - 1;
+    
+    slides.forEach((slide, i) => {
+      slide.classList.remove('active', 'prev');
+      if (i === index) {
+        slide.classList.add('active');
+      } else if (i < index) {
+        slide.classList.add('prev');
+      }
+    });
+    
+    currentIndex = index;
+    
+    counterEl.textContent = `${String(index + 1).padStart(2, '0')} / ${String(totalSlides).padStart(2, '0')}`;
+    const progressPercent = totalSlides > 1 ? (index / (totalSlides - 1)) * 100 : 0;
+    progressFill.style.width = `${progressPercent}%`;
+    
+    notesSlideNum.textContent = index + 1;
+    notesContent.innerHTML = SPEAKER_NOTES[index + 1] || '<p>Заметки для этого слайда отсутствуют.</p>';
+    
+    history.replaceState(null, '', `#slide-${index + 1}`);
+    
+    document.querySelectorAll('.overview-card').forEach((c, idx) => {
+      c.classList.toggle('current', idx === index);
+    });
+  }
+  
+  function nextSlide() {
+    if (currentIndex < totalSlides - 1) updateSlide(currentIndex + 1);
+  }
+  
+  function prevSlide() {
+    if (currentIndex > 0) updateSlide(currentIndex - 1);
+  }
+  
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen().catch(() => {});
+    }
+  }
+  
+  function toggleNotes() {
+    notesPanel.classList.toggle('open');
+  }
+  
+  function toggleOverview() {
+    const isOpen = overviewModal.classList.toggle('open');
+    overviewModal.hidden = !isOpen;
+  }
+  
+  function buildOverviewGrid() {
+    overviewGrid.innerHTML = '';
+    slides.forEach((slide, idx) => {
+      const card = document.createElement('div');
+      card.className = `overview-card ${idx === currentIndex ? 'current' : ''}`;
+      const title = slide.dataset.title || `Слайд ${idx + 1}`;
+      card.innerHTML = `
+        <span class="overview-card-num">СЛАЙД ${idx + 1}</span>
+        <div class="overview-card-title">${title}</div>
+      `;
+      card.addEventListener('click', () => {
+        updateSlide(idx);
+        toggleOverview();
+      });
+      overviewGrid.appendChild(card);
+    });
+  }
+  
+  function exportPdf() {
+    window.print();
+  }
+  
+  // Keyboard Listeners
+  window.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    
+    switch (e.key) {
+      case 'ArrowRight':
+      case 'ArrowDown':
+      case ' ':
+      case 'PageDown':
+      case 'j':
+      case 'l':
+        e.preventDefault();
+        nextSlide();
+        break;
+      case 'ArrowLeft':
+      case 'ArrowUp':
+      case 'PageUp':
+      case 'k':
+      case 'h':
+      case 'Backspace':
+        e.preventDefault();
+        prevSlide();
+        break;
+      case 'Home':
+        e.preventDefault();
+        updateSlide(0);
+        break;
+      case 'End':
+        e.preventDefault();
+        updateSlide(totalSlides - 1);
+        break;
+      case 'f':
+      case 'F':
+        e.preventDefault();
+        toggleFullscreen();
+        break;
+      case 's':
+      case 'S':
+        e.preventDefault();
+        toggleNotes();
+        break;
+      case 'g':
+      case 'G':
+      case 'o':
+      case 'O':
+        e.preventDefault();
+        toggleOverview();
+        break;
+      case 'p':
+      case 'P':
+        if (e.ctrlKey || e.metaKey) return;
+        e.preventDefault();
+        exportPdf();
+        break;
+      case 'Escape':
+        if (overviewModal.classList.contains('open')) toggleOverview();
+        if (notesPanel.classList.contains('open')) toggleNotes();
+        break;
+    }
+  });
+  
+  // Touch Gestures
+  let touchStartX = 0;
+  let touchStartY = 0;
+  window.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    }
+  }, { passive: true });
+  
+  window.addEventListener('touchend', (e) => {
+    if (!touchStartX) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      if (dx < 0) nextSlide();
+      else prevSlide();
+    }
+    touchStartX = 0;
+    touchStartY = 0;
+  }, { passive: true });
+  
+  document.getElementById('btn-next').addEventListener('click', nextSlide);
+  document.getElementById('btn-prev').addEventListener('click', prevSlide);
+  document.getElementById('btn-fullscreen').addEventListener('click', toggleFullscreen);
+  document.getElementById('btn-notes').addEventListener('click', toggleNotes);
+  document.getElementById('btn-close-notes').addEventListener('click', toggleNotes);
+  document.getElementById('btn-overview').addEventListener('click', toggleOverview);
+  document.getElementById('btn-close-overview').addEventListener('click', toggleOverview);
+  document.getElementById('btn-pdf').addEventListener('click', exportPdf);
+  
+  document.getElementById('deck-stage').addEventListener('click', (e) => {
+    if (e.target.closest('button, a, input, select, .overview-card, .speaker-notes-panel')) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    if (x > rect.width * 0.75) {
+      nextSlide();
+    } else if (x < rect.width * 0.25) {
+      prevSlide();
+    }
+  });
+  
+  const hash = window.location.hash;
+  let startSlide = 0;
+  if (hash && hash.startsWith('#slide-')) {
+    const num = parseInt(hash.replace('#slide-', ''), 10);
+    if (!isNaN(num) && num >= 1 && num <= totalSlides) {
+      startSlide = num - 1;
+    }
+  }
+  
+  buildOverviewGrid();
+  updateSlide(startSlide);
+})();
+</script>
+
+  <!-- SCREENSHOT LIGHTBOX MODAL -->
+  <div id="screenshot-lightbox" class="screenshot-lightbox-modal" onclick="closeScreenshotModal(event)">
+    <div class="lightbox-content" onclick="event.stopPropagation()">
+      <div class="lightbox-header">
+        <div id="lightbox-title" class="lightbox-title">Скриншот платформы</div>
+        <button class="lightbox-close" onclick="closeScreenshotModal()" title="Закрыть (Esc)">✕</button>
+      </div>
+      <div class="lightbox-img-wrapper">
+        <img id="lightbox-img" src="" alt="Скриншот">
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openScreenshotModal(src, title) {
+      const modal = document.getElementById('screenshot-lightbox');
+      const img = document.getElementById('lightbox-img');
+      const titleEl = document.getElementById('lightbox-title');
+      if (modal && img) {
+        img.src = src;
+        if (titleEl) titleEl.innerText = title || 'Скриншот платформы';
+        modal.classList.add('active');
+      }
+    }
+
+    function closeScreenshotModal(e) {
+      if (e && e.target && e.target.id !== 'screenshot-lightbox' && !e.target.classList.contains('lightbox-close')) return;
+      const modal = document.getElementById('screenshot-lightbox');
+      if (modal) modal.classList.remove('active');
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const modal = document.getElementById('screenshot-lightbox');
+        if (modal && modal.classList.contains('active')) {
+          modal.classList.remove('active');
+          e.stopPropagation();
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>

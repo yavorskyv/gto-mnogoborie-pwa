@@ -1,0 +1,214 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+:root {
+  /* Официальные цвета Федерации многоборья ГТО России (gto.com.ru) */
+  --gto-blue: #0078BF;           /* Королевский синий ГТО */
+  --gto-blue-hover: #008BE2;
+  --gto-blue-soft: rgba(0, 120, 191, 0.12);
+  --gto-blue-glow: rgba(0, 120, 191, 0.35);
+
+  --gto-red: #ED1C24;            /* Спортивный красный ГТО */
+  --gto-red-hover: #FF3838;
+  --gto-red-soft: rgba(237, 28, 36, 0.12);
+  --gto-red-glow: rgba(237, 28, 36, 0.35);
+
+  --gto-gold: #F59E0B;           /* Золотой знак / рекорд */
+  --gto-gold-light: #FDE68A;
+  --gto-gold-glow: rgba(245, 158, 11, 0.35);
+  --gto-silver: #94A3B8;         /* Серебряный знак */
+  --gto-bronze: #D97706;         /* Бронзовый знак */
+
+  /* Тёмная спортивная палитра портала (UI/UX Pro Max Dark Athletic) */
+  --gto-bg: #0A0E17;             /* Основной глубокий фон */
+  --gto-surface: #121826;        /* Карточки и контейнеры */
+  --gto-surface-raised: #1A2337; /* Инпуты и приподнятые плашки */
+  --gto-surface-hover: #222D46;  /* Ховер элементов */
+  --gto-border: rgba(255, 255, 255, 0.08);
+  --gto-border-active: rgba(0, 120, 191, 0.45);
+
+  /* Antigravity Glassmorphism & Weightless Spatial Tokens */
+  --gto-glass-bg: linear-gradient(145deg, rgba(20, 27, 43, 0.78) 0%, rgba(13, 18, 29, 0.88) 100%);
+  --gto-glass-border: rgba(255, 255, 255, 0.09);
+  --gto-glass-blur: 16px;
+  --gto-shadow-float: 0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  --gto-shadow-hover: 0 20px 42px -8px rgba(0, 120, 191, 0.28), 0 0 0 1px rgba(0, 136, 255, 0.35);
+
+  --gto-text: #FFFFFF;           /* Основной текст */
+  --gto-text-secondary: #CBD5E1; /* Вторичный текст */
+  --gto-text-muted: #94A3B8;     /* Приглушенный */
+  --gto-success: #10B981;        /* Успех */
+  --gto-success-soft: rgba(16, 185, 129, 0.12);
+
+  /* Геометрия и сетка */
+  --gto-radius: 16px;
+  --gto-radius-sm: 10px;
+  --gto-radius-xs: 6px;
+  --gto-content: 1240px;
+  --gto-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+  --gto-font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --gto-font-display: 'Barlow Condensed', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --gto-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Российский триколор ГТО */
+  --gto-tricolor-gradient: linear-gradient(90deg, #FFFFFF 0%, #FFFFFF 33.3%, #0078BF 33.3%, #0078BF 66.6%, #ED1C24 66.6%, #ED1C24 100%);
+
+  /* Safe Area Insets for Mobile */
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+html {
+  width: 100%;
+  height: 100%;
+  background-color: var(--gto-bg);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  width: 100%;
+  min-height: 100%;
+  background: var(--gto-bg);
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0, 120, 191, 0.15), transparent),
+    radial-gradient(ellipse 50% 40% at 85% 80%, rgba(237, 28, 36, 0.08), transparent),
+    linear-gradient(180deg, #090D15 0%, #0D121D 100%);
+  background-attachment: fixed;
+  color: var(--gto-text);
+  font-family: var(--gto-font);
+  font-size: 14.5px;
+  line-height: 1.5;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Стилизация скроллбара */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--gto-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gto-blue);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+  color: inherit;
+  touch-action: manipulation;
+  transition: transform var(--transition-fast), opacity var(--transition-fast), background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+:focus-visible {
+  outline: 2px solid #38BDF8 !important;
+  outline-offset: 2px !important;
+}
+
+input, select, textarea {
+  font-family: inherit;
+  font-size: 16px; /* Защита от автозума в iOS */
+}
+
+/* Оболочка приложения */
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: clip;
+  position: relative;
+}
+
+.gto-section-header {
+  scroll-margin-top: 75px;
+}
+
+.main-content {
+  flex: 1;
+  max-width: var(--gto-content);
+  width: 100%;
+  margin: 0 auto;
+  padding: 22px 18px calc(88px + var(--sab)) 18px;
+  box-sizing: border-box;
+}
+
+/* Анимация переключения вкладок */
+.tab-view {
+  display: none;
+  animation: gtoFadeIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.tab-view.active {
+  display: block;
+}
+
+@keyframes gtoFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Staggered card entrance for dynamic lists */
+@keyframes gtoCardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+

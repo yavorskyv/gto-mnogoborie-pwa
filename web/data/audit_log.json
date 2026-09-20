@@ -1,0 +1,33 @@
+[
+  {
+    "id": "LOG-1789648357349-svr1",
+    "timestamp": "2026-09-17T12:32:37.349Z",
+    "action": "CREATE_OR_UPDATE_EVENT",
+    "actor": "admin",
+    "details": {
+      "event_id": "EVT-0114",
+      "title": "Онлайн-Кубок ФМГТО 2026",
+      "format": "ONLINE"
+    }
+  },
+  {
+    "id": "LOG-1789646817326-fn76",
+    "timestamp": "2026-09-17T12:06:57.326Z",
+    "action": "LINK_ATHLETE_PROFILE",
+    "actor": "athlete",
+    "details": {
+      "athlete_id": "ATH-0000268",
+      "name": "Яворский Валерий"
+    }
+  },
+  {
+    "id": "LOG-1789645770510-v0ii",
+    "timestamp": "2026-09-17T11:49:30.510Z",
+    "action": "LINK_ATHLETE_PROFILE",
+    "actor": "athlete",
+    "details": {
+      "athlete_id": "ATH-0000268",
+      "name": "Яворский Валерий"
+    }
+  }
+]

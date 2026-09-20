@@ -1,0 +1,8 @@
+.env
+node_modules/
+.DS_Store
+web/uploads/
+web/web/
+database_dumps/
+*.sqlite
+*.webm
