@@ -47,6 +47,12 @@ hr { border: 0; border-top: 1px solid #cbd5e1; margin: 12pt 0; }
 
 def build_html(md_text: str) -> str:
     body = markdown.markdown(md_text, extensions=["tables", "fenced_code", "sane_lists"])
+    # Колонка с названием провайдера/тарифа — самая длинная: отдаём ей ~30% ширины, колонке «#» — 4%
+    body = re.sub(r"<th>(Провайдер / тариф|Провайдер|Тариф|Возможность|Файл|Сервис|Запись)</th>",
+                  r'<th style="width:27%">\1</th>', body)
+    body = body.replace("<th>#</th>", '<th style="width:5.5%">#</th>')
+    body = body.replace("<th>Класс</th>", '<th style="width:12%">Класс</th>')
+    body = body.replace("<th>Оплата из РФ</th>", '<th style="width:11%">Оплата из РФ</th>')
     # Заголовок и подзаголовок
     return f"""<!doctype html><html lang="ru"><head><meta charset="utf-8">
 <title>Почта Федерации: анализ, интеграция, тарифы</title><style>{CSS}</style></head>
@@ -68,6 +74,16 @@ const {{ chromium }} = require({npm_root!r} + '/playwright');
   // Короткие ячейки (числа, цены) не переносим по словам
   await page.evaluate(() => {{
     document.querySelectorAll('td, th').forEach(td => {{ if (td.textContent.trim().length <= 14) td.style.whiteSpace = 'nowrap'; }});
+    // Таблицы с заданной шириной колонки названия — фиксированная раскладка, иначе Chromium ширину игнорирует
+    document.querySelectorAll('table').forEach(t => {{
+      if (t.querySelector('thead th[style*="width"]')) {{
+        t.style.tableLayout = 'fixed';
+        t.querySelectorAll('td, th').forEach(c => {{
+          if (c.textContent.trim().length <= 8) {{ c.style.whiteSpace = 'nowrap'; }}
+          else {{ c.style.whiteSpace = 'normal'; c.style.overflowWrap = 'anywhere'; }}
+        }});
+      }}
+    }});
   }});
   await page.pdf({{
     path: {str(OUT)!r}, format: 'A4', printBackground: true,
