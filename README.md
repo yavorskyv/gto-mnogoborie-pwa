@@ -138,6 +138,13 @@ rsync -az -e "ssh -i ~/.ssh/crossfit_prod_ed25519 -o StrictHostKeyChecking=no" \
 
 > При каждом деплое поднимайте версию ассетов (`?v=N` в `index.html` и `VERSION` в `sw.js`) для сброса кэша.
 
+### Почта (уведомления о заявках, вердикты судей, форма обратной связи)
+
+API-сервер (`web/api_server.js`) отправляет письма через SMTP без внешних зависимостей (`web/server/mailer.js`).
+Пока не задан `MAIL_ENABLED=1`, письма только пишутся в `data/mail_log.json`. Настройка для Яндекс 360, Yandex Cloud Postbox
+и VK WorkSpace — в `web/server/.env.example`; анализ провайдеров, DNS-записи и сравнение тарифов — в
+[docs/EMAIL_YANDEX360_INTEGRATION.md](docs/EMAIL_YANDEX360_INTEGRATION.md). Проверка модуля: `node scripts/test_mailer.js`.
+
 ---
 
 ## Обновление данных

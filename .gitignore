@@ -6,3 +6,6 @@ web/web/
 database_dumps/
 *.sqlite
 *.webm
+web/data/applications.json
+web/data/mail_log.json
+web/server/.env

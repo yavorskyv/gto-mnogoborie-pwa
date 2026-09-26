@@ -20,6 +20,14 @@
  *  GET   /api/hero/videos          — Список видеозаписей атлетов для админки/судейства
  *  PATCH /api/hero/videos/:id      — Судейский вердикт (создаёт официальный RESULT при зачёте)
  *  GET   /api/hero/health          — Проверка работоспособности
+ *
+ * Эндпоинты почты (см. mailer.js, настройка через переменные окружения SMTP_... и MAIL_...):
+ *  POST  /api/applications         — Заявка на турнир: сохраняется в data/applications.json,
+ *                                    участнику уходит подтверждение, федерации — уведомление
+ *  GET   /api/applications         — Список заявок (для админки)
+ *  POST  /api/contact              — Форма обратной связи → письмо на MAIL_ADMIN
+ *  GET   /api/mail/status          — Состояние почтового модуля и последние отправки (без секретов)
+ *  PATCH /api/hero/videos/:id      — дополнительно: письмо атлету о вердикте судьи (если указан email)
  */
 
 const http = require('http');
@@ -27,6 +35,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { masterDataService } = require('./master_data_service');
+const { getMailer, templates: mailTemplates, isValidEmail } = require('./mailer');
 
 const PORT = process.env.PORT || 5055;
 const HOST = '127.0.0.1';
@@ -34,6 +43,11 @@ const HOST = '127.0.0.1';
 const ROOT_DIR = process.env.GTO_ROOT || (fs.existsSync('/var/www/gto2026') ? '/var/www/gto2026' : path.resolve(__dirname, '..'));
 const UPLOADS_DIR = path.join(ROOT_DIR, 'uploads', 'hero');
 const DATA_FILE = path.join(ROOT_DIR, 'data', 'hero_videos.json');
+const APPLICATIONS_FILE = path.join(ROOT_DIR, 'data', 'applications.json');
+
+// Почтовый модуль (dry-run, пока не задан MAIL_ENABLED=1 и SMTP_USER/SMTP_PASS)
+const mailer = getMailer({ logFile: path.join(ROOT_DIR, 'data', 'mail_log.json') });
+console.log(`[Mailer] provider=${mailer.provider} host=${mailer.config.host}:${mailer.config.port} enabled=${mailer.config.enabled} configured=${mailer.isConfigured()}`);
 
 // Инициализация Master Data Layer
 try {
@@ -73,6 +87,58 @@ function saveVideos(videos) {
     console.error('[Save Videos Error]', err);
     return false;
   }
+}
+
+function loadApplications() {
+  try {
+    if (fs.existsSync(APPLICATIONS_FILE)) {
+      return JSON.parse(fs.readFileSync(APPLICATIONS_FILE, 'utf8')) || [];
+    }
+  } catch (err) {
+    console.error('[Load Applications Error]', err);
+  }
+  return [];
+}
+
+function saveApplications(items) {
+  try {
+    fs.writeFileSync(APPLICATIONS_FILE, JSON.stringify(items, null, 2), 'utf8');
+    return true;
+  } catch (err) {
+    console.error('[Save Applications Error]', err);
+    return false;
+  }
+}
+
+// Простой лимит частоты для публичных форм: не более N запросов с одного IP за окно
+const RATE_WINDOW_MS = 10 * 60 * 1000;
+const RATE_MAX_REQUESTS = 10;
+const rateBuckets = new Map();
+function isRateLimited(req) {
+  const ip = String(req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown').split(',')[0].trim();
+  const now = Date.now();
+  const bucket = rateBuckets.get(ip) || [];
+  const recent = bucket.filter(t => now - t < RATE_WINDOW_MS);
+  recent.push(now);
+  rateBuckets.set(ip, recent);
+  if (rateBuckets.size > 5000) {
+    for (const [key, times] of rateBuckets) if (!times.some(t => now - t < RATE_WINDOW_MS)) rateBuckets.delete(key);
+  }
+  return recent.length > RATE_MAX_REQUESTS;
+}
+
+function cleanText(value, max = 200) {
+  return String(value ?? '').replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g, '').trim().slice(0, max);
+}
+
+function makeRegNumber(existing) {
+  const year = new Date().getFullYear();
+  const used = new Set(existing.map(a => a.regNumber));
+  for (let i = 0; i < 50; i++) {
+    const candidate = `ГТО-${year}-${String(1000 + crypto.randomInt(9000))}`;
+    if (!used.has(candidate)) return candidate;
+  }
+  return `ГТО-${year}-${Date.now().toString(36).toUpperCase()}`;
 }
 
 function sendJson(res, statusCode, data) {
@@ -192,6 +258,90 @@ const server = http.createServer(async (req, res) => {
       events_count: masterDataService.events.size,
       records_count: masterDataService.records.length
     });
+    return;
+  }
+
+  // ================= ПОЧТА И ЗАЯВКИ =================
+
+  // GET /api/mail/status — состояние почтового модуля (без секретов)
+  if (pathname === '/api/mail/status' && req.method === 'GET') {
+    sendJson(res, 200, { ok: true, mail: mailer.status() });
+    return;
+  }
+
+  // POST /api/contact — обращение с сайта → письмо федерации
+  if (pathname === '/api/contact' && req.method === 'POST') {
+    if (isRateLimited(req)) { sendJson(res, 429, { ok: false, error: 'Слишком много запросов, попробуйте позже' }); return; }
+    const body = await readJsonBody(req);
+    if (body.website) { sendJson(res, 200, { ok: true, status: 'ignored' }); return; } // honeypot для ботов
+    const form = {
+      name: cleanText(body.name, 120),
+      email: cleanText(body.email, 254),
+      phone: cleanText(body.phone, 40),
+      topic: cleanText(body.topic, 120),
+      message: cleanText(body.message, 4000)
+    };
+    if (!form.name || !form.message) { sendJson(res, 400, { ok: false, error: 'Укажите имя и текст обращения' }); return; }
+    if (form.email && !isValidEmail(form.email)) { sendJson(res, 400, { ok: false, error: 'Некорректный email' }); return; }
+    const result = await mailer.notifyAdmin(mailTemplates.contactForm(form));
+    sendJson(res, result.ok ? 200 : 502, { ok: result.ok, status: result.status, error: result.error || null });
+    return;
+  }
+
+  // GET /api/applications — заявки на турниры (админка)
+  if (pathname === '/api/applications' && req.method === 'GET') {
+    const items = loadApplications();
+    const eventId = url.searchParams.get('event_id');
+    const filtered = eventId ? items.filter(a => String(a.eventId) === String(eventId)) : items;
+    sendJson(res, 200, { ok: true, count: filtered.length, applications: filtered });
+    return;
+  }
+
+  // POST /api/applications — новая заявка на турнир
+  if (pathname === '/api/applications' && req.method === 'POST') {
+    if (isRateLimited(req)) { sendJson(res, 429, { ok: false, error: 'Слишком много запросов, попробуйте позже' }); return; }
+    const body = await readJsonBody(req);
+    if (body.website) { sendJson(res, 200, { ok: true, status: 'ignored' }); return; }
+    const app = {
+      name: cleanText(body.name, 120),
+      phone: cleanText(body.phone, 40),
+      email: cleanText(body.email, 254),
+      region: cleanText(body.region, 120),
+      category: cleanText(body.category, 60) || 'Любители',
+      uin: cleanText(body.uin, 40),
+      eventId: body.eventId != null ? cleanText(body.eventId, 40) : '',
+      eventTitle: cleanText(body.eventTitle, 200),
+      eventPeriod: cleanText(body.eventPeriod, 120),
+      eventLocation: cleanText(body.eventLocation, 200),
+      clientId: cleanText(body.clientId, 60)
+    };
+    if (!app.name || !app.phone || !app.region) { sendJson(res, 400, { ok: false, error: 'Заполните ФИО, телефон и регион' }); return; }
+    if (app.email && !isValidEmail(app.email)) { sendJson(res, 400, { ok: false, error: 'Некорректный email' }); return; }
+
+    const all = loadApplications();
+    const duplicate = app.clientId && all.find(a => a.clientId === app.clientId);
+    if (duplicate) { sendJson(res, 200, { ok: true, application: duplicate, duplicate: true }); return; }
+
+    const record = {
+      id: 'app_' + Date.now().toString(36) + '_' + crypto.randomBytes(3).toString('hex'),
+      regNumber: makeRegNumber(all),
+      ...app,
+      dateSubmitted: new Date().toLocaleDateString('ru-RU'),
+      createdAt: new Date().toISOString(),
+      status: 'Подтверждена',
+      mail: { athlete: null, admin: null }
+    };
+    all.unshift(record);
+    saveApplications(all);
+
+    const [athleteMail, adminMail] = await Promise.all([
+      record.email ? mailer.send({ ...mailTemplates.applicationConfirmation(record), to: record.email }) : Promise.resolve({ status: 'no-email' }),
+      mailer.notifyAdmin(mailTemplates.applicationAdminNotice(record))
+    ]);
+    record.mail = { athlete: athleteMail.status, admin: adminMail.status };
+    saveApplications(all);
+
+    sendJson(res, 201, { ok: true, application: record });
     return;
   }
 
@@ -411,6 +561,7 @@ const server = http.createServer(async (req, res) => {
         localId: metadata.local_id || null,
         athleteId: athleteId,
         athleteName: metadata.athlete_name || fields.athlete_name || 'Атлет',
+        athleteEmail: isValidEmail(metadata.athlete_email || fields.athlete_email || '') ? (metadata.athlete_email || fields.athlete_email) : null,
         exerciseId: metadata.exercise_id || 'exercise',
         exerciseTitle: metadata.exercise_title || 'Упражнение',
         tournamentId: metadata.tournament_id || metadata.tournamentId || fields.tournament_id || fields.tournamentId || null,
@@ -498,6 +649,14 @@ const server = http.createServer(async (req, res) => {
 
         saveVideos(all);
         sendJson(res, 200, { ok: true, video: item });
+
+        // Уведомление атлета о вердикте (после ответа клиенту, чтобы не задерживать судью)
+        if ((updateData.status === 'approved' || updateData.status === 'rejected') && item.athleteEmail) {
+          mailer.send({ ...mailTemplates.heroVerdict(item), to: item.athleteEmail }).then(r => {
+            item.verdictMail = { status: r.status, at: new Date().toISOString() };
+            saveVideos(loadVideos().map(v => (v.id === item.id ? { ...v, verdictMail: item.verdictMail } : v)));
+          }).catch(() => {});
+        }
       } catch (err) {
         sendJson(res, 400, { ok: false, error: err.message });
       }

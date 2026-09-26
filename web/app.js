@@ -3441,6 +3441,10 @@ export function submitTournamentApplication(event, eventId) {
     localStorage.setItem("gto_user_applications", JSON.stringify(existing.slice(0, 20)));
   } catch (e) {}
 
+  // Отправляем заявку на сервер: там она попадает в реестр и участнику/федерации уходят письма.
+  // Локальная копия выше остаётся источником правды для офлайна; при ответе сервера обновляем номер.
+  syncApplicationToServer(newApp);
+
   // Instant success screen inside the modal
   const modalContent = document.getElementById("gto-modal-content");
   if (modalContent) {
@@ -3456,7 +3460,7 @@ export function submitTournamentApplication(event, eventId) {
         </p>
 
         <div style="background: var(--gto-surface-raised); border: 1px solid var(--gto-border); border-radius: var(--gto-radius-sm); padding: 14px 16px; max-width: 440px; margin: 0 auto 18px auto; text-align: left; font-size: 12.5px; display: flex; flex-direction: column; gap: 6px;">
-          <div><strong>Номер заявки:</strong> <span style="color: var(--gto-gold); font-weight: 800; font-family: monospace; font-size: 13.5px;">${regNumber}</span></div>
+          <div><strong>Номер заявки:</strong> <span data-reg-number style="color: var(--gto-gold); font-weight: 800; font-family: monospace; font-size: 13.5px;">${regNumber}</span></div>
           <div><strong>Турнир:</strong> <span style="color: #fff; font-weight: 700;">${escapeHtml(ev.title)}</span></div>
           <div><strong>Сроки:</strong> ${escapeHtml(ev.period)} • ${escapeHtml(ev.location)}</div>
           <div><strong>Участник:</strong> ${escapeHtml(name)} (${escapeHtml(category)})</div>
@@ -3476,6 +3480,55 @@ export function submitTournamentApplication(event, eventId) {
   }
 
   showToast(`Заявка № ${regNumber} успешно отправлена!`);
+}
+
+async function syncApplicationToServer(app) {
+  const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
+  const timer = controller ? setTimeout(() => controller.abort(), 8000) : null;
+  try {
+    const res = await fetch("/api/applications", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      signal: controller ? controller.signal : undefined,
+      body: JSON.stringify({
+        clientId: String(app.id),
+        name: app.name,
+        phone: app.phone,
+        email: app.email,
+        region: app.region,
+        category: app.category,
+        uin: app.uin,
+        eventId: app.eventId,
+        eventTitle: app.eventTitle,
+        eventPeriod: app.eventPeriod,
+        eventLocation: app.eventLocation
+      })
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = await res.json();
+    const serverApp = json && json.application;
+    if (!serverApp || !serverApp.regNumber) return;
+
+    // Обновляем локальную запись серверным номером и статусом доставки письма
+    try {
+      const existing = JSON.parse(localStorage.getItem("gto_user_applications") || "[]");
+      const idx = existing.findIndex(a => a.id === app.id);
+      if (idx !== -1) {
+        existing[idx] = { ...existing[idx], regNumber: serverApp.regNumber, serverId: serverApp.id, mail: serverApp.mail || null, synced: true };
+        localStorage.setItem("gto_user_applications", JSON.stringify(existing));
+      }
+    } catch (e) {}
+
+    const regEl = document.querySelector("#gto-modal-content [data-reg-number]");
+    if (regEl) regEl.textContent = serverApp.regNumber;
+    if (serverApp.mail && serverApp.mail.athlete === "sent" && app.email) {
+      showToast(`Подтверждение отправлено на ${app.email}`);
+    }
+  } catch (err) {
+    console.warn("[Applications] server sync skipped:", err && err.message);
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
 }
 
 export function applyForEvent(eventId) {

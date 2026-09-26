@@ -725,11 +725,20 @@ async function uploadHeroVideoRecord(record) {
     const tournamentTitle = record.tournamentTitle || draft.tournamentTitle || '';
     if (tournamentId) formData.append('tournament_id', tournamentId);
     if (tournamentTitle) formData.append('tournament_title', tournamentTitle);
+    // Email активного профиля — чтобы сервер мог уведомить атлета о вердикте судьи
+    let athleteEmail = '';
+    try {
+      const heroStore = loadStore();
+      const activeProfile = heroStore.profiles[heroStore.active];
+      athleteEmail = (activeProfile && activeProfile.email) ? String(activeProfile.email).trim() : '';
+    } catch (_) {}
+    if (athleteEmail) formData.append('athlete_email', athleteEmail);
     formData.append('metadata', JSON.stringify({
       tournament_id: tournamentId,
       tournament_title: tournamentTitle,
       athlete_id: record.athleteId || '',
       athlete_name: record.athleteName || '',
+      athlete_email: athleteEmail,
       exercise_id: record.exerciseId || '',
       exercise_title: record.exerciseTitle || '',
       result: {
