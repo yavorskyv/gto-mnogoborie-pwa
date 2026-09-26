@@ -9,3 +9,5 @@ database_dumps/
 web/data/applications.json
 web/data/mail_log.json
 web/server/.env
+__pycache__/
+*.pyc
