@@ -3,7 +3,7 @@
 Собирает PDF из docs/EMAIL_YANDEX360_INTEGRATION.md.
 Markdown → HTML (python-markdown) → PDF (headless Chromium через Playwright, локально, без сети).
 
-  python3 scripts/build_email_report_pdf.py [выходной.pdf]
+  python3 scripts/build_email_report_pdf.py [выходной.pdf] [исходный.md]
 """
 import html
 import os
@@ -15,8 +15,8 @@ from pathlib import Path
 import markdown
 
 ROOT = Path(__file__).resolve().parent.parent
-SRC = ROOT / "docs" / "EMAIL_YANDEX360_INTEGRATION.md"
-OUT = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "docs" / "EMAIL_YANDEX360_INTEGRATION.pdf"
+SRC = (Path(sys.argv[2]) if len(sys.argv) > 2 else ROOT / "docs" / "EMAIL_YANDEX360_INTEGRATION.md").resolve()
+OUT = (Path(sys.argv[1]) if len(sys.argv) > 1 else SRC.with_suffix(".pdf")).resolve()
 
 CSS = """
 @page { size: A4; margin: 16mm 14mm 18mm 14mm; }
@@ -90,7 +90,7 @@ const {{ chromium }} = require({npm_root!r} + '/playwright');
     margin: {{ top: '16mm', right: '14mm', bottom: '18mm', left: '14mm' }},
     displayHeaderFooter: true,
     headerTemplate: '<div></div>',
-    footerTemplate: '<div style="font-size:8px;color:#64748b;width:100%;text-align:center;font-family:sans-serif">Федерация многоборья ГТО России · Почта: анализ и тарифы · стр. <span class="pageNumber"></span> из <span class="totalPages"></span></div>'
+    footerTemplate: '<div style="font-size:8px;color:#64748b;width:100%;text-align:center;font-family:sans-serif">Федерация многоборья ГТО России · Корпоративная почта · стр. <span class="pageNumber"></span> из <span class="totalPages"></span></div>'
   }});
   await browser.close();
 }})().catch(e => {{ console.error(e); process.exit(1); }});
